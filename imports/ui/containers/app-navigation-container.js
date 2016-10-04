@@ -7,3 +7,4 @@ const composer = (props, onData) => {
 };
 
 export default composeWithTracker(composer, {}, {}, { pure: false })(AppNavigation);
+  

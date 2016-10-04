@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Meteor } from 'meteor/meteor';
-import { App } from '../../ui/layouts/app';
+import { Layout } from '../../ui/layouts/layout';
 import { Documents } from '../../ui/pages/documents';
 import { Communities } from '../../ui/pages/communities';
 import { Community } from '../../ui/pages/community';
@@ -25,7 +25,7 @@ const requireAuth = (nextState, replace) => {
 Meteor.startup(() => {
   render(
     <Router history={ browserHistory }>
-      <Route path="/" component={ App }>
+      <Route path="/" component={ Layout }>
         <IndexRoute name="index" component={ Index } onEnter={ requireAuth } />
         <Route name="documents" path="/documents" component={ Documents } onEnter={ requireAuth } />
         <Route name="communities" path="/communities" component={ Communities } />

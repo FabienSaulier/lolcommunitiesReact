@@ -1,12 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import CommunitiesList from '../containers/communities-list.js';
-import { AddCommunity } from '../components/add-community.js';
+import CommunityContainer from '../containers/community-container';
 
 
 
-export const Community = ({community}) => (
+export const Community = ( { params, location } ) => (
   <div>
-    This is the detail page of the community! {community}
+  <h3>Howdy, You lik. {params.communityId} and </h3>
+  <CommunityContainer communityId={params.communityId} />
   </div>
 );

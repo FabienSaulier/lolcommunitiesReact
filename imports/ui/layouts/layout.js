@@ -1,14 +1,14 @@
 import React from 'react';
 import { Grid } from 'react-bootstrap';
-import AppNavigation from '../containers/app-navigation';
+import AppNavigationContainer from '../containers/app-navigation-container';
 
-export const App = React.createClass({
+export const Layout = React.createClass({
   propTypes: {
     children: React.PropTypes.element.isRequired,
   },
   render() {
     return <div>
-      <AppNavigation />
+      <AppNavigationContainer />
       <Grid>
         { this.props.children }
       </Grid>

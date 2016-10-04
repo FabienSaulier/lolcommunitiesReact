@@ -38,10 +38,9 @@ const handleRemoveCommunity = (documentId, event) => {
 };
 
 export const Community = ({ community }) => (
-  <div className='ui image big label'>
-  <img src={"/communities_logo/"+community.picture} />
-{community.name}
-
-Ceci est ma super community détail!
-
+  <div>
+    <div className='ui image'>
+      <img src={"/communities_logo/"+community.picture} />
+    </div>
+    <a className="ui big label" href={community.url} target="_blank" >{community.name}</a>
 </div>);
