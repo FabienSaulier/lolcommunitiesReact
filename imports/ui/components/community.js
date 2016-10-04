@@ -48,7 +48,7 @@ export const Community = ({ community }) => (
     </div>
     <a className="ui big label" href={community.url} target="_blank" >{community.name}</a>
 
-    <button class="ui primary button">
+    <button className="ui primary button">
       Join {community.name}
     </button>
 </div>);
