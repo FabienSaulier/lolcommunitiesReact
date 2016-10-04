@@ -11,14 +11,17 @@ const getUserData = () => ({
   email: getInputValue(component.refs.emailAddress),
   password: getInputValue(component.refs.password),
   profile: {
-    name: {
-      first: getInputValue(component.refs.firstName),
-      last: getInputValue(component.refs.lastName),
-    },
+
+    summonerName: getInputValue(component.refs.summonerName),
+    summonerId: getInputValue(component.refs.summonerId),
+    server: getInputValue(component.refs.server),
+    communityName: getInputValue(component.refs.communityName),
   },
 });
 
 const signUp = () => {
+
+  console.log(component);
   const user = getUserData();
 
   Accounts.createUser(user, (error) => {
@@ -34,12 +37,6 @@ const signUp = () => {
 const validate = () => {
   $(component.refs.signup).validate({
     rules: {
-      firstName: {
-        required: true,
-      },
-      lastName: {
-        required: true,
-      },
       emailAddress: {
         required: true,
         email: true,
@@ -50,12 +47,6 @@ const validate = () => {
       },
     },
     messages: {
-      firstName: {
-        required: 'First name?',
-      },
-      lastName: {
-        required: 'Last name?',
-      },
       emailAddress: {
         required: 'Need an email address here.',
         email: 'Is this email address legit?',

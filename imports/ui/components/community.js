@@ -3,6 +3,8 @@ import { Row, Col, ListGroupItem, FormControl, Button } from 'react-bootstrap';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { updateCommunity, removeCommunity } from '../../api/communities/methods.js';
 
+
+/**
 const handleUpdateCommunity = (documentId, event) => {
   const name = event.target.value.trim();
   if (name !== '' && event.keyCode === 13) {
@@ -37,10 +39,16 @@ const handleRemoveCommunity = (documentId, event) => {
   }
 };
 
+**/
+
 export const Community = ({ community }) => (
   <div>
     <div className='ui image'>
       <img src={"/communities_logo/"+community.picture} />
     </div>
     <a className="ui big label" href={community.url} target="_blank" >{community.name}</a>
+
+    <button class="ui primary button">
+      Join {community.name}
+    </button>
 </div>);

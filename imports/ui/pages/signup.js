@@ -17,30 +17,46 @@ export class Signup extends React.Component {
       <Col xs={ 12 } sm={ 6 } md={ 4 }>
         <h4 className="page-header">Sign Up</h4>
         <form ref="signup" className="signup" onSubmit={ this.handleSubmit }>
-          <Row>
-            <Col xs={ 6 } sm={ 6 }>
-              <FormGroup>
-                <ControlLabel>First Name</ControlLabel>
-                <FormControl
-                  type="text"
-                  ref="firstName"
-                  name="firstName"
-                  placeholder="First Name"
-                />
-              </FormGroup>
-            </Col>
-            <Col xs={ 6 } sm={ 6 }>
-              <FormGroup>
-                <ControlLabel>Last Name</ControlLabel>
-                <FormControl
-                  type="text"
-                  ref="lastName"
-                  name="lastName"
-                  placeholder="Last Name"
-                />
-              </FormGroup>
-            </Col>
-          </Row>
+
+          <FormGroup>
+            <ControlLabel>Summoner Name</ControlLabel>
+            <FormControl
+              type="text"
+              ref="summonerName"
+              name="summonerName"
+              placeholder="summoner name"
+            />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>summoner id</ControlLabel>
+            <FormControl
+              type="text"
+              ref="summonerId"
+              name="summonerId"
+              placeholder="summoner id"
+            />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>server</ControlLabel>
+            <FormControl
+              type="text"
+              ref="server"
+              name="server"
+              placeholder="server"
+            />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Community name</ControlLabel>
+            <FormControl
+              type="text"
+              ref="communityName"
+              name="communityName"
+              placeholder="community name"
+            />
+          </FormGroup>
+
+
+
           <FormGroup>
             <ControlLabel>Email Address</ControlLabel>
             <FormControl
