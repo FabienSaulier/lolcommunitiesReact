@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Profil = () => (
+export const ProfilPage = () => (
   <div>
     TODO profil  !
   </div>
