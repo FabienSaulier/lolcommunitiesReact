@@ -22,7 +22,7 @@ Schema.UserProfile = new SimpleSchema({
         allowedValues: ['NA', 'EUW', 'EUNE', 'BR', 'TR', 'RU', 'LAN', 'LAS', 'OCE', 'KR'],
         optional: false
     },
-    communityId: {
+    community_id: {
         type: [String],
         optional: true
     }
@@ -34,7 +34,7 @@ Meteor.users.helpers({
     //  console.log(this.profile.communityId);
      // console.log(Communities.find({_id :  { $in: this.profile.communityId}}));
 
-    return Communities.find({_id :  { $in: this.profile.communityId}});
+    return Communities.find({_id :  { $in: this.profile.community_Id}});
   }
 
 });

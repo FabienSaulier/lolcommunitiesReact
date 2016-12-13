@@ -1,6 +1,18 @@
 import { Communities } from './communities';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
+import { Meteor } from 'meteor/meteor';
+
+export const joinCommunity = new ValidatedMethod({
+  name: 'community.join',
+  validate: null,
+  run({_id, userId }) {
+    console.log(_id, userId);
+    Communities.update(_id, { $push: {user_id: userId} });
+    Meteor.users.update(userId, {$push: {'profile.community_id': _id} });
+
+  },
+});
 
 export const insertCommunity = new ValidatedMethod({
   name: 'communities.insert',
@@ -12,6 +24,8 @@ export const insertCommunity = new ValidatedMethod({
     Communities.insert(community);
   },
 });
+
+
 
 export const updateCommunity = new ValidatedMethod({
   name: 'communities.update',

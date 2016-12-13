@@ -7,10 +7,49 @@ import { Meteor } from 'meteor/meteor';
 const composer = (params, onData) => {
   const subscription = Meteor.subscribe('communities');
 
-  if (subscription.ready()) {
-    const communities = Communities.find().fetch();
-    onData(null, { communities });
-  }
+let toto = "caca";
+let communities= [];
+
+const test = () =>{
+  console.log("avant: "+toto);
+  if(toto=="caca")
+    toto = "pipi";
+  else
+    toto = "caca";
+
+  console.log("après: "+toto);
+  changeData();
+}
+
+changeData = () => {
+  const data = {};
+
+  //const communities = Communities.find().fetch();
+  data.communities = communities;
+  data.test = test;
+  data.toto = toto;
+  console.log(data);
+
+  onData(null, {data});
+
+}
+
+load = () =>{
+  const data = {};
+
+  communities = Communities.find().fetch();
+
+  data.communities = communities;
+  data.test = test;
+  data.toto = toto;
+  onData(null, { data });
+}
+
+
+if (subscription.ready())
+  load();
+
+
 };
 
-export default composeWithTracker(composer, Loading)(CommunitiesList);
+export default CommunitiesListContainer = composeWithTracker(composer, Loading)(CommunitiesList);
