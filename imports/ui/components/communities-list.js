@@ -18,7 +18,7 @@ export class CommunitiesList extends React.Component {
         {communities.map((com) => (
           <CommunitySticker key={ com._id } community={ com } />
         ))}
-      <button onClick={this.props.data.test} >{this.props.data.toto} </button>
+      <button onClick={this.props.testcall} >{this.props.envie} </button>
       </ListGroup> :
       <Alert bsStyle="warning">No communities yet.</Alert>
     );

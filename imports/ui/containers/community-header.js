@@ -7,8 +7,6 @@ import { Loading } from '../components/loading.js';
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 
-
-
 let communityId = "";
 
 
@@ -35,9 +33,6 @@ const getInitialState =() => {
     titi : "toto"
   }
 }
-
-// Il faudrait passer le open modal au dessus
-//et mettre seulement le composer ici ?
 
 const openModal = () => {
   alert("coucou ma poule : ");
