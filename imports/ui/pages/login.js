@@ -4,8 +4,16 @@ import { Row, Col, FormGroup, ControlLabel, FormControl, Button } from 'react-bo
 import { handleLogin } from '../../modules/login';
 
 export class Login extends React.Component {
+
+  constructor(props){
+    super(props);
+    console.log(props);
+
+  }
+
   componentDidMount() {
     handleLogin({ component: this });
+    this.props.test();
   }
 
   handleSubmit(event) {
@@ -40,6 +48,7 @@ export class Login extends React.Component {
           </FormGroup>
           <Button type="submit" bsStyle="success">Login</Button>
         </form>
+        <p>Dont have an account? <Link to="/signup">Sign Up</Link>.</p>
       </Col>
     </Row>;
   }

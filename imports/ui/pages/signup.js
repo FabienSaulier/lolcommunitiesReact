@@ -9,25 +9,25 @@ import { Meteor } from 'meteor/meteor'
 export class Signup extends React.Component {
 
   constructor(){
-  super()
-  console.log("constructor");
-  this.state = {
-      summonerName:'',
-      server:''
-  };
-}
+    super()
+    this.state = {
+        summonerName:'',
+        server:''
+    };
+  }
 
-checkSummonerExistCallBack(error, result){
-  console.log("callback client");
-  if(error){
-    Bert.alert(error.reason, 'warning');
-    console.log(error);
+  checkSummonerExistCallBack(error, result){
+    console.log("callback client");
+    if(error){
+      Bert.alert(error.reason, 'warning');
+      console.log(error);
+    }
+    else{
+      Bert.alert('Found your lol account!', 'success');
+      console.log(result);
+    }
   }
-  else{
-    Bert.alert('Found your lol account!', 'success');
-    console.log(result);
-  }
-}
+
   componentDidMount() {
     handleSignup({ component: this });
   }
@@ -40,38 +40,27 @@ checkSummonerExistCallBack(error, result){
     this.setState({[e.target.name]: e.target.value});
   }
 
-
   handleOnBlur(event){
-
-  if(this.state.summonerName && this.state.server){
-    const server = this.state.server;
-    const summonerName = this.state.summonerName;
-console.log("from client call method");
-
-Meteor.wrapAsync(
-    checkSummonerExist.call(
-      {server, summonerName},
-      this.checkSummonerExistCallBack
-    )
-     );
-
-
+    if(this.state.summonerName && this.state.server){
+      const server = this.state.server;
+      const summonerName = this.state.summonerName;
+      console.log("from client call method");
+      Meteor.wrapAsync(
+        checkSummonerExist.call({server, summonerName}, this.checkSummonerExistCallBack
+      ));
+    }
   }
-}
-
-
 
   render() {
     return <Row>
       <Col xs={ 12 } sm={ 6 } md={ 4 }>
         <h4 className="page-header">Sign Up</h4>
         <form ref="signup" className="signup" onSubmit={ this.handleSubmit }>
-
           <FormGroup>
             <ControlLabel>Summoner Name</ControlLabel>
             <FormControl
-            onBlur={this.handleOnBlur.bind(this)}
-onChange={this.handleChange.bind(this)}
+              onBlur={this.handleOnBlur.bind(this)}
+              onChange={this.handleChange.bind(this)}
               type="text"
               ref="summonerName"
               name="summonerName"
@@ -81,8 +70,8 @@ onChange={this.handleChange.bind(this)}
           <FormGroup>
             <ControlLabel>server</ControlLabel>
             <FormControl
-            onBlur={this.handleOnBlur.bind(this)}
-onChange={this.handleChange.bind(this)}
+              onBlur={this.handleOnBlur.bind(this)}
+              onChange={this.handleChange.bind(this)}
               type="text"
               ref="server"
               name="server"
@@ -98,9 +87,6 @@ onChange={this.handleChange.bind(this)}
               placeholder="community name"
             />
           </FormGroup>
-
-
-
           <FormGroup>
             <ControlLabel>Email Address</ControlLabel>
             <FormControl

@@ -10,18 +10,15 @@ const composer = (params, onData) => {
   //const subUser = Meteor.subscribe('users');
 
   let community= {};
-console.log("before load");
 
   load = () =>{
     const data = {};
     community = Communities.findOne({name:params.communityName});
-console.log("on a recup la community: ");
-console.log(community.user_id);
+
 
     let users = [];
 //    if(typeof community.user_id  !== 'undefined'){
       users = Meteor.users.find({ _id: { $in: community.user_id }}).fetch();
-      console.log(users);
 //    }
 
 

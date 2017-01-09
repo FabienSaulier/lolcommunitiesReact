@@ -40,3 +40,6 @@ juliancwirko:postcss
 http@1.2.10
 peppelg:bootstrap-3-modal
 universe:react-bootstrap
+react-meteor-data
+modules
+react
