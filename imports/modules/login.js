@@ -10,7 +10,7 @@ let component;
 const login = () => {
   const email = getInputValue(component.refs.emailAddress);
   const password = getInputValue(component.refs.password);
-
+console.log(component);
   Meteor.loginWithPassword(email, password, (error) => {
     if (error) {
       Bert.alert(error.reason, 'warning');
@@ -18,6 +18,8 @@ const login = () => {
       Bert.alert('Logged in!', 'success');
 
       const { location } = component.props;
+      console.log(location.state);
+      console.log(location.state.nextPathname);
       if (location.state && location.state.nextPathname) {
         browserHistory.push(location.state.nextPathname);
       } else {
@@ -28,6 +30,7 @@ const login = () => {
 };
 
 const validate = () => {
+  console.log("validate");
   $(component.refs.login).validate({
     rules: {
       emailAddress: {
@@ -53,5 +56,6 @@ const validate = () => {
 
 export const handleLogin = (options) => {
   component = options.component;
+  console.log(component);
   validate();
 };

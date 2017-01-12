@@ -12,8 +12,10 @@ export class Signup extends React.Component {
     super()
     this.state = {
         summonerName:'',
-        server:''
+        server:'',
+        summonerId:''
     };
+    this.checkSummonerExistCallBack = this.checkSummonerExistCallBack.bind(this);
   }
 
   checkSummonerExistCallBack(error, result){
@@ -23,8 +25,9 @@ export class Signup extends React.Component {
       console.log(error);
     }
     else{
-      Bert.alert('Found your lol account!', 'success');
       console.log(result);
+      Bert.alert('Found your lol account!', 'success');
+      this.setState({summonerId: result.data[this.state.summonerName.toLowerCase()].id});
     }
   }
 
@@ -78,6 +81,7 @@ export class Signup extends React.Component {
               placeholder="server"
             />
           </FormGroup>
+          <input type="hidden" ref="summonerId" value={this.state.summonerId}></input>
           <FormGroup>
             <ControlLabel>Community name</ControlLabel>
             <FormControl

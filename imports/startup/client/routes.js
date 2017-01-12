@@ -31,6 +31,7 @@ Meteor.startup(() => {
         <IndexRoute name="index" component={ Index } onEnter={ requireAuth } />
         <Route name="documents" path="/documents" component={ Documents } onEnter={ requireAuth } />
         <Route name="community" path="/community/:communityName" component={ Community } />
+        <Route path="/communityjoin/:communityName" component={ Community }  onEnter={ requireAuth }  />
         <Route name="login" path="/login" component={ Login } />
         <Route name="communities" path="/communities" component={ Communities } />
         <Route name="recover-password" path="/recover-password" component={ RecoverPassword } />

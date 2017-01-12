@@ -2,18 +2,15 @@ import React from 'react';
 import { composeWithTracker } from 'react-komposer';
 import { Communities } from '../../api/communities/communities.js';
 import { joinCommunity } from '../../api/communities/methods.js';
-//import { CommunityHeader } from '../components/community-header.js';
 import { Loading } from '../components/loading.js';
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { Row, Col, ListGroupItem, Modal, FormControl, Button, Label } from 'react-bootstrap';
 import { Signup } from '../pages/signup';
 import { Login } from '../pages/login';
+import {Link } from 'react-router';
 
-
-
-
-import { createContainer } from 'meteor/react-meteor-data';
+import { LinkContainer } from 'react-router-bootstrap';
 
 
 class CommunityHeaderContainer extends React.Component {
@@ -27,19 +24,10 @@ class CommunityHeaderContainer extends React.Component {
     this._open = this._open.bind(this)
     this._close = this._close.bind(this)
     this.changeModal = this.changeModal.bind(this);
-    this.test = this.test.bind(this);
 
     console.log("constructor com header container with props: ");
     console.log(props);
 
-    /*
-    this.subscription = Meteor.subscribe('communities');
-    this.state = {
-      community: {},
-      actionBtn: "",
-      communityName : props.communityName
-    };
-    */
   }
 
   joinCommunity (){
@@ -55,6 +43,7 @@ class CommunityHeaderContainer extends React.Component {
      }
    });
  }
+
 
  componentWillMount(){
    console.log("componentWillMount");
@@ -77,13 +66,11 @@ _open(){
    this.setState({ showLoginModal: false });
  }
 
- test(){
-   alert("this is the test");
- }
 
 changeModal(){
   console.log("changeModal");
 }
+
   render(){
     console.log("render data: ");
     console.log(this.props);
@@ -102,16 +89,15 @@ changeModal(){
           <a className="ui big label" href={this.props.community.url} target="_blank" >{this.props.community.name}</a>
 
           {this.displayActionBtn( this.props.community)}
-          <Modal show={this.state.showLoginModal} onHide={this._close} >
-              <Modal.Body>
-                <Login test={this.test} />
-              </Modal.Body>
-              <Modal.Footer>
-              <p>Dont have an account? <Button onClick={this.changeModal} >Sign Up</Button>.</p>
-                  <Button onClick={this._close}>Close</Button>
-              </Modal.Footer>
-          </Modal>
-
+          // <Modal show={this.state.showLoginModal} onHide={this._close} >
+          //     <Modal.Body>
+          //       <Login />
+          //     </Modal.Body>
+          //     <Modal.Footer>
+          //     <p>Dont have an account? <Button onClick={this.changeModal} >Sign Up</Button>.</p>
+          //         <Button onClick={this._close}>Close</Button>
+          //     </Modal.Footer>
+          // </Modal>
         </div>
       )
     }
@@ -142,6 +128,7 @@ changeModal(){
 function composer(props, onData) {
   const subscription = Meteor.subscribe('communities');
 console.log("composer");
+console.log(props);
   if (subscription.ready()) {
     const data = {
       ready: true,
@@ -163,10 +150,7 @@ const JoinCommunityBtn = (props) => (
 );
 
 const LoginBtn = (props) => (
-
-  <Button onClick={props.openModal}   className="ui primary button">
-    You need to login in order to join {props.name}
-  </Button>
+  <Link to={'/communityjoin/'+props.name}>You need to login in order to join {props.name}</Link>
 );
 
 const YouAreInBtn = () => (

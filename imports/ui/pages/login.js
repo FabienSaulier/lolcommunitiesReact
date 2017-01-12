@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+  import { Link } from 'react-router';
 import { Row, Col, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 import { handleLogin } from '../../modules/login';
 
@@ -8,12 +8,18 @@ export class Login extends React.Component {
   constructor(props){
     super(props);
     console.log(props);
-
   }
 
   componentDidMount() {
+    console.log(this.props.location);
+    console.log(this.props.location.state);
+    this.setState({nextPathname : 'community/HFR22'});
+  //   console.log(this.props.location.state.nextPathname);
+
+
+
     handleLogin({ component: this });
-    this.props.test();
+
   }
 
   handleSubmit(event) {
