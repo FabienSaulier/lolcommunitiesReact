@@ -3,10 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 // User est un cas particulier de collection.
 
-
 Schema = {};
-
-
 
 Schema.UserProfile = new SimpleSchema({
     summonerName: {
@@ -24,21 +21,10 @@ Schema.UserProfile = new SimpleSchema({
     },
     community_id: {
         type: [String],
-        optional: true
+        optional: false
     }
 
 });
-
-Meteor.users.helpers({
-  communities: function() {
-    //  console.log(this.profile.communityId);
-     // console.log(Communities.find({_id :  { $in: this.profile.communityId}}));
-
-    return Communities.find({_id :  { $in: this.profile.community_Id}});
-  }
-
-});
-
 
 Schema.User = new SimpleSchema({
     username: {

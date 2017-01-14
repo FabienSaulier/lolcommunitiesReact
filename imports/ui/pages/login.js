@@ -16,8 +16,6 @@ export class Login extends React.Component {
     this.setState({nextPathname : 'community/HFR22'});
   //   console.log(this.props.location.state.nextPathname);
 
-
-
     handleLogin({ component: this });
 
   }

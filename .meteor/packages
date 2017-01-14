@@ -43,3 +43,4 @@ universe:react-bootstrap
 react-meteor-data
 modules
 react
+dburles:collection-helpers

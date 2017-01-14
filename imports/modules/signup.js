@@ -15,7 +15,6 @@ const getUserData = () => ({
     summonerName: getInputValue(component.refs.summonerName),
     summonerId: getInputValue(component.refs.summonerId),
     server: getInputValue(component.refs.server),
-    communityName: getInputValue(component.refs.communityName),
   },
 });
 

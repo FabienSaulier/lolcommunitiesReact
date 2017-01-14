@@ -10,16 +10,11 @@ let component;
 const login = () => {
   const email = getInputValue(component.refs.emailAddress);
   const password = getInputValue(component.refs.password);
-console.log(component);
   Meteor.loginWithPassword(email, password, (error) => {
     if (error) {
       Bert.alert(error.reason, 'warning');
     } else {
       Bert.alert('Logged in!', 'success');
-
-      const { location } = component.props;
-      console.log(location.state);
-      console.log(location.state.nextPathname);
       if (location.state && location.state.nextPathname) {
         browserHistory.push(location.state.nextPathname);
       } else {

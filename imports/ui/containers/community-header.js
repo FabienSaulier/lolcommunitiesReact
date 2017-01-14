@@ -28,12 +28,6 @@ const handleJoinCommunity = () =>{
 }
 
 
-const getInitialState =() => {
-  return {
-    titi : "toto"
-  }
-}
-
 const openModal = () => {
   alert("coucou ma poule : ");
   console.log(this.state.titi);

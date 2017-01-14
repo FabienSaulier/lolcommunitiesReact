@@ -83,15 +83,6 @@ export class Signup extends React.Component {
           </FormGroup>
           <input type="hidden" ref="summonerId" value={this.state.summonerId}></input>
           <FormGroup>
-            <ControlLabel>Community name</ControlLabel>
-            <FormControl
-              type="text"
-              ref="communityName"
-              name="communityName"
-              placeholder="community name"
-            />
-          </FormGroup>
-          <FormGroup>
             <ControlLabel>Email Address</ControlLabel>
             <FormControl
               type="text"

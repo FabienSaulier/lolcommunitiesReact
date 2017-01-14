@@ -6,9 +6,10 @@ import { Loading } from '../components/loading.js';
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { Row, Col, ListGroupItem, Modal, FormControl, Button, Label } from 'react-bootstrap';
-import { Signup } from '../pages/signup';
 import { Login } from '../pages/login';
 import {Link } from 'react-router';
+
+import {Users} from '../../api/user/userHelpers';
 
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -72,8 +73,6 @@ changeModal(){
 }
 
   render(){
-    console.log("render data: ");
-    console.log(this.props);
 
     if(this.props.ready === false){
       return(
@@ -114,16 +113,18 @@ changeModal(){
   }
 
   determineActionBtn(){
-    if(Meteor.user() &&  !Meteor.user().profile.community_id.includes(this.props.community._id))
+    //if(Meteor.user() && !Meteor.user().profile.community_id && !Meteor.user().profile.community_id.includes(this.props.community._id))
+    if(Meteor.user() && !Meteor.user().isInCommunity(this.props.community._id))
       return "join";
-    else if (Meteor.user() &&  Meteor.user().profile.community_id.includes(this.props.community._id))
+    else if (Meteor.user() &&  Meteor.user().isInCommunity(this.props.community._id))
       return"youarein";
     else
-      return"signup";
+      return "join";
   }
 
-
 }
+
+
 
 function composer(props, onData) {
   const subscription = Meteor.subscribe('communities');
