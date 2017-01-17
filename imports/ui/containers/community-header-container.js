@@ -18,17 +18,10 @@ class CommunityHeaderContainer extends React.Component {
 
   constructor(props){
     super(props);
-
-    this.state = { showModal: false, };
-
     this._open = this._open.bind(this)
     this._close = this._close.bind(this)
     this.changeModal = this.changeModal.bind(this);
     this.joinCommunity = this.joinCommunity.bind(this);
-
-    console.log("constructor com header container with props: ");
-    console.log(props);
-
   }
 
   joinCommunity (){
@@ -44,14 +37,6 @@ class CommunityHeaderContainer extends React.Component {
          Bert.alert('Join the community!', 'success');
        }
      });
-   }
-
-   _open(){
-     this.setState({ showLoginModal: true });
-   }
-
-   _close(){
-     this.setState({ showLoginModal: false });
    }
 
   render(){
