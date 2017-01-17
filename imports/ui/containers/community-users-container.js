@@ -4,39 +4,31 @@ import { Communities } from '../../api/communities/communities.js';
 import { Loading } from '../components/loading.js';
 import { Meteor } from 'meteor/meteor';
 
-const composer = (params, onData) => {
-
+const composer = (props, onData) => {
   const subscription = Meteor.subscribe('communities');
-  //const subUser = Meteor.subscribe('users');
+  const subUser = Meteor.subscribe('userList');
+
+
 
   let community= {};
 
   load = () =>{
     const data = {};
-    community = Communities.findOne({name:params.communityName});
-
-
+    community = Communities.findOne({name:props.communityName});
+    console.log(community.user_id);
     let users = [];
-//    if(typeof community.user_id  !== 'undefined'){
-      users = Meteor.users.find({ _id: { $in: community.user_id }}).fetch();
-//    }
+
+    users = Meteor.users.find({ _id: { $in: ["8FHZ66f4wcxfx8oGn", "PwWGSZTDnf3dJ8xiC"] }}).fetch();
 
 
+
+    console.log(users);
     onData(null, { users });
   }
 
-
-  if (subscription.ready() )
+  if (subscription.ready() && subUser.ready() )
     load();
 
-
-
-// la subscription a users est toujours présente.
-//  const subscription = Meteor.subscribe('users');
-//  if (subscription.ready()) {
-//    const users = Meteor.users.find().fetch();
-//    onData(null, { users });
-//  }
 };
 
-export default composeWithTracker(composer, Loading)(CommunityUsers);
+export default CommunityUsersContainer = composeWithTracker(composer, Loading)(CommunityUsers);

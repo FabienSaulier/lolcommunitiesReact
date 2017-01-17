@@ -19,12 +19,12 @@ class CommunityHeaderContainer extends React.Component {
   constructor(props){
     super(props);
 
-
     this.state = { showModal: false, };
 
     this._open = this._open.bind(this)
     this._close = this._close.bind(this)
     this.changeModal = this.changeModal.bind(this);
+    this.joinCommunity = this.joinCommunity.bind(this);
 
     console.log("constructor com header container with props: ");
     console.log(props);
@@ -32,19 +32,19 @@ class CommunityHeaderContainer extends React.Component {
   }
 
   joinCommunity (){
-   joinCommunity.call({
-     _id: this.community._id,
-     userId: Meteor.userId(),
-   }, (error) => {
-     if (error) {
-       //TODO gérer le cas où l'user est déjà dedans (mettre un unique dans le model?)
-       Bert.alert(error.reason, 'danger');
-     } else {
-       Bert.alert('Join the community!', 'success');
-     }
-   });
+    console.log("join community");
+    joinCommunity.call({
+      _id: this.props.community._id,
+      userId: Meteor.userId(),
+    }, (error) => {
+      if (error) {
+         //TODO gérer le cas où l'user est déjà dedans (mettre un unique dans le model?)
+         Bert.alert(error.reason, 'danger');
+       } else {
+         Bert.alert('Join the community!', 'success');
+       }
+     });
  }
-
 
  componentWillMount(){
    console.log("componentWillMount");
@@ -86,17 +86,7 @@ changeModal(){
             <img src={"/communities_logo/"+this.props.community.picture} />
           </div>
           <a className="ui big label" href={this.props.community.url} target="_blank" >{this.props.community.name}</a>
-
           {this.displayActionBtn( this.props.community)}
-          // <Modal show={this.state.showLoginModal} onHide={this._close} >
-          //     <Modal.Body>
-          //       <Login />
-          //     </Modal.Body>
-          //     <Modal.Footer>
-          //     <p>Dont have an account? <Button onClick={this.changeModal} >Sign Up</Button>.</p>
-          //         <Button onClick={this._close}>Close</Button>
-          //     </Modal.Footer>
-          // </Modal>
         </div>
       )
     }
@@ -105,7 +95,7 @@ changeModal(){
    displayActionBtn(community){
     let actionBtn = this.determineActionBtn();
     if( actionBtn === "join")
-      return <JoinCommunityBtn joinCommunity={community.handleJoinCommunity} name={community.name} />
+      return <JoinCommunityBtn joinCommunity={this.joinCommunity} name={community.name} />
     else if(actionBtn === "youarein")
       return <YouAreInBtn />
     else
@@ -128,8 +118,6 @@ changeModal(){
 
 function composer(props, onData) {
   const subscription = Meteor.subscribe('communities');
-console.log("composer");
-console.log(props);
   if (subscription.ready()) {
     const data = {
       ready: true,

@@ -10,6 +10,7 @@ import { Bert } from 'meteor/themeteorchef:bert';
 let communityId = "";
 
 
+//TODO c'est mort aussi ca non
 // prendre un parameter ?
 const handleJoinCommunity = () =>{
   joinCommunity.call({

@@ -7,6 +7,9 @@ import {Signup} from '../pages/signup';
 
 //TODO onclick: pass _id as parameter
 
+//TODO c'est mort non ? a del.
+
+
 export const CommunityHeader = ({ community , actionBtn }) => (
   <div>
     <div className='ui image'>
