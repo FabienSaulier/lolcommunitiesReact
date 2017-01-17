@@ -44,36 +44,17 @@ class CommunityHeaderContainer extends React.Component {
          Bert.alert('Join the community!', 'success');
        }
      });
- }
+   }
 
- componentWillMount(){
-   console.log("componentWillMount");
- }
- componentDidMount(){
-   console.log("componentDidMount");
- }
- componentWillUpdate(){
-   console.log("componentWillUpdate");
- }
- componentDidUpdate(){
-   console.log("componentDidUpdate");
-}
+   _open(){
+     this.setState({ showLoginModal: true });
+   }
 
-_open(){
-   this.setState({ showLoginModal: true });
- }
- _close(){
-   console.log("close");
-   this.setState({ showLoginModal: false });
- }
-
-
-changeModal(){
-  console.log("changeModal");
-}
+   _close(){
+     this.setState({ showLoginModal: false });
+   }
 
   render(){
-
     if(this.props.ready === false){
       return(
         <Loading />
@@ -103,7 +84,6 @@ changeModal(){
   }
 
   determineActionBtn(){
-    //if(Meteor.user() && !Meteor.user().profile.community_id && !Meteor.user().profile.community_id.includes(this.props.community._id))
     if(Meteor.user() && !Meteor.user().isInCommunity(this.props.community._id))
       return "join";
     else if (Meteor.user() &&  Meteor.user().isInCommunity(this.props.community._id))
@@ -113,8 +93,6 @@ changeModal(){
   }
 
 }
-
-
 
 function composer(props, onData) {
   const subscription = Meteor.subscribe('communities');
