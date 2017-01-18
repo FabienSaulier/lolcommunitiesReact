@@ -2,6 +2,7 @@ import { Communities } from './communities';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { Meteor } from 'meteor/meteor';
+import {getSummonerLeague} from '../lolProfile/methods';
 
 export const joinCommunity = new ValidatedMethod({
   name: 'community.join',
@@ -11,6 +12,23 @@ export const joinCommunity = new ValidatedMethod({
     Communities.update(_id, { $push: {user_id: userId} });
     Meteor.users.update(userId, {$push: {'profile.community_id': _id} });
 
+    getSummonerLeague.call({server:'euw', summonerId:'53929665'},
+     (error) => {
+console.log("join test error", error);
+     });
+
+
+  },
+});
+
+
+export const leaveCommunity = new ValidatedMethod({
+  name: 'community.leave',
+  validate: null,
+  run({_id, userId }) {
+    console.log("leave community: ",_id, userId);
+    Communities.update(_id, { $pull: {user_id: userId} });
+    Meteor.users.update(userId, {$pull: {'profile.community_id': _id} });
   },
 });
 

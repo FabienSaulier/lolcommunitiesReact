@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 export const Users = Meteor.users;
 
 Users.helpers({
-  
+
   communities: function() {
     //  console.log(this.profile.communityId);
      // console.log(Communities.find({_id :  { $in: this.profile.communityId}}));
@@ -14,6 +14,7 @@ Users.helpers({
   // if the current user has the community as his.
   isInCommunity(idCommunity){
     const com = this.profile.community_id;
+    console.log("isInCommunity", com, idCommunity);
     if(com && com.includes(idCommunity)){
       console.log("il y a des com et il est dedans");
       return true;
