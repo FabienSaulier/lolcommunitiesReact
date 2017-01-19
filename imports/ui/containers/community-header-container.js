@@ -23,7 +23,6 @@ class CommunityHeaderContainer extends React.Component {
   }
 
   leaveCommunity (){
-    console.log("leave community");
     leaveCommunity.call({
       _id: this.props.community._id,
       userId: Meteor.userId(),
@@ -38,7 +37,6 @@ class CommunityHeaderContainer extends React.Component {
   }
 
   joinCommunity (){
-    console.log("join community");
     joinCommunity.call({
       _id: this.props.community._id,
       userId: Meteor.userId(),

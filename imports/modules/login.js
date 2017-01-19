@@ -25,7 +25,6 @@ const login = () => {
 };
 
 const validate = () => {
-  console.log("validate");
   $(component.refs.login).validate({
     rules: {
       emailAddress: {
@@ -51,6 +50,5 @@ const validate = () => {
 
 export const handleLogin = (options) => {
   component = options.component;
-  console.log(component);
   validate();
 };

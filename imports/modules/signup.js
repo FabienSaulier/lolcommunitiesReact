@@ -20,7 +20,6 @@ const getUserData = () => ({
 
 const signUp = () => {
 
-  console.log(component);
   const user = getUserData();
 
   Accounts.createUser(user, (error) => {

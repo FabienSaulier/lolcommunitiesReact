@@ -26,8 +26,6 @@ export const getSummonerLeague = new ValidatedMethod({
   validate: null,
 
   run({server, summonerId}) {
-
-    console.log("run getSummonerLeague");
     server = server.toLowerCase();
     let league;
     let stat;
@@ -46,7 +44,6 @@ export const getSummonerLeague = new ValidatedMethod({
 
           league = result.data[summonerId][0];
           stat = league.entries[0];
-          console.log(stat);
           insertLolProfileData(league, stat);
 return league;
         }

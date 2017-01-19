@@ -13,7 +13,6 @@ if(error){
   throw new Meteor.Error('Error', 'We didn\'t found your lol account');
 
 }
-console.log(res);
 
 }
 */
@@ -26,8 +25,6 @@ export const checkSummonerExist = new ValidatedMethod({
   }).validator(),
 
   run({ server, summonerName }) {
-    console.log("dans le run de la methode server");
-
 
     server = server.toLowerCase();
     /*

@@ -7,14 +7,12 @@ export class Login extends React.Component {
 
   constructor(props){
     super(props);
-    console.log(props);
   }
 
   componentDidMount() {
-    console.log(this.props.location);
-    console.log(this.props.location.state);
+
+//TODO a changer
     this.setState({nextPathname : 'community/HFR22'});
-  //   console.log(this.props.location.state.nextPathname);
 
     handleLogin({ component: this });
 
