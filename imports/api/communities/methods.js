@@ -2,7 +2,7 @@ import { Communities } from './communities';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { Meteor } from 'meteor/meteor';
-import {getSummonerLeague} from '../lolProfile/methods';
+//import {getSummonerLeague} from '../lolProfile/server/methods';
 
 export const joinCommunity = new ValidatedMethod({
   name: 'community.join',
@@ -12,10 +12,22 @@ export const joinCommunity = new ValidatedMethod({
     Communities.update(_id, { $push: {user_id: userId} });
     Meteor.users.update(userId, {$push: {'profile.community_id': _id} });
 
-    getSummonerLeague.call({server:'euw', summonerId:'53929665'},
-     (error) => {
-console.log("join test error", error);
+
+
+// TODO check si user a déjà un lolProfile.
+  // si oui : update son lolProfile
+  // si non: insert un lolProfile
+
+
+    getSummonerLeague.call({server: Meteor.user().profile.server, summonerId: Meteor.user().profile.summonerId},
+     (error, result) => {
+        if(error)
+          console.log("join community error", error);
+        else {
+          console.log("result getsumleague: ", result);
+        }
      });
+
 
 
   },

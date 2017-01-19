@@ -1,5 +1,5 @@
 
-import '../../api/lolProfile/methods.js';
+import '../../api/lolProfile/server/methods.js';
 import '../../api/lolProfile/server/publications.js';
 
 import '../../api/documents/methods.js';

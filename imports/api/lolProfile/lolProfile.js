@@ -3,6 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 export const LolProfile = new Mongo.Collection('LolProfile');
 
+//TODO rename en lolInformation, summonerInformation, summonerData, summonerProfil
 LolProfile.allow({
   insert: () => true,
   update: () => true,

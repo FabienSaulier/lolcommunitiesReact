@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { HTTP } from 'meteor/http';
 
 
-const riotApiKey = Meteor.settings.riotApiKey;
+const riotApiKey = Meteor.settings.public.riotApiKey;
 
 
 /*

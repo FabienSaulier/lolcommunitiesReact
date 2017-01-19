@@ -2,14 +2,14 @@ import React from 'react';
 import { ListGroup, Alert } from 'react-bootstrap';
 
 
-export const CommunityUsers = ({ users }) => (
+export const CommunityUsers = ({ summoners }) => (
 
-  users.length > 0 ? <ListGroup className="communityUsersList">
-    {users.map((user, index) => (
-      <div key={index}> {user.profile.summonerName}</div>
+  summoners.length > 0 ? <ListGroup className="communityUsersList">
+    {summoners.map((summoner, index) => (
+      <div key={index}> {summoner.summonerName}</div>
     ))}
   </ListGroup> :
-  <Alert bsStyle="warning">No users yet.</Alert>
+  <Alert bsStyle="warning">No summoners yet.</Alert>
 );
 
 CommunityUsers.propTypes = {

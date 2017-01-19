@@ -1,7 +1,7 @@
-import React from 'react';
+  import React from 'react';
 import CommunityUsersContainer from '../containers/community-users-container';
 import CommunityHeaderDataContainer from '../containers/community-header-container';
-import { Communities } from '../../api/communities/communities.js';
+import { Communities } from '../../api/communities/communities';
 import { Meteor } from 'meteor/meteor';
 
 
