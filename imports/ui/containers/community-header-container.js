@@ -1,7 +1,7 @@
 import React from 'react';
 import { composeWithTracker } from 'react-komposer';
 import { Communities } from '../../api/communities/communities.js';
-import { joinCommunity, leaveCommunity } from '../../api/communities/methods.js';
+//import { joinCommunity, leaveCommunity } from '../../api/communities/server/methods.js';
 import { Loading } from '../components/loading.js';
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
@@ -23,10 +23,8 @@ class CommunityHeaderContainer extends React.Component {
   }
 
   leaveCommunity (){
-    leaveCommunity.call({
-      _id: this.props.community._id,
-      userId: Meteor.userId(),
-    }, (error) => {
+    Meteor.call( 'community.leave', {_id: this.props.community._id,
+      userId: Meteor.userId()}, (error) => {
       if (error) {
          //TODO gérer le cas où l'user est déjà dedans (mettre un unique dans le model?)
          Bert.alert(error.reason, 'danger');
@@ -37,17 +35,18 @@ class CommunityHeaderContainer extends React.Component {
   }
 
   joinCommunity (){
-    joinCommunity.call({
-      _id: this.props.community._id,
-      userId: Meteor.userId(),
-    }, (error) => {
-      if (error) {
-         //TODO gérer le cas où l'user est déjà dedans (mettre un unique dans le model?)
-         Bert.alert(error.reason, 'danger');
-       } else {
-         Bert.alert('Join the community!', 'success');
-       }
-     });
+     Meteor.call('community.join', {community: this.props.community,
+       user: Meteor.user() },(error) => {
+         console.log("call back joincomm client");
+         if (error) {
+           console.log(error);
+            //TODO gérer le cas où l'user est déjà dedans (mettre un unique dans le model?)
+            Bert.alert(error.reason, 'danger');
+          } else {
+            Bert.alert('Join the community!', 'success');
+          }
+        }
+      );
    }
 
   render(){
@@ -117,12 +116,12 @@ const LoginBtn = (props) => (
 );
 
 const YouAreInBtn = (props) => (
-  <div>
+  <span>
     <Label bsStyle="info">
       You are part of this community
     </Label>
     <Button onClick={props.leaveCommunity} className="ui primary button">
       leave {props.name}
     </Button>
-  </div>
+  </span>
 );

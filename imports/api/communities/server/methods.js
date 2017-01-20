@@ -1,42 +1,37 @@
-import { Communities } from './communities';
+import { Communities } from '../communities';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { Meteor } from 'meteor/meteor';
-//import {getSummonerLeague} from '../lolProfile/server/methods';
+import {createSummonerProfile, updateSummonerProfile} from '../../lolProfile/server/methods';
 
 export const joinCommunity = new ValidatedMethod({
   name: 'community.join',
   validate: null,
-  run({_id, userId }) {
-    Communities.update(_id, { $push: {user_id: userId} });
-    Meteor.users.update(userId, {$push: {'profile.community_id': _id} });
+  run({community, user }) {
+    // insert the user in the community
+    Communities.update(community._id, { $push: {user_id: user._id} });
+    Meteor.users.update(user._id, {$push: {'profile.community_id': community._id} });
 
+    const hasProfile = Meteor.call('LolProfile.hasUserLolProfile', {user : user });
 
-
-// TODO check si user a déjà un lolProfile.
-  // si oui : update son lolProfile
-  // si non: insert un lolProfile
-
-
-    getSummonerLeague.call({server: Meteor.user().profile.server, summonerId: Meteor.user().profile.summonerId},
-     (error, result) => {
-        if(error)
-          console.log("join community error", error);
-        else {
-          console.log("result getsumleague: ", result);
-        }
-     });
-
-
-
+    if(hasProfile){
+      console.log("todo update profile");
+      updateSummonerProfile(user);
+    } else{
+      console.log("todo insert profile");
+      createSummonerProfile(user);
+    }
   },
 });
+
+
 
 
 export const leaveCommunity = new ValidatedMethod({
   name: 'community.leave',
   validate: null,
   run({_id, userId }) {
+    console.log("leave com method server");
     Communities.update(_id, { $pull: {user_id: userId} });
     Meteor.users.update(userId, {$pull: {'profile.community_id': _id} });
   },
@@ -52,8 +47,6 @@ export const insertCommunity = new ValidatedMethod({
     Communities.insert(community);
   },
 });
-
-
 
 export const updateCommunity = new ValidatedMethod({
   name: 'communities.update',

@@ -5,7 +5,7 @@ import '../../api/lolProfile/server/publications.js';
 import '../../api/documents/methods.js';
 import '../../api/documents/server/publications.js';
 
-import '../../api/communities/methods.js';
+import '../../api/communities/server/methods.js';
 import '../../api/communities/server/publications.js';
 
 
