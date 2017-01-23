@@ -84,7 +84,7 @@ class CommunityHeaderContainer extends React.Component {
     else if (Meteor.user() &&  Meteor.user().isInCommunity(this.props.community._id))
       return"youarein";
     else
-      return "join";
+      return "login";
   }
 
 }
