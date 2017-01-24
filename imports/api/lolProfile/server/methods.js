@@ -17,7 +17,7 @@ export const updateSummonerProfile = (user) =>{
 
 const getSummonerProfileData = (server, summonerId) => {
   server = server.toLowerCase();
-  const riotApiUrl = "https://euw.api.pvp.net/api/lol/" + server + "/v2.5/league/by-summoner/" + summonerId + "/entry?api_key=" + riotApiKey;
+  const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
   try {
     var result = HTTP.call("GET", riotApiUrl);
 
@@ -44,44 +44,6 @@ const getSummonerProfileData = (server, summonerId) => {
     console.log(e);
   }
 }
-
-
-export const getSummonerLeague = new ValidatedMethod({
-  name: 'getSummonerLeague',
-  validate: null,
-
-  run({server, summonerId}) {
-    server = server.toLowerCase();
-    let league;
-    let stat;
-    const riotApiUrl = "https://euw.api.pvp.net/api/lol/" + server + "/v2.5/league/by-summoner/" + summonerId + "/entry?api_key=" + riotApiKey;
-
-    try {
-
-      var result = HTTP.call("GET", riotApiUrl);
-
-      console.log(result)
-
-      /*
-      var result = HTTP.call("GET", riotApiUrl , function(error, result) {
-        if (error) {
-          throw new Meteor.Error('An error occured', error);
-        } else {
-
-          league = result.data[summonerId][0];
-          stat = league.entries[0];
-          createSummonerProfile(league, stat);
-return league;
-        }
-      });
-      */
-    } catch (e) {
-      // Got a network error, time-out or HTTP error in the 400 or 500 range.
-      console.log(e);
-    }
-
-  }
-});
 
 export const hasUserLolProfile = new ValidatedMethod({
   name: 'LolProfile.hasUserLolProfile',

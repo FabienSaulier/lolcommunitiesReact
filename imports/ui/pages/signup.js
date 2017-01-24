@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Row, Col, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 import { handleSignup } from '../../modules/signup';
-import {checkSummonerExist } from '../../api/user/methods.js';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { Meteor } from 'meteor/meteor'
 
@@ -24,7 +23,8 @@ export class Signup extends React.Component {
     }
     else{
       Bert.alert('Found your lol account!', 'success');
-      this.setState({summonerId: result.data[this.state.summonerName.toLowerCase()].id});
+      console.log(result);
+      this.setState({summonerId: result});
     }
   }
 
@@ -44,10 +44,32 @@ export class Signup extends React.Component {
     if(this.state.summonerName && this.state.server){
       const server = this.state.server;
       const summonerName = this.state.summonerName;
-      console.log("from client call method");
-      Meteor.wrapAsync(
-        checkSummonerExist.call({server, summonerName}, this.checkSummonerExistCallBack
-      ));
+
+
+
+      Meteor.call( 'User.checkSummonerExist',
+        {server: server,
+        summonerName: summonerName},
+this.checkSummonerExistCallBack
+        /*
+        function (error, result) {
+          console.log(error);
+          console.log(result); }*/
+
+      //
+
+      );
+      /*
+        (error) => {
+        if (error) {
+           //TODO gérer le cas où l'user est déjà dedans (mettre un unique dans le model?)
+           Bert.alert(error.reason, 'danger');
+         } else {
+           Bert.alert('leave the community!', 'success');
+         }
+       });
+*/
+
     }
   }
 

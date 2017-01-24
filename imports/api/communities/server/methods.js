@@ -24,6 +24,31 @@ export const joinCommunity = new ValidatedMethod({
   },
 });
 
+const riotApiKey = Meteor.settings.riotApiKey;
+
+// check if summoner exist and return riot Id.
+export const checkSummonerExist = new ValidatedMethod({
+  name: 'User.checkSummonerExist',
+  validate: new SimpleSchema({
+    server: { type: String },
+    summonerName: { type: String },
+  }).validator(),
+  run({ server, summonerName }) {
+    server = server.toLowerCase();
+    const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v1.4/summoner/by-name/"+summonerName+"?api_key="+riotApiKey;
+    try {
+      var result = HTTP.call("GET", riotApiUrl);
+
+      console.log(result.data[summonerName.toLowerCase()]);
+
+      return result.data[summonerName.toLowerCase()].id;
+    } catch (e) {
+      // Got a network error, time-out or HTTP error in the 400 or 500 range.
+      console.log(e);
+    }
+
+  },
+});
 
 
 

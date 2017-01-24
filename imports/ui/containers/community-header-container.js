@@ -1,7 +1,6 @@
 import React from 'react';
 import { composeWithTracker } from 'react-komposer';
 import { Communities } from '../../api/communities/communities.js';
-//import { joinCommunity, leaveCommunity } from '../../api/communities/server/methods.js';
 import { Loading } from '../components/loading.js';
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
