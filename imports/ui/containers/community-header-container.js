@@ -25,7 +25,6 @@ class CommunityHeaderContainer extends React.Component {
     Meteor.call( 'community.leave', {_id: this.props.community._id,
       userId: Meteor.userId()}, (error) => {
       if (error) {
-         //TODO gérer le cas où l'user est déjà dedans (mettre un unique dans le model?)
          Bert.alert(error.reason, 'danger');
        } else {
          Bert.alert('leave the community!', 'success');
@@ -36,10 +35,7 @@ class CommunityHeaderContainer extends React.Component {
   joinCommunity (){
      Meteor.call('community.join', {community: this.props.community,
        user: Meteor.user() },(error) => {
-         console.log("call back joincomm client");
          if (error) {
-           console.log(error);
-            //TODO gérer le cas où l'user est déjà dedans (mettre un unique dans le model?)
             Bert.alert(error.reason, 'danger');
           } else {
             Bert.alert('Join the community!', 'success');
