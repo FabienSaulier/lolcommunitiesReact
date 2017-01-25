@@ -5,8 +5,9 @@ import {Meteor} from 'meteor/meteor';
 
 const riotApiKey = Meteor.settings.riotApiKey;
 
-export const createSummonerProfile = (user) => {
-  const summonerProfileData = getSummonerProfileData(user.profile.server, user.profile.summonerId);
+export const createSummonerProfile = (user, userCommunityName) => {
+  let summonerProfileData = getSummonerProfileData(user.profile.server, user.profile.summonerId);
+  summonerProfileData.userCommunityName = userCommunityName;
   LolProfile.insert(summonerProfileData);
 }
 

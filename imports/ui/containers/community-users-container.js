@@ -17,10 +17,7 @@ const composer = (props, onData) => {
     const data = {};
     community = Communities.findOne({name:props.communityName});
     let users = [];
-console.log("caeae");
-    console.log(community.user_id);
     users = Meteor.users.find({ _id: { $in: community.user_id }}).fetch();
-    console.log(users);
     let summonerIds = [];
     users.forEach(function(user) {
       summonerIds.push(user.profile.summonerId);

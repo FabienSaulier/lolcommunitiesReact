@@ -20,7 +20,7 @@ export const CommunityUsers = ({ summoners , communityName}) => (
     <tbody>
       {summoners.map((summoner, index) => (
         <tr key={index}>
-          <td> </td>
+          <td> {summoner.userCommunityName}</td>
           <td><a href={"http://"+summoner.server+".op.gg/summoner/userName="+summoner.summonerName}> {summoner.summonerName}</a></td>
           <td> {summoner.tier} {summoner.division} {summoner.leaguePoints}</td>
           <td> </td>

@@ -40,36 +40,14 @@ export class Signup extends React.Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  handleOnBlur(event){
-    if(this.state.summonerName && this.state.server){
+  handleOnBlur(e){
+    if (this.state.summonerName && this.state.server) {
       const server = this.state.server;
       const summonerName = this.state.summonerName;
-
-
-
-      Meteor.call( 'User.checkSummonerExist',
-        {server: server,
-        summonerName: summonerName},
-this.checkSummonerExistCallBack
-        /*
-        function (error, result) {
-          console.log(error);
-          console.log(result); }*/
-
-      //
-
-      );
-      /*
-        (error) => {
-        if (error) {
-           //TODO gérer le cas où l'user est déjà dedans (mettre un unique dans le model?)
-           Bert.alert(error.reason, 'danger');
-         } else {
-           Bert.alert('leave the community!', 'success');
-         }
-       });
-*/
-
+      Meteor.call('User.checkSummonerExist', {
+        server: server,
+        summonerName: summonerName
+      }, this.checkSummonerExistCallBack)
     }
   }
 
@@ -92,13 +70,22 @@ this.checkSummonerExistCallBack
           <FormGroup>
             <ControlLabel>server</ControlLabel>
             <FormControl
+              componentClass="select"
               onBlur={this.handleOnBlur.bind(this)}
               onChange={this.handleChange.bind(this)}
               type="text"
               ref="server"
               name="server"
-              placeholder="server"
-            />
+              placeholder="server">
+              <option value="EUW">EUW</option>
+              <option value="NA">NA</option>
+              <option value="LAN">LAN</option>
+              <option value="EUNE">EUNE</option>
+              <option value="TR">TR</option>
+              <option value="LAS">LAS</option>
+              <option value="OCE">OCE</option>
+              <option value="JP">JP</option>
+            </FormControl>
           </FormGroup>
           <input type="hidden" ref="summonerId" value={this.state.summonerId}></input>
           <FormGroup>

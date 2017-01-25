@@ -7,7 +7,7 @@ import {createSummonerProfile, updateSummonerProfile} from '../../lolProfile/ser
 export const joinCommunity = new ValidatedMethod({
   name: 'community.join',
   validate: null,
-  run({community, user }) {
+  run({community, user, userCommunityName }) {
     // insert the user in the community
     Communities.update(community._id, { $push: {user_id: user._id} });
     Meteor.users.update(user._id, {$push: {'profile.community_id': community._id} });
@@ -19,7 +19,7 @@ export const joinCommunity = new ValidatedMethod({
       updateSummonerProfile(user);
     } else{
       console.log("todo insert profile");
-      createSummonerProfile(user);
+      createSummonerProfile(user, userCommunityName);
     }
   },
 });

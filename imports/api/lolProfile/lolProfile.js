@@ -4,13 +4,6 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 export const LolProfile = new Mongo.Collection('LolProfile');
 
 //TODO rename en lolInformation, summonerInformation, summonerData, summonerProfil
-/*
-ile.allow({
-  insert: () => true,
-  update: () => true,
-  remove: () => true,
-});
-*/
 
 LolProfile.schema = new SimpleSchema({
   server:{
@@ -27,6 +20,12 @@ LolProfile.schema = new SimpleSchema({
     type: String,
     label: "summonerName",
     max: 100
+  },
+  userCommunityName: {
+    type: String,
+    label: 'userCommunityName',
+    min: 3,
+    max: 30
   },
   queue: {
     type:String,
