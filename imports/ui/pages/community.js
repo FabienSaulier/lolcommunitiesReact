@@ -11,12 +11,14 @@ import { Meteor } from 'meteor/meteor';
     console.log(props);
   }
 
+
   render() {
     return (
       <div>
         <div>
           <CommunityHeaderDataContainer communityName={this.props.params.communityName} />
         </div>
+        <br />
         <div>
           <CommunityUsersContainer communityName={this.props.params.communityName} />
         </div>
