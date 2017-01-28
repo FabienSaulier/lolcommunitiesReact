@@ -41,7 +41,7 @@ export class Signup extends React.Component {
   }
 
   handleOnBlur(e){
-    if (this.state.summonerName && this.state.server) {
+    if (this.state.summonerName && this.state.server && this.state.server != "") {
       const server = this.state.server;
       const summonerName = this.state.summonerName;
       Meteor.call('User.checkSummonerExist', {
@@ -77,6 +77,7 @@ export class Signup extends React.Component {
               ref="server"
               name="server"
               placeholder="server">
+              <option value=""></option>
               <option value="EUW">EUW</option>
               <option value="NA">NA</option>
               <option value="LAN">LAN</option>
