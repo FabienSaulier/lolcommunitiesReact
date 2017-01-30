@@ -4,6 +4,7 @@ import {TierIconImage} from './tier-icon';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import { Table as TableSemantic } from 'semantic-ui-react'
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
+//import '../../../client/stylesheets/application.scss';
 
 export class CommunityUsers extends React.Component {
 
@@ -14,9 +15,10 @@ export class CommunityUsers extends React.Component {
     this.tierWinsLossesFormatter = this.tierWinsLossesFormatter.bind(this);
   }
 
+
   summonerNameFormatter(sumName, row){
     let url = "http://"+row.server+".op.gg/summoner/userName="+sumName;
-    return "<a  href="+url+" target='_blank' > "+sumName+"</a>";
+    return "<a style= href="+url+" target='_blank' > "+sumName+"</a>";
   }
 
   tierDataFormatter(tier, row){
@@ -44,18 +46,22 @@ export class CommunityUsers extends React.Component {
     );
   }
 
+
+
   tierWinsLossesFormatter(wins, row){
+    if(row.wins === undefined || row.losses === undefined)
+      return('-');
     return(row.wins +" / "+ row.losses);
   }
 
   render(){
     return(
       this.props.summoners.length > 0 ?
-      <BootstrapTable data={ this.props.summoners } bordered={ false }  condensed >
+      <BootstrapTable data={ this.props.summoners } bordered={ false }  containerStyle={{ width: '70%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
         <TableHeaderColumn dataField='userCommunityName' isKey>{this.props.communityName}</TableHeaderColumn>
-        <TableHeaderColumn dataField='summonerName'  dataFormat={this.summonerNameFormatter} >Summoner</TableHeaderColumn>
-        <TableHeaderColumn dataField='tier' dataFormat={this.tierDataFormatter} >S7</TableHeaderColumn>
-        <TableHeaderColumn dataField='wins' dataFormat={this.tierWinsLossesFormatter}>wins / looses </TableHeaderColumn>
+        <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} >Summoner</TableHeaderColumn>
+        <TableHeaderColumn dataField='tier'  dataFormat={this.tierDataFormatter} >S7</TableHeaderColumn>
+        <TableHeaderColumn dataField='wins' dataFormat={this.tierWinsLossesFormatter}>wins / losses </TableHeaderColumn>
       </BootstrapTable>
       :
       <Alert bsStyle="warning">No summoners yet.</Alert>
