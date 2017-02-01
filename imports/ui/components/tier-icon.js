@@ -2,6 +2,7 @@ import React from 'react';
 
 export class TierIconImage extends React.Component {
 
+
   constructor(props){
     super(props);
     this.getTierIconSrc = this.getTierIconSrc.bind(this);
