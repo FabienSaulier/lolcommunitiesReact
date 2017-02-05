@@ -13,7 +13,6 @@ export class Communities extends React.Component {
     return (
     <Row>
       <Col xs={ 12 }>
-        <h4 className="page-header">Communities</h4>
         <CommunitiesListContainer />
       </Col>
     </Row>

@@ -4,7 +4,6 @@ import {TierIconImage} from './tier-icon';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import { Table as TableSemantic } from 'semantic-ui-react'
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
-//import '../../../client/stylesheets/application.scss';
 
 export class CommunityUsers extends React.Component {
 
@@ -13,16 +12,99 @@ export class CommunityUsers extends React.Component {
     this.summonerNameFormatter = this.summonerNameFormatter.bind(this);
     this.tierDataFormatter = this.tierDataFormatter.bind(this);
     this.tierWinsLossesFormatter = this.tierWinsLossesFormatter.bind(this);
+    this.sortByElo = this.sortByElo.bind(this);
+    this.calculateElo = this.calculateElo.bind(this);
+
+    this.tableOptions = {
+      defaultSortName: 'tier',
+      defaultSortOrder: 'asc',
+      sortIndicator: false  // disable sort indicator ?? doesn't work.
+   };
   }
 
 
   summonerNameFormatter(sumName, row){
     let url = "http://"+row.server+".op.gg/summoner/userName="+sumName;
-    return "<a style= href="+url+" target='_blank' > "+sumName+"</a>";
+    return "<a href="+url+" target='_blank' > "+sumName+"</a>";
+  }
+
+  sortByElo(a, b, order) {
+    let aPoints = this.calculateElo(a);
+    let bPoints = this.calculateElo(b);
+    if(order === 'desc'){
+      if(aPoints > bPoints){
+        return 1;
+      }
+      else if (aPoints === bPoints)
+        return 0;
+      else
+        return -1;
+    } else{
+      if(aPoints > bPoints){
+        return -1;
+      }
+      else if (aPoints === bPoints)
+        return 0;
+      else
+        return 1;
+    }
+
+  }
+
+  calculateElo(leagueInfo){
+    let points;
+    switch (leagueInfo.tier) {
+      case "UNRANKED":
+        points = 0;
+        break;
+      case "BRONZE":
+        points = 10000;
+        break;
+      case "SILVER":
+        points = 20000;
+        break;
+      case "GOLD":
+        points = 30000;
+        break;
+      case "PLATINUM":
+        points = 40000;
+        break;
+      case "DIAMOND":
+        points = 50000;
+        break;
+      case "MASTER":
+        points = 60000;
+        break;
+      case "CHALLENGER":
+        points = 70000;
+        break;
+      default:
+        points = 0;
+    };
+    switch (leagueInfo.division) {
+      case "V":
+        points += 0;
+        break;
+      case "IV":
+        points += 1000;
+        break;
+      case "III":
+        points += 2000;
+        break;
+      case "II":
+        points += 3000;
+        break;
+      case "I":
+        points += 4000;
+        break;
+      default:
+    };
+    if(leagueInfo.leaguePoints)
+      points += leagueInfo.leaguePoints;
+    return points;
   }
 
   tierDataFormatter(tier, row){
-    console.log(row);
     if (!tier)
       tier = "unranked";
 
@@ -57,10 +139,10 @@ export class CommunityUsers extends React.Component {
   render(){
     return(
       this.props.summoners.length > 0 ?
-      <BootstrapTable data={ this.props.summoners } bordered={ false }  containerStyle={{ width: '70%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
+      <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '70%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
         <TableHeaderColumn dataField='userCommunityName' isKey>{this.props.communityName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} >Summoner</TableHeaderColumn>
-        <TableHeaderColumn dataField='tier'  dataFormat={this.tierDataFormatter} >S7</TableHeaderColumn>
+        <TableHeaderColumn dataField='tier' dataSort sortFunc={this.sortByElo} dataFormat={this.tierDataFormatter} >S7   5x5</TableHeaderColumn>
         <TableHeaderColumn dataField='wins' dataFormat={this.tierWinsLossesFormatter}>wins / losses </TableHeaderColumn>
       </BootstrapTable>
       :

@@ -4,13 +4,15 @@ import { Communities } from '../../api/communities/communities.js';
 import { Loading } from '../components/loading.js';
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
-import { Row, Col, ListGroupItem, Modal, FormControl, FormGroup, ControlLabel, Button, Label } from 'react-bootstrap';
+import { Row, Col, ListGroupItem, Modal, FormControl, FormGroup, ControlLabel} from 'react-bootstrap';
 import { Login } from '../pages/login';
 import {Link } from 'react-router';
+import { Header, Image, Button, Label} from 'semantic-ui-react'
 
 import {Users} from '../../api/user/userHelpers';
 
 import { LinkContainer } from 'react-router-bootstrap';
+
 
 
 class CommunityHeaderContainer extends React.Component {
@@ -38,6 +40,9 @@ class CommunityHeaderContainer extends React.Component {
   }
 
   joinCommunity() {
+    if(!this.state.userCommunityNameValue)
+      return;
+
     Meteor.call('community.join', {
       userCommunityName: this.state.userCommunityNameValue,
       community: this.props.community,
@@ -71,12 +76,16 @@ class CommunityHeaderContainer extends React.Component {
     else {
       return(
         <div>
-          <div className='ui image'>
-            <img src={"/communities_logo/"+this.props.community.picture} />
-          </div>
-          <a className="ui big label" href={this.props.community.url} target="_blank" >{this.props.community.name}</a>
-          {this.displayActionBtn( this.props.community)}
-          <Modal show={this.state.showModal} onHide={this.closeModal} >
+          <Header as='h3'>
+            <Image src={"/communities_logo/"+this.props.community.picture} />
+              <Header.Content>
+                <Button  size="big" href={this.props.community.url} target="_blank" >{this.props.community.name}</Button>
+
+                  {this.displayActionBtn( this.props.community)}
+
+              </Header.Content>
+          </Header>
+          <Modal show={this.state.showModal} onHide={this.closeModal} onEnter={this.joinCommunity} >
             <Modal.Header >
               <Modal.Title>What name do you use in {this.props.community.name}?</Modal.Title>
             </Modal.Header>
@@ -93,7 +102,7 @@ class CommunityHeaderContainer extends React.Component {
               </FormGroup>
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={this.joinCommunity}>Join</Button>
+              <Button primary onClick={this.joinCommunity}>Join</Button>
             </Modal.Footer>
           </Modal>
         </div>
@@ -104,13 +113,11 @@ class CommunityHeaderContainer extends React.Component {
    displayActionBtn(community){
     let actionBtn = this.determineActionBtn();
     if( actionBtn === "join")
-      return <JoinCommunityBtn joinCommunity={this.openModal} name={community.name} />
-
-    //  return <JoinCommunityBtn joinCommunity={this.joinCommunity} name={community.name} />
+      return <JoinCommunityBtn  joinCommunity={this.openModal} name={community.name} />
     else if(actionBtn === "youarein")
-      return <YouAreInBtn leaveCommunity={this.leaveCommunity} name={community.name}  />
+      return null;//<YouAreInBtn leaveCommunity={this.leaveCommunity} name={community.name}  />
     else
-      return <LoginBtn name={community.name} />
+      return <LoginBtn  name={community.name} />
   }
 
   determineActionBtn(){
@@ -140,20 +147,13 @@ function composer(props, onData) {
 export default CommunityHeaderDataContainer = composeWithTracker(composer)(CommunityHeaderContainer);
 
 const JoinCommunityBtn = (props) => (
-  <Button onClick={props.joinCommunity} className="ui primary button">
-    Join {props.name}
+  <Button primary onClick={props.joinCommunity} >
+    Join
   </Button>
 );
-/*
-const JoinCommunityBtn = (props) => (
-  <Button onClick={props.joinCommunity} className="ui primary button">
-    Join {props.name}
-  </Button>
-);
-*/
 
 const LoginBtn = (props) => (
-  <Link to={'/communityjoin/'+props.name}>You need to login in order to join {props.name}</Link>
+  <Link to={'/communityjoin/'+props.name}>Log in to join</Link>
 );
 
 const YouAreInBtn = (props) => (
@@ -161,8 +161,12 @@ const YouAreInBtn = (props) => (
     <Label bsStyle="info">
       You are part of this community
     </Label>
+    {
+      /*
     <Button onClick={props.leaveCommunity} className="ui primary button">
       leave {props.name}
     </Button>
+    */
+    }
   </span>
 );

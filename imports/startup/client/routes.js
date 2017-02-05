@@ -3,10 +3,8 @@ import { render } from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Meteor } from 'meteor/meteor';
 import { Layout } from '../../ui/layouts/layout';
-import { Documents } from '../../ui/pages/documents';
 import { Communities } from '../../ui/pages/communities';
 import { Community } from '../../ui/pages/community';
-import { Index } from '../../ui/pages/index';
 import { Login } from '../../ui/pages/login';
 import { NotFound } from '../../ui/pages/not-found';
 import { RecoverPassword } from '../../ui/pages/recover-password';
@@ -28,8 +26,7 @@ Meteor.startup(() => {
   render(
     <Router history={ browserHistory }>
       <Route path="/" component={ Layout }>
-        <IndexRoute name="index" component={ Index } onEnter={ requireAuth } />
-        <Route name="documents" path="/documents" component={ Documents } onEnter={ requireAuth } />
+        <IndexRoute name="index" component={ Communities } />
         <Route name="community" path="/community/:communityName" component={ Community } />
         <Route path="/communityjoin/:communityName" component={ Community }  onEnter={ requireAuth }  />
         <Route name="login" path="/login" component={ Login } />
