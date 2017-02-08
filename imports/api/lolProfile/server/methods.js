@@ -18,7 +18,7 @@ export const updateSummonerProfile = (user) =>{
 
 const getSummonerProfileData = (server, summonerId) => {
 
-  const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
+  const riotApiUrl = "https://"+"na"+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
   try {
     var result = HTTP.call("GET", riotApiUrl);
 
