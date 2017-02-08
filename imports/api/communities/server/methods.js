@@ -35,7 +35,7 @@ export const checkSummonerExist = new ValidatedMethod({
   }).validator(),
   run({ server, summonerName }) {
     server = server.toLowerCase();
-    const riotApiUrl = "https://"+"na"+".api.pvp.net/api/lol/"+server+"/v1.4/summoner/by-name/"+summonerName+"?api_key="+riotApiKey;
+    const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v1.4/summoner/by-name/"+summonerName+"?api_key="+riotApiKey;
     try {
       var result = HTTP.call("GET", riotApiUrl);
 
