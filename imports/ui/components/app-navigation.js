@@ -13,7 +13,7 @@ export class AppNavigation extends React.Component {
     return <Navbar>
       <Navbar.Header>
         <Navbar.Brand>
-          <Link to="/">Lol Communities</Link>
+          <Link to="/">League communities</Link>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>

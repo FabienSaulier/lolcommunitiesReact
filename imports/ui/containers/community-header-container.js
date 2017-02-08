@@ -87,7 +87,7 @@ class CommunityHeaderContainer extends React.Component {
           </Header>
           <Modal show={this.state.showModal} onHide={this.closeModal} onEnter={this.joinCommunity} >
             <Modal.Header >
-              <Modal.Title>What name do you use in {this.props.community.name}?</Modal.Title>
+              <Modal.Title>What name do you use at {this.props.community.name}?</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <FormGroup>
