@@ -35,7 +35,7 @@ export const checkSummonerExist = new ValidatedMethod({
   }).validator(),
   run({ server, summonerName }) {
     server = server.toLowerCase();
-    const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v1.4/summoner/by-name/"+summonerName+"?api_key="+riotApiKey;
+    const riotApiUrl = "https://"+"na"+".api.pvp.net/api/lol/"+server+"/v1.4/summoner/by-name/"+summonerName+"?api_key="+riotApiKey;
     try {
       var result = HTTP.call("GET", riotApiUrl);
 
@@ -44,6 +44,7 @@ export const checkSummonerExist = new ValidatedMethod({
       return result.data[summonerName.toLowerCase()].id;
     } catch (e) {
       // Got a network error, time-out or HTTP error in the 400 or 500 range.
+      console.log("on: "+riotApiUrl);
       console.log(e);
     }
 
