@@ -5,20 +5,19 @@ import { Loading } from '../components/loading.js';
 import { Meteor } from 'meteor/meteor';
 
 const composer = (params, onData) => {
-const subscription = Meteor.subscribe('communities');
 
-let communities= [];
+  const subscription = Meteor.subscribe('communities');
+  let communities= [];
 
-load = () =>{
-  const data = {};
-  communities = Communities.find().fetch();
-  data.communities = communities;
+  load = () =>{
+    const data = {};
+    communities = Communities.find().fetch();
+    data.communities = communities;
+    onData(null, { data });
+  }
 
-  onData(null, { data });
-}
-
-if (subscription.ready())
-  load();
-};
+  if (subscription.ready())
+    load();
+  };
 
 export default CommunitiesListContainer = composeWithTracker(composer, Loading)(CommunitiesList);

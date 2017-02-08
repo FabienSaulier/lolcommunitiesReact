@@ -10,7 +10,7 @@ import { NotFound } from '../../ui/pages/not-found';
 import { RecoverPassword } from '../../ui/pages/recover-password';
 import { ResetPassword } from '../../ui/pages/reset-password';
 import { Signup } from '../../ui/pages/signup';
-import { ProfilPage } from '../../ui/pages/ProfilPage';
+import { ProfilPage } from '../../ui/pages/profilPage';
 
 
 const requireAuth = (nextState, replace) => {
