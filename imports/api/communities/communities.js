@@ -16,6 +16,9 @@ Communities.deny({
 });
 
 Communities.schema = new SimpleSchema({
+  _id:{
+    type:String
+  },
   name: {
     type: String,
     label: "name",

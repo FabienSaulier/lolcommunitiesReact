@@ -4,10 +4,17 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { Meteor } from 'meteor/meteor';
 import {createSummonerProfile, updateSummonerProfile} from '../../lolProfile/server/methods';
 
+const joinCommunityValidator = new SimpleSchema({
+  community: { type: Communities.schema },
+  user: {type:Object, blackbox:true}, // if no blackbox _id fucked the validation.... ??!!
+  userCommunityName: {label: "Your name", type: String, min:3}
+})
+
 export const joinCommunity = new ValidatedMethod({
   name: 'community.join',
-  validate: null,
+  validate: joinCommunityValidator.validator(),
   run({community, user, userCommunityName }) {
+    console.log("in the run");
     // insert the user in the community
     Communities.update(community._id, { $push: {user_id: user._id} });
     Meteor.users.update(user._id, {$push: {'profile.community_id': community._id} });

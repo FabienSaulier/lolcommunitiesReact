@@ -24,6 +24,7 @@ class CommunityHeaderContainer extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.userCommunityNameHandleChange = this.userCommunityNameHandleChange.bind(this);
+    this.handleInputNameEnter = this.handleInputNameEnter.bind(this);
     this.state = {showModal: false, userCommunityNameValue: ''};
 
   }
@@ -40,8 +41,12 @@ class CommunityHeaderContainer extends React.Component {
   }
 
   joinCommunity() {
-    if(!this.state.userCommunityNameValue)
-      return;
+
+    let test = {};
+    test._id = Meteor.user()._id;
+    test.profile = Meteor.user().profile;
+
+    console.log(test);
 
     Meteor.call('community.join', {
       userCommunityName: this.state.userCommunityNameValue,
@@ -57,15 +62,19 @@ class CommunityHeaderContainer extends React.Component {
     });
   }
 
-   openModal(){
-     this.setState({ showModal: true });
-   }
-   closeModal(){
-     this.setState({showModal: false});
-   }
-   userCommunityNameHandleChange(e){
-     this.setState({userCommunityNameValue: e.target.value});
-   }
+  openModal() {
+    this.setState({showModal: true});
+  }
+  closeModal() {
+    this.setState({showModal: false});
+  }
+  userCommunityNameHandleChange(e) {
+    this.setState({userCommunityNameValue: e.target.value});
+  }
+  handleInputNameEnter(target) {
+    if (target.charCode == 13)
+      this.joinCommunity();
+  }
 
   render(){
     if(this.props.ready === false){
@@ -85,7 +94,7 @@ class CommunityHeaderContainer extends React.Component {
 
               </Header.Content>
           </Header>
-          <Modal show={this.state.showModal} onHide={this.closeModal} onEnter={this.joinCommunity} >
+          <Modal show={this.state.showModal} onHide={this.closeModal} >
             <Modal.Header >
               <Modal.Title>What name do you use at {this.props.community.name}?</Modal.Title>
             </Modal.Header>
@@ -97,7 +106,7 @@ class CommunityHeaderContainer extends React.Component {
                   name="userCommunityName"
                   value={this.state.userCommunityNameValue}
                   onChange={this.userCommunityNameHandleChange}
-                  placeholder={"name used in "+this.props.community.name}
+                  placeholder={"name"} onKeyPress={this.handleInputNameEnter}
                 />
               </FormGroup>
             </Modal.Body>
@@ -113,7 +122,7 @@ class CommunityHeaderContainer extends React.Component {
    displayActionBtn(community){
     let actionBtn = this.determineActionBtn();
     if( actionBtn === "join")
-      return <JoinCommunityBtn  joinCommunity={this.openModal} name={community.name} />
+      return <JoinCommunityBtn  openModal={this.openModal} name={community.name} />
     else if(actionBtn === "youarein")
       return null;//<YouAreInBtn leaveCommunity={this.leaveCommunity} name={community.name}  />
     else
@@ -147,7 +156,7 @@ function composer(props, onData) {
 export default CommunityHeaderDataContainer = composeWithTracker(composer)(CommunityHeaderContainer);
 
 const JoinCommunityBtn = (props) => (
-  <Button primary onClick={props.joinCommunity} >
+  <Button primary onClick={props.openModal} >
     Join
   </Button>
 );
