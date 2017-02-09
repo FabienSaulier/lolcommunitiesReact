@@ -4,3 +4,4 @@ import { BrowserPolicy } from 'meteor/browser-policy-common';
 BrowserPolicy.content.allowFontDataUrl();
 
 BrowserPolicy.content.allowOriginForAll("www.google-analytics.com");
+BrowserPolicy.content.allowFontOrigin("cdnjs.cloudflare.com");
