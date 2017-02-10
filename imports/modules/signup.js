@@ -21,13 +21,18 @@ const getUserData = () => (
 
 const signUp = () => {
   const user = getUserData();
-  Accounts.createUser(user, (error) => {
-    if (error) {
-      Bert.alert(error.reason, 'danger');
-    } else {
-      browserHistory.push('/');
-    }
-  });
+
+  if(user.profile.summonerId == ""){
+    Bert.alert("We can't find your summoner name on this server", 'danger');
+  } else{
+    Accounts.createUser(user, (error) => {
+      if (error) {
+        Bert.alert(error.reason, 'danger');
+      } else {
+        browserHistory.push('/');
+      }
+    });
+  }
 };
 
 const validate = () => {
