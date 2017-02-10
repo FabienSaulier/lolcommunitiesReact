@@ -41,13 +41,6 @@ class CommunityHeaderContainer extends React.Component {
   }
 
   joinCommunity() {
-
-    let test = {};
-    test._id = Meteor.user()._id;
-    test.profile = Meteor.user().profile;
-
-    console.log(test);
-
     Meteor.call('community.join', {
       userCommunityName: this.state.userCommunityNameValue,
       community: this.props.community,

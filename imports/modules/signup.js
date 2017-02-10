@@ -7,12 +7,13 @@ import { getInputValue } from './get-input-value';
 
 let component;
 
-const getUserData = () => ({
-  email: getInputValue(component.refs.emailAddress),
-  password: getInputValue(component.refs.password),
+const getUserData = () => (
+  {
+  email: getInputValue(component.refs.emailAddress).trim(),
+  password: getInputValue(component.refs.password).trim(),
   profile: {
 
-    summonerName: getInputValue(component.refs.summonerName),
+    summonerName: getInputValue(component.refs.summonerName).trim(),
     summonerId: getInputValue(component.refs.summonerId),
     server: getInputValue(component.refs.server),
   },
@@ -25,7 +26,6 @@ const signUp = () => {
       Bert.alert(error.reason, 'danger');
     } else {
       browserHistory.push('/');
-      Bert.alert('Welcome!', 'success');
     }
   });
 };
@@ -33,6 +33,15 @@ const signUp = () => {
 const validate = () => {
   $(component.refs.signup).validate({
     rules: {
+      summonerId: {
+        required: true
+      },
+      summonerName: {
+        required: true
+      },
+      server: {
+        required: true
+      },
       emailAddress: {
         required: true,
         email: true,
@@ -43,6 +52,12 @@ const validate = () => {
       },
     },
     messages: {
+      summonerName: {
+        required: 'Need a summoner name here.',
+      },
+      server: {
+        required: 'Need a server here.',
+      },
       emailAddress: {
         required: 'Need an email address here.',
         email: 'Is this email address legit?',

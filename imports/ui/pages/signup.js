@@ -14,6 +14,7 @@ export class Signup extends React.Component {
         server:'',
         summonerId:''
     };
+    this.checkSummonerExist = this.checkSummonerExist.bind(this);
     this.checkSummonerExistCallBack = this.checkSummonerExistCallBack.bind(this);
   }
 
@@ -37,13 +38,23 @@ export class Signup extends React.Component {
   }
 
   handleChange(e){
-    this.setState({[e.target.name]: e.target.value});
+    if(e.target.name=="server")
+      this.setState({[e.target.name]: e.target.value}, function(){
+        this.checkSummonerExist();
+      }.bind(this) );
+    else
+      this.setState({[e.target.name]: e.target.value});
   }
 
   handleOnBlur(e){
+    this.checkSummonerExist();
+  }
+
+  checkSummonerExist(){
+    console.log("ds le server: "+this.state.server);
     if (this.state.summonerName && this.state.server && this.state.server != "") {
       const server = this.state.server;
-      const summonerName = this.state.summonerName;
+      const summonerName = this.state.summonerName.trim();
       Meteor.call('User.checkSummonerExist', {
         server: server,
         summonerName: summonerName
@@ -71,7 +82,6 @@ export class Signup extends React.Component {
             <ControlLabel>server</ControlLabel>
             <FormControl
               componentClass="select"
-              onBlur={this.handleOnBlur.bind(this)}
               onChange={this.handleChange.bind(this)}
               type="text"
               ref="server"

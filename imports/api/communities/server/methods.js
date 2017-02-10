@@ -7,15 +7,13 @@ import {createSummonerProfile, updateSummonerProfile} from '../../lolProfile/ser
 const joinCommunityValidator = new SimpleSchema({
   community: { type: Communities.schema },
   user: {type:Object, blackbox:true}, // if no blackbox _id fucked the validation.... ??!!
-  userCommunityName: {label: "Your name", type: String, min:3}
+  userCommunityName: {label: "Your name", type: String, min:3, trim:true}
 })
 
 export const joinCommunity = new ValidatedMethod({
   name: 'community.join',
   validate: joinCommunityValidator.validator(),
   run({community, user, userCommunityName }) {
-    console.log("in the run");
-    // insert the user in the community
     Communities.update(community._id, { $push: {user_id: user._id} });
     Meteor.users.update(user._id, {$push: {'profile.community_id': community._id} });
 
@@ -42,17 +40,26 @@ export const checkSummonerExist = new ValidatedMethod({
   }).validator(),
   run({ server, summonerName }) {
     server = server.toLowerCase();
-    const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v1.4/summoner/by-name/"+summonerName+"?api_key="+riotApiKey;
+
+    let summonerNameEncoded = encodeURIComponent(summonerName);
+    const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v1.4/summoner/by-name/"+summonerNameEncoded+"?api_key="+riotApiKey;
+
     try {
       var result = HTTP.call("GET", riotApiUrl);
 
-      console.log(result.data[summonerName.toLowerCase()]);
+      const resultSumName = summonerName.toLowerCase().replace(" ","");
+console.log(resultSumName);
+console.log(result);
 
-      return result.data[summonerName.toLowerCase()].id;
+      console.log(result.data[resultSumName]);
+
+      return result.data[resultSumName].id;
     } catch (e) {
       // Got a network error, time-out or HTTP error in the 400 or 500 range.
-      console.log("on: "+riotApiUrl);
+      console.log("Exception on: "+riotApiUrl);
       console.log(e);
+      throw new Meteor.Error('User.checkSummonerExist', 'Cannot find your summoner name at the selected server');
+
     }
 
   },
