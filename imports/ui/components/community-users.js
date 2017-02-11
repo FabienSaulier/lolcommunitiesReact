@@ -2,7 +2,7 @@ import React from 'react';
 import { ListGroup, Alert, Table, Media} from 'react-bootstrap';
 import {TierIconImage} from './tier-icon';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
-import { Table as TableSemantic } from 'semantic-ui-react'
+import { Table as TableSemantic, Icon } from 'semantic-ui-react'
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
 export class CommunityUsers extends React.Component {
@@ -14,6 +14,8 @@ export class CommunityUsers extends React.Component {
     this.tierWinsLossesFormatter = this.tierWinsLossesFormatter.bind(this);
     this.sortByElo = this.sortByElo.bind(this);
     this.calculateElo = this.calculateElo.bind(this);
+    this.communityNameFormatter = this.communityNameFormatter.bind(this);
+    this.refreshInfo = this.refreshInfo.bind(this);
 
     this.tableOptions = {
       defaultSortName: 'tier',
@@ -22,6 +24,24 @@ export class CommunityUsers extends React.Component {
    };
   }
 
+  communityNameFormatter(comName, row){
+    console.log(row);
+    return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(row.summonerId, row.server)}} />  {comName}</div>);
+  }
+
+  refreshInfo(summonerId, summonerServer){
+    console.log("resfre");
+    Meteor.call('summonerProfile.refresh', {
+      summonerId: summonerId,
+      summonerServer: summonerServer
+    }, (error) => {
+      if (error) {
+        Bert.alert(error.reason, 'danger');
+      } else {
+        Bert.alert('refresh', 'success');
+      }
+    });
+  }
 
   summonerNameFormatter(sumName, row){
     let url = "http://"+row.server+".op.gg/summoner/userName="+sumName;
@@ -107,7 +127,6 @@ export class CommunityUsers extends React.Component {
   tierDataFormatter(tier, row){
     if (!tier)
       tier = "unranked";
-
     return(
         <Media>
           <Media.Left align="middle">
@@ -140,7 +159,7 @@ export class CommunityUsers extends React.Component {
     return(
       this.props.summoners.length > 0 ?
       <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '70%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
-        <TableHeaderColumn dataField='userCommunityName' isKey>{this.props.communityName}</TableHeaderColumn>
+        <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} isKey>{this.props.communityName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} >Summoner</TableHeaderColumn>
         <TableHeaderColumn dataField='tier' dataSort sortFunc={this.sortByElo} dataFormat={this.tierDataFormatter} >S7   5x5</TableHeaderColumn>
         <TableHeaderColumn dataField='wins' dataFormat={this.tierWinsLossesFormatter}>wins / losses </TableHeaderColumn>

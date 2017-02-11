@@ -35,7 +35,8 @@ class CommunityHeaderContainer extends React.Component {
       if (error) {
          Bert.alert(error.reason, 'danger');
        } else {
-         Bert.alert('leave the community!', 'success');
+         // stop spamming alert when it works.
+        // Bert.alert('leave the community!', 'success');
        }
      });
   }

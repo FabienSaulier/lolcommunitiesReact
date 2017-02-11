@@ -11,13 +11,21 @@ export const createSummonerProfile = (user, userCommunityName) => {
   LolProfile.insert(summonerProfileData);
 }
 
-export const updateSummonerProfile = (user) =>{
-  const summonerProfileData = getSummonerProfileData(user.profile.server, user.profile.summonerId);
-  LolProfile.update({summonerId: user.profile.summonerId}, {$set: summonerProfileData}, {validate: false});
+export const updateSummonerProfile = (summonerId, summonerServer) =>{
+  const summonerProfileData = getSummonerProfileData(summonerId, summonerServer);
+  LolProfile.update({summonerId: summonerId}, {$set: summonerProfileData}, {validate: false});
 }
 
-const getSummonerProfileData = (server, summonerId) => {
+export const refreshSummonerProfile = new ValidatedMethod({
+  name: 'summonerProfile.refresh',
+  validate:null,
+  run({summonerId, summonerServer }) {
+    console.log("refreshSummonerProfile");
+    updateSummonerProfile(summonerId, summonerServer);
+  },
+});
 
+const getSummonerProfileData = (summonerId, server) => {
   const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
   try {
     var result = HTTP.call("GET", riotApiUrl);

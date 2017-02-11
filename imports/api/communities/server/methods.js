@@ -21,7 +21,7 @@ export const joinCommunity = new ValidatedMethod({
 
     if(hasProfile){
       console.log("todo update profile");
-      updateSummonerProfile(user);
+      updateSummonerProfile(user.profile.summonerId, user.profile.server);
     } else{
       console.log("todo insert profile");
       createSummonerProfile(user, userCommunityName);
