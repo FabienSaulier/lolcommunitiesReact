@@ -37,7 +37,7 @@ Communities.schema = new SimpleSchema({
   },
   user_id: {
     type: [String],
-    optional:true
+    optional: false // need to be instanciante empty
   }
 });
 

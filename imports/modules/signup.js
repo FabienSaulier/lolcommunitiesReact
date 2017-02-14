@@ -16,6 +16,7 @@ const getUserData = () => (
     summonerName: getInputValue(component.refs.summonerName).trim(),
     summonerId: getInputValue(component.refs.summonerId),
     server: getInputValue(component.refs.server),
+    communities:[]
   },
 });
 

@@ -6,7 +6,7 @@ import {Meteor} from 'meteor/meteor';
 const riotApiKey = Meteor.settings.riotApiKey;
 
 export const createSummonerProfile = (user, userCommunityName) => {
-  let summonerProfileData = getSummonerProfileData(user.profile.server, user.profile.summonerId);
+  let summonerProfileData = getSummonerProfileData(user.profile.summonerId, user.profile.server);
   summonerProfileData.userCommunityName = userCommunityName;
   LolProfile.insert(summonerProfileData);
 }
@@ -29,7 +29,6 @@ const getSummonerProfileData = (summonerId, server) => {
   const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
   try {
     var result = HTTP.call("GET", riotApiUrl);
-
     let summonerProfileData = {};
 
     for(i in result.data[summonerId]){

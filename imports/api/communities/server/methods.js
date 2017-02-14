@@ -15,15 +15,20 @@ export const joinCommunity = new ValidatedMethod({
   validate: joinCommunityValidator.validator(),
   run({community, user, userCommunityName }) {
     Communities.update(community._id, { $push: {user_id: user._id} });
-    Meteor.users.update(user._id, {$push: {'profile.community_id': community._id} });
+
+    //Meteor.users.update(user._id, {$push: {'profile.community_id': community._id} });
+
+    let userCommunity = {'_id': community._id, 'userName': userCommunityName}
+    Meteor.users.update(user._id, {$push: {'profile.communities': userCommunity} });
+
 
     const hasProfile = Meteor.call('LolProfile.hasUserLolProfile', {user : user });
 
     if(hasProfile){
-      console.log("todo update profile");
+      console.log("update profile");
       updateSummonerProfile(user.profile.summonerId, user.profile.server);
     } else{
-      console.log("todo insert profile");
+      console.log("insert profile");
       createSummonerProfile(user, userCommunityName);
     }
   },

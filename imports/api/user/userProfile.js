@@ -19,11 +19,20 @@ Schema.UserProfile = new SimpleSchema({
         allowedValues: ['NA', 'EUW', 'EUNE', 'BR', 'TR', 'RU', 'LAN', 'LAS', 'OCE', 'KR'],
         optional: false
     },
-    community_id: {
-        type: [String],
-        optional: false
-    }
+    communities:{
+        type:[Object],
+        optional: false // need to be instanciante empty
+    },
 
+    "community.$._id":{
+        type: String
+    },
+    "community.$.userName":{
+        type: String,
+        label: 'communityUserName',
+        min: 3,
+        max: 30
+    }
 });
 
 Schema.User = new SimpleSchema({

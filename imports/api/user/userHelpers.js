@@ -10,12 +10,10 @@ Users.helpers({
 
   // if the current user has the community as his.
   isInCommunity(idCommunity){
-    const com = this.profile.community_id;
-    if(com && com.includes(idCommunity)){
-      return true;
-    } else{
-      return false;
-    }
+    return this.profile.communities.some(function(community){
+      if(community._id == idCommunity)
+        return true;
+    });
   }
 
 });

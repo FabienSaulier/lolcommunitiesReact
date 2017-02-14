@@ -51,7 +51,7 @@ class CommunityHeaderContainer extends React.Component {
         Bert.alert(error.reason, 'danger');
       } else {
         this.closeModal();
-        Bert.alert('Join the community!', 'success');
+        //Bert.alert('Join the community!', 'success');
       }
     });
   }
@@ -124,8 +124,9 @@ class CommunityHeaderContainer extends React.Component {
   }
 
   determineActionBtn(){
-    if(Meteor.user() && !Meteor.user().isInCommunity(this.props.community._id))
+    if(Meteor.user() && !Meteor.user().isInCommunity(this.props.community._id)){
       return "join";
+    }
     else if (Meteor.user() &&  Meteor.user().isInCommunity(this.props.community._id))
       return"youarein";
     else

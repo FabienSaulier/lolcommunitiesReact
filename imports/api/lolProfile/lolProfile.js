@@ -21,12 +21,6 @@ LolProfile.schema = new SimpleSchema({
     label: "summonerName",
     max: 100
   },
-  userCommunityName: {
-    type: String,
-    label: 'userCommunityName',
-    min: 3,
-    max: 30
-  },
   queue: {
     type:String,
     label:"queue",
