@@ -52,7 +52,13 @@ const getSummonerProfileData = (summonerId, server) => {
     return summonerProfileData;
 
   } catch (e) {
-    if(e.response.data.status.status_code == 404){
+
+    if(e.response.statusCode == '429'){
+      console.log('Riot Api is overloaded, wait one minute to refresh');
+      throw new Meteor.Error('riot.api ', 'Riot Api is overloaded, wait one minute to refresh');
+    }
+    //TODO a check, queue unranked ???
+    else if(e.response.statusCode == 404){
       // user has no ranked stats
       summonerProfileData = {
         'server': server.toUpperCase(),
@@ -62,8 +68,10 @@ const getSummonerProfileData = (summonerId, server) => {
       }
       return summonerProfileData;
     } else{
-      console.log(e);
       // Got a network error, time-out or HTTP error in the 400 or 500 range.
+      console.log('at: '+riotApiUrl);
+      console.log(e);
+      throw new Meteor.Error('riot.api ', 'Unknown error from Riot api.');
     }
   }
 }
