@@ -21,6 +21,7 @@ export class Signup extends React.Component {
   checkSummonerExistCallBack(error, result){
     if(error){
       Bert.alert(error.reason, 'warning');
+      this.setState({summonerId: null});
     }
     else{
       Bert.alert('Found your lol account!', 'success');
