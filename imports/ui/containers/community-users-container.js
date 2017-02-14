@@ -16,50 +16,43 @@ const composer = (props, onData) => {
   load = () =>{
 
     community = Communities.findOne({name:props.communityName});
+
+    /** Get the users of the community.**/
     let users = [];
     //TODO optimiser la requete, pas besoins de tout le user.
     users = Meteor.users.find({ _id: { $in: community.user_id }}).fetch();
 
+    /** build a map of userCommunityName and summonerId for each users. **/
     let summonerIds = [];
-
-    let mapUserCommunityName_userId = [];
-
+    let mapUserCommunityName_summonerId = [];
     users.forEach(function(user) {
       summonerIds.push(user.profile.summonerId);
-
       for(i=0; i<user.profile.communities.length; i++){
         if(user.profile.communities[i]._id == community._id){
-          mapUserCommunityName_userId.push({'summonerId':user.profile.summonerId, 'userCommunityname': user.profile.communities[i].userName});
+          mapUserCommunityName_summonerId.push({'summonerId':user.profile.summonerId, 'userCommunityName': user.profile.communities[i].userName});
           break;
         }
       }
     });
 
-console.log(mapUserCommunityName_userId);
+    /** Get the lolProfiles for each users and set the userCommunityName accordingly. **/
+    let summonersProfiles = [];
+    summonersProfiles = LolProfile.find({ summonerId: { $in: summonerIds}}).fetch();
 
-    let summoners = [];
-    // ici! on a qu'un summonerid
-    summoners = LolProfile.find({ summonerId: { $in: summonerIds}}).fetch();
-
-    summoners.forEach(function(summoner){
-      console.log(summoner);
-      for(i=0; i<mapUserCommunityName_userId.length; i++){
-        if(mapUserCommunityName_userId[i].summonerId == summoner.summonerId){
-          console.log('add '+mapUserCommunityName_userId[i].userCommunityname);
-          summoner.userCommunityName = mapUserCommunityName_userId[i].userCommunityname;
+  // Handle the case where multiple user have the same summonerId. Yeah, it shouldn't not.
+  // But for now, it's possible. before a verification to confirm the legitimate owner of the riot summoner id
+    let summoners =[];
+    mapUserCommunityName_summonerId.forEach(function(userCommunityName_userId){
+      for(i=0; i<summonersProfiles.length; i++){
+        if(summonersProfiles[i].summonerId == userCommunityName_userId.summonerId){
+          // need a copie for when different users share the same summonerID
+          let copie = Object.assign({}, summonersProfiles[i]);
+          copie.userCommunityName = userCommunityName_userId.userCommunityName;
+          summoners.push(copie);
           break;
         }
       }
     })
-
-/*
-    for(summoner in summoners){
-      users.forEach(function(user) {
-        if(summoner.summonerId = user.profile.summonerId)
-          summoner.communityName = user.profile.communityName;
-      });
-    }
-    */
 
     onData(null, { summoners });
   }

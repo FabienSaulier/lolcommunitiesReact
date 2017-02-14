@@ -25,7 +25,6 @@ export class CommunityUsers extends React.Component {
   }
 
   communityNameFormatter(comName, row){
-    console.log(row);
     return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(row.summonerId, row.server)}} />  {comName}</div>);
   }
 
