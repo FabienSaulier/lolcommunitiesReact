@@ -1,16 +1,13 @@
-  import React from 'react';
+import React from 'react';
 import CommunityUsersContainer from '../containers/community-users-container';
 import CommunityHeaderDataContainer from '../containers/community-header-container';
 import { Communities } from '../../api/communities/communities';
 import { Meteor } from 'meteor/meteor';
 
-
  export class Community extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
   }
-
 
   render() {
     return (
@@ -23,8 +20,6 @@ import { Meteor } from 'meteor/meteor';
           <CommunityUsersContainer communityName={this.props.params.communityName} />
         </div>
       </div>
-
     )
   }
-
 };

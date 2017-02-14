@@ -24,7 +24,6 @@ export class Signup extends React.Component {
     }
     else{
       Bert.alert('Found your lol account!', 'success');
-      console.log(result);
       this.setState({summonerId: result});
     }
   }
@@ -51,7 +50,6 @@ export class Signup extends React.Component {
   }
 
   checkSummonerExist(){
-    console.log("ds le server: "+this.state.server);
     if (this.state.summonerName && this.state.server && this.state.server != "") {
       const server = this.state.server;
       const summonerName = this.state.summonerName.trim();

@@ -29,7 +29,6 @@ export class CommunityUsers extends React.Component {
   }
 
   refreshInfo(summonerId, summonerServer){
-    console.log("resfre");
     Meteor.call('summonerProfile.refresh', {
       summonerId: summonerId,
       summonerServer: summonerServer
