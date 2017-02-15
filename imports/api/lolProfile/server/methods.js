@@ -7,7 +7,8 @@ const riotApiKey = Meteor.settings.riotApiKey;
 
 export const createSummonerProfile = (user, userCommunityName) => {
   let summonerProfileData = getSummonerProfileData(user.profile.summonerId, user.profile.server);
-  summonerProfileData.userCommunityName = userCommunityName;
+  // a del, on a plus besoin?!
+//  summonerProfileData.userCommunityName = userCommunityName;
   LolProfile.insert(summonerProfileData);
 }
 
@@ -26,27 +27,40 @@ export const refreshSummonerProfile = new ValidatedMethod({
 });
 
 const getSummonerProfileData = (summonerId, server) => {
+  console.log("get sum porfiledata");
   const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
   try {
+    console.log(riotApiUrl);
+
+
     var result = HTTP.call("GET", riotApiUrl);
     let summonerProfileData = {};
 
+console.log("ici");
     for(i in result.data[summonerId]){
+
+      console.log("la");
+
+
       if(result.data[summonerId][i].queue == 'RANKED_SOLO_5x5'){
         let league = result.data[summonerId][i];
         let stats = league.entries[i];
+        console.log(league);
         summonerProfileData = {
           'server': server,
           'summonerId': stats.playerOrTeamId,
           'summonerName': stats.playerOrTeamName,
-          'queue': league.queue,
-          'tier': league.tier,
-          'leagueName': league.name,
-          'division': stats.division,
-          'leaguePoints': stats.leaguePoints,
-          'wins': stats.wins,
-          'losses': stats.losses
+          'leagues':[{
+            'queue': league.queue,
+            'tier': league.tier,
+            'leagueName': league.name,
+            'division': stats.division,
+            'leaguePoints': stats.leaguePoints,
+            'wins': stats.wins,
+            'losses': stats.losses
+          }]
         }
+        console.log(summonerProfileData);
       }
     }
     return summonerProfileData;
@@ -64,7 +78,7 @@ const getSummonerProfileData = (summonerId, server) => {
         'server': server.toUpperCase(),
         'summonerId': summonerId,
         'summonerName': Meteor.user().profile.summonerName,
-        'queue': "UNRANKED"
+        'leagues': []
       }
       return summonerProfileData;
     } else{

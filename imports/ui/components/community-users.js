@@ -12,13 +12,13 @@ export class CommunityUsers extends React.Component {
     this.summonerNameFormatter = this.summonerNameFormatter.bind(this);
     this.tierDataFormatter = this.tierDataFormatter.bind(this);
     this.tierWinsLossesFormatter = this.tierWinsLossesFormatter.bind(this);
-    this.sortByElo = this.sortByElo.bind(this);
+    this.sortByRank = this.sortByRank.bind(this);
     this.calculateElo = this.calculateElo.bind(this);
     this.communityNameFormatter = this.communityNameFormatter.bind(this);
     this.refreshInfo = this.refreshInfo.bind(this);
-
+    this.getRanked5v5Data = this.getRanked5v5Data.bind(this);
     this.tableOptions = {
-      defaultSortName: 'tier',
+      defaultSortName: 'leagues',
       defaultSortOrder: 'asc',
       sortIndicator: false  // disable sort indicator ?? doesn't work.
    };
@@ -46,9 +46,20 @@ export class CommunityUsers extends React.Component {
     return "<a href="+url+" target='_blank' > "+sumName+"</a>";
   }
 
-  sortByElo(a, b, order) {
-    let aPoints = this.calculateElo(a);
-    let bPoints = this.calculateElo(b);
+  getRanked5v5Data(summonerProfil){
+    for(league of summonerProfil.leagues){
+      if(league.queue == 'RANKED_SOLO_5x5')
+        return league;
+    }
+    return {'tier':"unranked"};
+  }
+
+  sortByRank(summonerA, summonerB, order) {
+    const aLeague = this.getRanked5v5Data(summonerA);
+    const bLeague = this.getRanked5v5Data(summonerB);
+
+    let aPoints = this.calculateElo(aLeague);
+    let bPoints = this.calculateElo(bLeague);
     if(order === 'desc'){
       if(aPoints > bPoints){
         return 1;
@@ -66,7 +77,6 @@ export class CommunityUsers extends React.Component {
       else
         return 1;
     }
-
   }
 
   calculateElo(leagueInfo){
@@ -122,22 +132,28 @@ export class CommunityUsers extends React.Component {
     return points;
   }
 
-  tierDataFormatter(tier, row){
-    if (!tier)
-      tier = "unranked";
+  tierDataFormatter(leagues, row){
+    let league;
+    for(l of leagues){
+      if(l.queue == 'RANKED_SOLO_5x5')
+        league = l;
+    }
+    if(!league)
+      league = {'tier': 'unranked'};
+
     return(
         <Media>
           <Media.Left align="middle">
-            <TierIconImage tier={tier} />
+            <TierIconImage tier={league.tier} />
           </Media.Left>
           <Media.Right  align="middle">
-            { row.leaguePoints >= 0 ?
+            { league.leaguePoints >= 0 ?
               <span>
-                <strong>{tier.toLowerCase()} {row.division}  {row.leaguePoints} LP</strong>
+                <strong>{league.tier.toLowerCase()} {league.division}  {league.leaguePoints} LP</strong>
               </span>
             :
               <span>
-                <strong>{tier.toLowerCase()} {row.division}</strong>
+                <strong>{league.tier.toLowerCase()} {league.division}</strong>
               </span>
             }
           </Media.Right>
@@ -145,12 +161,11 @@ export class CommunityUsers extends React.Component {
     );
   }
 
-
-
-  tierWinsLossesFormatter(wins, row){
-    if(row.wins === undefined || row.losses === undefined)
+  tierWinsLossesFormatter(leagues, summoner){
+    const league5v5 = this.getRanked5v5Data(summoner);
+    if(league5v5.wins === undefined || league5v5.losses === undefined)
       return('-');
-    return(row.wins +" / "+ row.losses);
+    return(league5v5.wins +" / "+ league5v5.losses);
   }
 
   render(){
@@ -159,8 +174,8 @@ export class CommunityUsers extends React.Component {
       <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '70%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
         <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} isKey>{this.props.communityName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} >Summoner</TableHeaderColumn>
-        <TableHeaderColumn dataField='tier' dataSort sortFunc={this.sortByElo} dataFormat={this.tierDataFormatter} >S7   5x5</TableHeaderColumn>
-        <TableHeaderColumn dataField='wins' dataFormat={this.tierWinsLossesFormatter}>wins / losses </TableHeaderColumn>
+        <TableHeaderColumn dataField='leagues' dataSort sortFunc={this.sortByRank} dataFormat={this.tierDataFormatter} >S7 solo 5x5</TableHeaderColumn>
+        <TableHeaderColumn dataField='winlosses' dataFormat={this.tierWinsLossesFormatter}>wins / losses </TableHeaderColumn>
       </BootstrapTable>
       :
       <Alert bsStyle="warning">No summoners yet.</Alert>

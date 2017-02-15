@@ -5,22 +5,8 @@ export const LolProfile = new Mongo.Collection('LolProfile');
 
 //TODO rename en lolInformation, summonerInformation, summonerData, summonerProfil
 
-LolProfile.schema = new SimpleSchema({
-  server:{
-    type:String,
-    label:"server",
-    allowedValues: ['NA', 'EUW', 'LAN','EUNE', 'BR', 'TR', 'RU', 'LAS', 'OCE', 'KR', 'JP'],
-  },
-  summonerId: {
-    type: String,
-    label: "summonerId",
-    max: 100
-  },
-  summonerName: {
-    type: String,
-    label: "summonerName",
-    max: 100
-  },
+
+LeagueSchema = new SimpleSchema({
   queue: {
     type:String,
     label:"queue",
@@ -57,6 +43,28 @@ LolProfile.schema = new SimpleSchema({
     type: Number,
     label: "losses",
     optional: true
+  }
+});
+
+
+LolProfile.schema = new SimpleSchema({
+  server: {
+    type:String,
+    label:"server",
+    allowedValues: ['NA', 'EUW', 'LAN','EUNE', 'BR', 'TR', 'RU', 'LAS', 'OCE', 'KR', 'JP'],
+  },
+  summonerId: {
+    type: String,
+    label: "summonerId",
+    max: 100
+  },
+  summonerName: {
+    type: String,
+    label: "summonerName",
+    max: 100
+  },
+  leagues: {
+    type: [LeagueSchema]
   }
 });
 
