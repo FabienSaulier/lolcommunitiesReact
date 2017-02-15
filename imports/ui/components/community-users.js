@@ -10,15 +10,18 @@ export class CommunityUsers extends React.Component {
   constructor(props){
     super(props);
     this.summonerNameFormatter = this.summonerNameFormatter.bind(this);
-    this.tierDataFormatter = this.tierDataFormatter.bind(this);
+    this.tierDataFormatter5v5 = this.tierDataFormatter5v5.bind(this);
+    this.tierDataFormatter3v3 = this.tierDataFormatter3v3.bind(this);
     this.tierWinsLossesFormatter = this.tierWinsLossesFormatter.bind(this);
-    this.sortByRank = this.sortByRank.bind(this);
+    this.sortByRank3v3 = this.sortByRank3v3.bind(this);
+    this.sortByRank5v5 = this.sortByRank5v5.bind(this);
     this.calculateElo = this.calculateElo.bind(this);
     this.communityNameFormatter = this.communityNameFormatter.bind(this);
     this.refreshInfo = this.refreshInfo.bind(this);
     this.getRanked5v5Data = this.getRanked5v5Data.bind(this);
+    this.calculatePositionAB = this.calculatePositionAB.bind(this);
     this.tableOptions = {
-      defaultSortName: 'leagues',
+      defaultSortName: 'league5v5',
       defaultSortOrder: 'asc',
       sortIndicator: false  // disable sort indicator ?? doesn't work.
    };
@@ -46,18 +49,15 @@ export class CommunityUsers extends React.Component {
     return "<a href="+url+" target='_blank' > "+sumName+"</a>";
   }
 
-  getRanked5v5Data(summonerProfil){
-    for(league of summonerProfil.leagues){
-      if(league.queue == 'RANKED_SOLO_5x5')
-        return league;
-    }
-    return {'tier':"unranked"};
+  sortByRank3v3(summonerA, summonerB, order) {
+    return this.calculatePositionAB(summonerA.league3v3, summonerB.league3v3, order);
   }
 
-  sortByRank(summonerA, summonerB, order) {
-    const aLeague = this.getRanked5v5Data(summonerA);
-    const bLeague = this.getRanked5v5Data(summonerB);
+  sortByRank5v5(summonerA, summonerB, order) {
+    return this.calculatePositionAB(summonerA.league5v5, summonerB.league5v5, order);
+  }
 
+  calculatePositionAB(aLeague, bLeague, order){
     let aPoints = this.calculateElo(aLeague);
     let bPoints = this.calculateElo(bLeague);
     if(order === 'desc'){
@@ -80,6 +80,9 @@ export class CommunityUsers extends React.Component {
   }
 
   calculateElo(leagueInfo){
+    if(!leagueInfo)
+      return 0;
+
     let points;
     switch (leagueInfo.tier) {
       case "UNRANKED":
@@ -132,15 +135,33 @@ export class CommunityUsers extends React.Component {
     return points;
   }
 
-  tierDataFormatter(leagues, row){
-    let league;
-    for(l of leagues){
-      if(l.queue == 'RANKED_SOLO_5x5')
-        league = l;
-    }
+
+tierDataFormatter3v3(league, row){
+  if(!league)
+    league = {'tier': 'unranked'};
+  return(
+      <Media>
+        <Media.Left align="middle">
+          <TierIconImage tier={league.tier} />
+        </Media.Left>
+        <Media.Right  align="middle">
+          { league.leaguePoints >= 0 ?
+            <span>
+              <strong>{league.tier.toLowerCase()} {league.division}  {league.leaguePoints} LP</strong>
+            </span>
+          :
+            <span>
+              <strong>{league.tier.toLowerCase()} {league.division}</strong>
+            </span>
+          }
+        </Media.Right>
+      </Media>
+  );
+}
+
+  tierDataFormatter5v5(league, row){
     if(!league)
       league = {'tier': 'unranked'};
-
     return(
         <Media>
           <Media.Left align="middle">
@@ -162,10 +183,10 @@ export class CommunityUsers extends React.Component {
   }
 
   tierWinsLossesFormatter(leagues, summoner){
-    const league5v5 = this.getRanked5v5Data(summoner);
-    if(league5v5.wins === undefined || league5v5.losses === undefined)
+
+    if(summoner.league5v5 === undefined)
       return('-');
-    return(league5v5.wins +" / "+ league5v5.losses);
+    return(summoner.league5v5.wins +" / "+ summoner.league5v5.losses);
   }
 
   render(){
@@ -174,8 +195,9 @@ export class CommunityUsers extends React.Component {
       <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '70%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
         <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} isKey>{this.props.communityName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} >Summoner</TableHeaderColumn>
-        <TableHeaderColumn dataField='leagues' dataSort sortFunc={this.sortByRank} dataFormat={this.tierDataFormatter} >S7 solo 5x5</TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={this.sortByRank5v5} dataFormat={this.tierDataFormatter5v5} >S7 solo 5v5</TableHeaderColumn>
         <TableHeaderColumn dataField='winlosses' dataFormat={this.tierWinsLossesFormatter}>wins / losses </TableHeaderColumn>
+        <TableHeaderColumn dataField='league3v3' dataSort sortFunc={this.sortByRank3v3} dataFormat={this.tierDataFormatter3v3} >S7 3v3</TableHeaderColumn>
       </BootstrapTable>
       :
       <Alert bsStyle="warning">No summoners yet.</Alert>

@@ -31,8 +31,6 @@ const getSummonerProfileData = (summonerId, server) => {
     var result = HTTP.call("GET", riotApiUrl);
 
     let summonerProfileData = {};
-
-
     let summonerQueues = result.data[summonerId];
     // at least 1 queue otherwise it's in 404
 
@@ -55,33 +53,6 @@ const getSummonerProfileData = (summonerId, server) => {
         'losses': stats.losses
       })
     }
-
-    // loop on queues
-    /*
-    for(i in summonerQueues){
-      if(result.data[summonerId][i].queue == 'RANKED_SOLO_5x5'){
-
-        let league = result.data[summonerId][i];
-        let stats = league.entries[i];
-        summonerProfileData = {
-          'server': server,
-          'summonerId': stats.playerOrTeamId,
-          'summonerName': stats.playerOrTeamName,
-          'leagues':[{
-            'queue': league.queue,
-            'tier': league.tier,
-            'leagueName': league.name,
-            'division': stats.division,
-            'leaguePoints': stats.leaguePoints,
-            'wins': stats.wins,
-            'losses': stats.losses
-          }]
-        }
-      }
-    }
-
-*/
-
     return summonerProfileData;
 
   } catch (e) {

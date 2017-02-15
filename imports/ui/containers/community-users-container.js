@@ -54,6 +54,25 @@ const composer = (props, onData) => {
       }
     })
 
+    // extract the different queue for presentation array.
+    for(summoner of summoners){
+      for(league of summoner.leagues){
+        if (league.queue == 'RANKED_SOLO_5x5'){
+          summoner.league5v5 = league;
+        }
+        if (league.queue == 'RANKED_FLEX_TT'){
+          summoner.league3v3 = league;
+        }
+        if (league.queue == 'RANKED_FLEX_SR'){
+          summoner.league5v5flex = league;
+        }
+        delete summoner.leagues;
+      }
+
+      console.log(summoner);
+    }
+    console.log(summoners);
+
     onData(null, { summoners });
   }
 
