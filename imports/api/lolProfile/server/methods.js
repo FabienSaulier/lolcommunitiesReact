@@ -7,8 +7,7 @@ const riotApiKey = Meteor.settings.riotApiKey;
 
 export const createSummonerProfile = (user, userCommunityName) => {
   let summonerProfileData = getSummonerProfileData(user.profile.summonerId, user.profile.server);
-  // a del, on a plus besoin?!
-//  summonerProfileData.userCommunityName = userCommunityName;
+  summonerProfileData.summonerName = user.profile.summonerName; // ensure the summonerName cause we can't retrieve it from riot if user has no ranked stats.
   LolProfile.insert(summonerProfileData);
 }
 
@@ -27,21 +26,12 @@ export const refreshSummonerProfile = new ValidatedMethod({
 });
 
 const getSummonerProfileData = (summonerId, server) => {
-  console.log("get sum porfiledata");
   const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
   try {
-    console.log(riotApiUrl);
-
-
     var result = HTTP.call("GET", riotApiUrl);
     let summonerProfileData = {};
 
-console.log("ici");
     for(i in result.data[summonerId]){
-
-      console.log("la");
-
-
       if(result.data[summonerId][i].queue == 'RANKED_SOLO_5x5'){
         let league = result.data[summonerId][i];
         let stats = league.entries[i];
@@ -60,7 +50,6 @@ console.log("ici");
             'losses': stats.losses
           }]
         }
-        console.log(summonerProfileData);
       }
     }
     return summonerProfileData;
@@ -71,13 +60,12 @@ console.log("ici");
       console.log('Riot Api is overloaded, wait one minute to refresh');
       throw new Meteor.Error('riot.api ', 'Riot Api is overloaded, wait one minute to refresh');
     }
-    //TODO a check, queue unranked ???
     else if(e.response.statusCode == 404){
       // user has no ranked stats
+      // note: on an update he has already his summonerName. on create, we ensure to pass the summoner name in appropriate function.
       summonerProfileData = {
         'server': server.toUpperCase(),
         'summonerId': summonerId,
-        'summonerName': Meteor.user().profile.summonerName,
         'leagues': []
       }
       return summonerProfileData;

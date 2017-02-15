@@ -36,7 +36,7 @@ export class CommunityUsers extends React.Component {
       if (error) {
         Bert.alert(error.reason, 'danger');
       } else {
-        Bert.alert('refresh', 'success');
+        Bert.alert('Data updated', 'success');
       }
     });
   }
