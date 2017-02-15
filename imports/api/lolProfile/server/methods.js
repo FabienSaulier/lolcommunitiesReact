@@ -29,13 +29,40 @@ const getSummonerProfileData = (summonerId, server) => {
   const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
   try {
     var result = HTTP.call("GET", riotApiUrl);
+
     let summonerProfileData = {};
 
-    for(i in result.data[summonerId]){
+
+    let summonerQueues = result.data[summonerId];
+    // at least 1 queue otherwise it's in 404
+
+    summonerProfileData = {
+      'server': server,
+      'summonerId': summonerQueues[0].entries[0].playerOrTeamId,
+      'summonerName': summonerQueues[0].entries[0].playerOrTeamName,
+      'leagues':[]
+    }
+    for(i in summonerQueues){
+      let league = summonerQueues[i];
+      let stats = league.entries[0]; // it's always 1 player, not a team.
+      summonerProfileData.leagues.push({
+        'queue': league.queue,
+        'tier': league.tier,
+        'leagueName': league.name,
+        'division': stats.division,
+        'leaguePoints': stats.leaguePoints,
+        'wins': stats.wins,
+        'losses': stats.losses
+      })
+    }
+
+    // loop on queues
+    /*
+    for(i in summonerQueues){
       if(result.data[summonerId][i].queue == 'RANKED_SOLO_5x5'){
+
         let league = result.data[summonerId][i];
         let stats = league.entries[i];
-        console.log(league);
         summonerProfileData = {
           'server': server,
           'summonerId': stats.playerOrTeamId,
@@ -52,6 +79,9 @@ const getSummonerProfileData = (summonerId, server) => {
         }
       }
     }
+
+*/
+
     return summonerProfileData;
 
   } catch (e) {
