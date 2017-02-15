@@ -18,7 +18,6 @@ export class CommunityUsers extends React.Component {
     this.calculateElo = this.calculateElo.bind(this);
     this.communityNameFormatter = this.communityNameFormatter.bind(this);
     this.refreshInfo = this.refreshInfo.bind(this);
-    this.getRanked5v5Data = this.getRanked5v5Data.bind(this);
     this.calculatePositionAB = this.calculatePositionAB.bind(this);
     this.tableOptions = {
       defaultSortName: 'league5v5',
