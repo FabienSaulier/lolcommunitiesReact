@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from 'react-bootstrap';
 import AppNavigationContainer from '../containers/app-navigation-container';
+import AppFooter from '../components/app-footer';
 
 export const Layout = React.createClass({
   propTypes: {
@@ -9,9 +10,10 @@ export const Layout = React.createClass({
   render() {
     return <div>
       <AppNavigationContainer />
-      <Grid>
+      <Grid >
         { this.props.children }
       </Grid>
+      <AppFooter />
     </div>;
   },
 });

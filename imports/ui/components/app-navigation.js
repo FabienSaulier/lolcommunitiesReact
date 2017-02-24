@@ -1,8 +1,10 @@
 import React from 'react';
-import { Navbar } from 'react-bootstrap';
+import { Navbar} from 'react-bootstrap';
 import { Link } from 'react-router';
 import { PublicNavigation } from './public-navigation';
 import { AuthenticatedNavigation } from './authenticated-navigation';
+
+import { Grid, Image, Label, Segment } from 'semantic-ui-react'
 
 export class AppNavigation extends React.Component {
   renderNavigation(hasUser) {
@@ -13,7 +15,7 @@ export class AppNavigation extends React.Component {
     return <Navbar>
       <Navbar.Header>
         <Navbar.Brand>
-          <Link to="/">League communities</Link>
+          <Link to="/"  >League communities</Link>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>
