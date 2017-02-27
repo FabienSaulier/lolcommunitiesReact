@@ -15,6 +15,7 @@ export class CommunityUsers extends React.Component {
     this.tierWinsLossesFormatter = this.tierWinsLossesFormatter.bind(this);
     this.sortByRank3v3 = this.sortByRank3v3.bind(this);
     this.sortByRank5v5 = this.sortByRank5v5.bind(this);
+    this.sortByRankFlex5v5 = this.sortByRankFlex5v5.bind(this);
     this.calculateElo = this.calculateElo.bind(this);
     this.communityNameFormatter = this.communityNameFormatter.bind(this);
     this.refreshInfo = this.refreshInfo.bind(this);
@@ -22,7 +23,7 @@ export class CommunityUsers extends React.Component {
     this.tableOptions = {
       defaultSortName: 'league5v5',
       defaultSortOrder: 'asc',
-      sortIndicator: false  // disable sort indicator ?? doesn't work.
+      sortIndicator: false
    };
   }
 
@@ -54,6 +55,10 @@ export class CommunityUsers extends React.Component {
 
   sortByRank5v5(summonerA, summonerB, order) {
     return this.calculatePositionAB(summonerA.league5v5, summonerB.league5v5, order);
+  }
+
+  sortByRankFlex5v5(summonerA, summonerB, order) {
+    return this.calculatePositionAB(summonerA.league5v5flex, summonerB.league5v5flex, order);
   }
 
   calculatePositionAB(aLeague, bLeague, order){
@@ -196,6 +201,7 @@ tierDataFormatter3v3(league, row){
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} >Summoner</TableHeaderColumn>
         <TableHeaderColumn dataField='league5v5' dataSort sortFunc={this.sortByRank5v5} dataFormat={this.tierDataFormatter5v5} >S7 solo 5v5</TableHeaderColumn>
         <TableHeaderColumn dataField='winlosses' dataFormat={this.tierWinsLossesFormatter}>wins / losses </TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5flex' dataSort sortFunc={this.sortByRankFlex5v5} dataFormat={this.tierDataFormatter5v5} >S7 flex 5v5</TableHeaderColumn>
         <TableHeaderColumn dataField='league3v3' dataSort sortFunc={this.sortByRank3v3} dataFormat={this.tierDataFormatter3v3} >S7 3v3</TableHeaderColumn>
       </BootstrapTable>
       :
