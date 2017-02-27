@@ -45,7 +45,7 @@ export class CommunityUsers extends React.Component {
   }
 
   summonerNameFormatter(sumName, row){
-    let url = "http://"+row.server+".op.gg/summoner/userName="+sumName;
+    let url = "http://"+row.server+".op.gg/summoner/userName="+encodeURIComponent(sumName);
     return "<a href="+url+" target='_blank' > "+sumName+"</a>";
   }
 
