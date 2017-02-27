@@ -3,8 +3,26 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 export const LolProfile = new Mongo.Collection('LolProfile');
 
-//TODO rename en lolInformation, summonerInformation, summonerData, summonerProfil
-
+HistoValueSchema = new SimpleSchema({
+  date:{
+    type: Date,
+    label: 'date'
+  },
+  tier: {
+    type: String,
+    label: "tier",
+    allowedValues: ['CHALLENGER', 'MASTER', 'DIAMOND', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE']
+  },
+  division: {
+    type:String,
+    label: 'division',
+    allowedValues: ['I', 'II', 'III', 'IV', 'V']
+  },
+  leaguePoints: {
+    type: Number,
+    label: "leaguePoints"
+  }
+});
 
 LeagueSchema = new SimpleSchema({
   queue: {
@@ -43,6 +61,9 @@ LeagueSchema = new SimpleSchema({
     type: Number,
     label: "losses",
     optional: true
+  },
+  histo:{
+    type: [HistoValueSchema]
   }
 });
 

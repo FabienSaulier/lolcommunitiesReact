@@ -2,6 +2,7 @@ import {LolProfile} from '../lolProfile';
 import {SimpleSchema} from 'meteor/aldeed:simple-schema';
 import {ValidatedMethod} from 'meteor/mdg:validated-method';
 import {Meteor} from 'meteor/meteor';
+import moment from "moment";
 
 const riotApiKey = Meteor.settings.riotApiKey;
 
@@ -12,9 +13,56 @@ export const createSummonerProfile = (user, userCommunityName) => {
 }
 
 export const updateSummonerProfile = (summonerId, summonerServer) =>{
+  // get new data from Riot
   const summonerProfileData = getSummonerProfileData(summonerId, summonerServer);
-  LolProfile.update({summonerId: summonerId}, {$set: summonerProfileData}, {validate: false});
+
+  // merge: report histo in the new data.
+  const sumProfilDataMerged = mergeHisto(summonerProfileData)
+
+console.log("après merege: ");
+console.log(sumProfilDataMerged.leagues);
+  //updateQueuesHisto(summonerProfileData);
+
+
+
+  // update
+  LolProfile.update({summonerId: summonerId}, {$set: sumProfilDataMerged}, {validate: false});
+
+
 }
+
+
+// Put the new data in the league historic.
+const mergeHisto = (newProfileData) => {
+
+  lolProfile = LolProfile.findOne({summonerId: newProfileData.summonerId});
+  console.log("ancien profile:");
+console.log(lolProfile.leagues);
+
+  for(newDataleague of newProfileData.leagues){
+
+    for(league of lolProfile.leagues){
+      console.log(JSON.stringify(league.histo));
+      if(newDataleague.queue == league.queue){
+
+        newDataleague.histo = [{
+          'date': moment().format("YYYY-MM-DD-HH-mm-ss"),
+          'tier': newDataleague.tier,
+          'division': newDataleague.division,
+          'leaguePoints': newDataleague.leaguePoints
+        }];
+      }
+    }
+    console.log(newDataleague.histo.toString());
+  }
+
+  return newProfileData;
+
+}
+
+
+
+
 
 export const refreshSummonerProfile = new ValidatedMethod({
   name: 'summonerProfile.refresh',
@@ -50,7 +98,8 @@ const getSummonerProfileData = (summonerId, server) => {
         'division': stats.division,
         'leaguePoints': stats.leaguePoints,
         'wins': stats.wins,
-        'losses': stats.losses
+        'losses': stats.losses,
+        'histo':[]
       })
     }
     return summonerProfileData;

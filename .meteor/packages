@@ -44,3 +44,4 @@ react-meteor-data
 modules
 react
 dburles:collection-helpers
+momentjs:moment
