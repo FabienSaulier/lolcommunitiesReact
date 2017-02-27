@@ -2,9 +2,10 @@ import {LolProfile} from '../lolProfile';
 import {SimpleSchema} from 'meteor/aldeed:simple-schema';
 import {ValidatedMethod} from 'meteor/mdg:validated-method';
 import {Meteor} from 'meteor/meteor';
-import moment from "moment";
+import moment from 'moment-timezone';
 
 const riotApiKey = Meteor.settings.riotApiKey;
+
 
 export const createSummonerProfile = (user, userCommunityName) => {
   let summonerProfileData = getSummonerProfileData(user.profile.summonerId, user.profile.server);
@@ -15,53 +16,50 @@ export const createSummonerProfile = (user, userCommunityName) => {
 export const updateSummonerProfile = (summonerId, summonerServer) =>{
   // get new data from Riot
   const summonerProfileData = getSummonerProfileData(summonerId, summonerServer);
-
   // merge: report histo in the new data.
   const sumProfilDataMerged = mergeHisto(summonerProfileData)
-
-console.log("après merege: ");
-console.log(sumProfilDataMerged.leagues);
-  //updateQueuesHisto(summonerProfileData);
-
-
-
   // update
   LolProfile.update({summonerId: summonerId}, {$set: sumProfilDataMerged}, {validate: false});
-
-
 }
-
 
 // Put the new data in the league historic.
 const mergeHisto = (newProfileData) => {
 
   lolProfile = LolProfile.findOne({summonerId: newProfileData.summonerId});
-  console.log("ancien profile:");
-console.log(lolProfile.leagues);
 
   for(newDataleague of newProfileData.leagues){
-
     for(league of lolProfile.leagues){
-      console.log(JSON.stringify(league.histo));
       if(newDataleague.queue == league.queue){
+        newDataleague.histo = league.histo;
 
-        newDataleague.histo = [{
-          'date': moment().format("YYYY-MM-DD-HH-mm-ss"),
+        console.log(league.histo[league.histo.length-1]);
+
+        let lastHistoEntry = league.histo[league.histo.length-1];
+
+
+        const currentDay = moment().tz("Europe/London").format("YYYY-MM-DD"); // GMT
+        const todayHisto = {
+          'date': currentDay,
           'tier': newDataleague.tier,
           'division': newDataleague.division,
           'leaguePoints': newDataleague.leaguePoints
-        }];
+        };
+        if(lastHistoEntry.date != currentDay){
+          console.log("not today");
+
+          newDataleague.histo.push(todayHisto);
+
+        }
+        else if (lastHistoEntry.date == currentDay){
+          league.histo[league.histo.length-1] = todayHisto;
+        console.log("maj today");
+
+        }
       }
     }
-    console.log(newDataleague.histo.toString());
   }
-
   return newProfileData;
-
 }
-
-
-
 
 
 export const refreshSummonerProfile = new ValidatedMethod({

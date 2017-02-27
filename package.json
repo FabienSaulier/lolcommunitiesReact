@@ -72,6 +72,7 @@
     "jquery": "^2.2.4",
     "jquery-validation": "^1.15.1",
     "meteor-node-stubs": "^0.2.5",
+    "moment-timezone": "^0.5.11",
     "react": "^15.4.1",
     "react-addons-create-fragment": "^15.4.1",
     "react-addons-css-transition-group": "^15.4.1",

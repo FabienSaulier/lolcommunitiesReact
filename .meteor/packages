@@ -45,3 +45,4 @@ modules
 react
 dburles:collection-helpers
 momentjs:moment
+mrt:moment-timezone
