@@ -30,13 +30,10 @@ const mergeHisto = (newProfileData) => {
   for(newDataleague of newProfileData.leagues){
     for(league of lolProfile.leagues){
       if(newDataleague.queue == league.queue){
+        // put the histo into the empty new data from riot.
         newDataleague.histo = league.histo;
 
-        console.log(league.histo[league.histo.length-1]);
-
-        let lastHistoEntry = league.histo[league.histo.length-1];
-
-
+        const lastHistoEntry = league.histo[league.histo.length-1];
         const currentDay = moment().tz("Europe/London").format("YYYY-MM-DD"); // GMT
         const todayHisto = {
           'date': currentDay,
@@ -44,17 +41,13 @@ const mergeHisto = (newProfileData) => {
           'division': newDataleague.division,
           'leaguePoints': newDataleague.leaguePoints
         };
-        if(lastHistoEntry.date != currentDay){
-          console.log("not today");
 
+        if(!lastHistoEntry)
+            newDataleague.histo.push(todayHisto);
+        else if(lastHistoEntry.date != currentDay)
           newDataleague.histo.push(todayHisto);
-
-        }
-        else if (lastHistoEntry.date == currentDay){
-          league.histo[league.histo.length-1] = todayHisto;
-        console.log("maj today");
-
-        }
+        else if (lastHistoEntry.date == currentDay)
+          newDataleague.histo[league.histo.length-1] = todayHisto;
       }
     }
   }
@@ -97,7 +90,12 @@ const getSummonerProfileData = (summonerId, server) => {
         'leaguePoints': stats.leaguePoints,
         'wins': stats.wins,
         'losses': stats.losses,
-        'histo':[]
+        'histo':[{
+          'date': moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
+          'tier': league.tier,
+          'division': stats.division,
+          'leaguePoints': stats.leaguePoints
+        }]
       })
     }
     return summonerProfileData;
