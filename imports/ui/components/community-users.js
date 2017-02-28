@@ -171,12 +171,14 @@ export class CommunityUsers extends React.Component {
   render(){
     return(
       this.props.summoners.length > 0 ?
-      <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '90%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
+      <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '70%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
         <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} dataAlign='center' isKey>{this.props.communityName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} dataAlign='center' >Summoner</TableHeaderColumn>
         <TableHeaderColumn dataField='league5v5' dataSort sortFunc={this.sortByRank5v5} dataFormat={this.tierDataFormatter} dataAlign='center'  >S7 solo 5v5</TableHeaderColumn>
         <TableHeaderColumn dataField='league5v5flex' dataSort sortFunc={this.sortByRankFlex5v5} dataFormat={this.tierDataFormatter} dataAlign='center'   >S7 flex 5v5</TableHeaderColumn>
+        {/*
         <TableHeaderColumn dataField='league3v3' dataSort sortFunc={this.sortByRank3v3} dataFormat={this.tierDataFormatter} dataAlign='center'  >S7 3v3</TableHeaderColumn>
+        */}
       </BootstrapTable>
       :
       <Alert bsStyle="warning">No summoners yet.</Alert>
