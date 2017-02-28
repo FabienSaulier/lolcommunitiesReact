@@ -82,7 +82,7 @@ class CommunityHeaderContainer extends React.Component {
           <Header as='h3'>
             <Image src={"/communities_logo/"+this.props.community.picture} />
               <Header.Content>
-                <Button  size="big" href={this.props.community.url} target="_blank" >{this.props.community.name}</Button>
+                <Button  size="big" href={this.props.community.url} target="_blank" >{this.props.community.displayName}</Button>
 
                   {this.displayActionBtn( this.props.community)}
 
@@ -90,7 +90,7 @@ class CommunityHeaderContainer extends React.Component {
           </Header>
           <Modal show={this.state.showModal} onHide={this.closeModal} >
             <Modal.Header >
-              <Modal.Title>What name do you use at {this.props.community.name}?</Modal.Title>
+              <Modal.Title>What name do you use at {this.props.community.displayName}?</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <FormGroup>

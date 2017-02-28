@@ -68,11 +68,7 @@ const composer = (props, onData) => {
         }
         delete summoner.leagues;
       }
-
-      console.log(summoner);
     }
-    console.log(summoners);
-
     onData(null, { summoners });
   }
 
