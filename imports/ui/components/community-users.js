@@ -10,9 +10,7 @@ export class CommunityUsers extends React.Component {
   constructor(props){
     super(props);
     this.summonerNameFormatter = this.summonerNameFormatter.bind(this);
-    this.tierDataFormatter5v5 = this.tierDataFormatter5v5.bind(this);
-    this.tierDataFormatter3v3 = this.tierDataFormatter3v3.bind(this);
-    this.tierWinsLossesFormatter = this.tierWinsLossesFormatter.bind(this);
+    this.tierDataFormatter = this.tierDataFormatter.bind(this);
     this.sortByRank3v3 = this.sortByRank3v3.bind(this);
     this.sortByRank5v5 = this.sortByRank5v5.bind(this);
     this.sortByRankFlex5v5 = this.sortByRankFlex5v5.bind(this);
@@ -25,6 +23,14 @@ export class CommunityUsers extends React.Component {
       defaultSortOrder: 'asc',
       sortIndicator: false
    };
+
+
+   Object.assign(String.prototype, {
+       capitalizeFirstLetter() {
+           return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+       }
+   });
+
   }
 
   communityNameFormatter(comName, row){
@@ -139,46 +145,22 @@ export class CommunityUsers extends React.Component {
     return points;
   }
 
-
-tierDataFormatter3v3(league, row){
-  if(!league)
-    league = {'tier': 'unranked'};
-  return(
-      <Media>
-        <Media.Left align="middle">
-          <TierIconImage tier={league.tier} />
-        </Media.Left>
-        <Media.Right  align="middle">
-          { league.leaguePoints >= 0 ?
-            <span>
-              <strong>{league.tier.toLowerCase()} {league.division}  {league.leaguePoints} LP</strong>
-            </span>
-          :
-            <span>
-              <strong>{league.tier.toLowerCase()} {league.division}</strong>
-            </span>
-          }
-        </Media.Right>
-      </Media>
-  );
-}
-
-  tierDataFormatter5v5(league, row){
+  tierDataFormatter(league, row){
     if(!league)
       league = {'tier': 'unranked'};
     return(
         <Media>
-          <Media.Left align="middle">
+          <Media.Left align="middle" style={{'paddingRight':0}}>
             <TierIconImage tier={league.tier} />
           </Media.Left>
-          <Media.Right  align="middle">
-            { league.leaguePoints >= 0 ?
-              <span>
-                <strong>{league.tier.toLowerCase()} {league.division}  {league.leaguePoints} LP</strong>
+          <Media.Right  align="middle" style={{'paddingLeft':'5px'}}>
+            { league.leaguePoints >= 0 ? // case of unranked
+              <span>{league.tier.capitalizeFirstLetter()} {league.division}  {league.leaguePoints} LP
+                <br /><small> {league.wins} W / {league.losses} L</small>
               </span>
             :
-              <span>
-                <strong>{league.tier.toLowerCase()} {league.division}</strong>
+              <span>{league.tier.capitalizeFirstLetter()} {league.division}
+                <br /><small> {league.wins} W / {league.losses} L</small>
               </span>
             }
           </Media.Right>
@@ -186,23 +168,15 @@ tierDataFormatter3v3(league, row){
     );
   }
 
-  tierWinsLossesFormatter(leagues, summoner){
-
-    if(summoner.league5v5 === undefined)
-      return('-');
-    return(summoner.league5v5.wins +" / "+ summoner.league5v5.losses);
-  }
-
   render(){
     return(
       this.props.summoners.length > 0 ?
-      <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '70%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
-        <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} isKey>{this.props.communityName}</TableHeaderColumn>
-        <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} >Summoner</TableHeaderColumn>
-        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={this.sortByRank5v5} dataFormat={this.tierDataFormatter5v5} >S7 solo 5v5</TableHeaderColumn>
-        <TableHeaderColumn dataField='winlosses' dataFormat={this.tierWinsLossesFormatter}>wins / losses </TableHeaderColumn>
-        <TableHeaderColumn dataField='league5v5flex' dataSort sortFunc={this.sortByRankFlex5v5} dataFormat={this.tierDataFormatter5v5} >S7 flex 5v5</TableHeaderColumn>
-        <TableHeaderColumn dataField='league3v3' dataSort sortFunc={this.sortByRank3v3} dataFormat={this.tierDataFormatter3v3} >S7 3v3</TableHeaderColumn>
+      <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '90%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
+        <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} dataAlign='center' isKey>{this.props.communityName}</TableHeaderColumn>
+        <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} dataAlign='center' >Summoner</TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={this.sortByRank5v5} dataFormat={this.tierDataFormatter} dataAlign='center'  >S7 solo 5v5</TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5flex' dataSort sortFunc={this.sortByRankFlex5v5} dataFormat={this.tierDataFormatter} dataAlign='center'   >S7 flex 5v5</TableHeaderColumn>
+        <TableHeaderColumn dataField='league3v3' dataSort sortFunc={this.sortByRank3v3} dataFormat={this.tierDataFormatter} dataAlign='center'  >S7 3v3</TableHeaderColumn>
       </BootstrapTable>
       :
       <Alert bsStyle="warning">No summoners yet.</Alert>
