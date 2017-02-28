@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import {ChampionMasterySchema} from './championMastery';
 
 export const LolProfile = new Mongo.Collection('LolProfile');
 
@@ -67,7 +68,6 @@ LeagueSchema = new SimpleSchema({
   }
 });
 
-
 LolProfile.schema = new SimpleSchema({
   server: {
     type:String,
@@ -86,6 +86,9 @@ LolProfile.schema = new SimpleSchema({
   },
   leagues: {
     type: [LeagueSchema]
+  },
+  championsMasteries: {
+    type: [ChampionMasterySchema]
   }
 });
 
