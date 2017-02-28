@@ -149,7 +149,7 @@ export class CommunityUsers extends React.Component {
     if(!league)
       league = {'tier': 'unranked'};
     return(
-        <Media>
+        <Media style={{'marginLeft': 'auto', 'marginRight': 'auto', 'width': '150px'}}>
           <Media.Left align="middle" style={{'paddingRight':0}}>
             <TierIconImage tier={league.tier} />
           </Media.Left>
@@ -158,10 +158,8 @@ export class CommunityUsers extends React.Component {
               <span>{league.tier.capitalizeFirstLetter()} {league.division}  {league.leaguePoints} LP
                 <br /><small> {league.wins} W / {league.losses} L</small>
               </span>
-            :
-              <span>{league.tier.capitalizeFirstLetter()} {league.division}
-                <br /><small> {league.wins} W / {league.losses} L</small>
-              </span>
+            : // unranked
+              <span>{league.tier.capitalizeFirstLetter()}</span>
             }
           </Media.Right>
         </Media>
@@ -174,8 +172,8 @@ export class CommunityUsers extends React.Component {
       <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '70%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
         <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} dataAlign='center' isKey>{this.props.communityName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} dataAlign='center' >Summoner</TableHeaderColumn>
-        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={this.sortByRank5v5} dataFormat={this.tierDataFormatter} dataAlign='center'  >S7 solo 5v5</TableHeaderColumn>
-        <TableHeaderColumn dataField='league5v5flex' dataSort sortFunc={this.sortByRankFlex5v5} dataFormat={this.tierDataFormatter} dataAlign='center'   >S7 flex 5v5</TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={this.sortByRank5v5} dataFormat={this.tierDataFormatter} headerAlign='center'>S7 solo 5v5</TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5flex' dataSort sortFunc={this.sortByRankFlex5v5} dataFormat={this.tierDataFormatter}  headerAlign='center' >S7 flex 5v5</TableHeaderColumn>
         {/*
         <TableHeaderColumn dataField='league3v3' dataSort sortFunc={this.sortByRank3v3} dataFormat={this.tierDataFormatter} dataAlign='center'  >S7 3v3</TableHeaderColumn>
         */}
