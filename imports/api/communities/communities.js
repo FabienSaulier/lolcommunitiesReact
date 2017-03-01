@@ -24,6 +24,11 @@ Communities.schema = new SimpleSchema({
     label: "name",
     max: 100
   },
+  displayName: {
+    type: String,
+    label: "displayName",
+    max: 100
+  },
   url: {
     type: String,
     label: "url",

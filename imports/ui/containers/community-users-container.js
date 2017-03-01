@@ -14,8 +14,31 @@ const composer = (props, onData) => {
 
 // load data required for the array listing the summoner of a community.
   load = () =>{
-
     community = Communities.findOne({name:props.communityName});
+
+
+
+
+
+
+
+
+//TODO if community has depend_champ : get the champion info.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /** Get the users of the community.**/
     let users = [];
@@ -69,11 +92,14 @@ const composer = (props, onData) => {
         delete summoner.leagues;
       }
     }
-    onData(null, { summoners });
+    let toto = {"val": "racamba"};
+    onData(null, { summoners, toto });
   }
 
   if (subscription.ready()  && subUersData.ready() && subLolProfil.ready() )
     load();
 };
 
-export default CommunityUsersContainer = composeWithTracker(composer, Loading)(CommunityUsers);
+let  CommunityUsersContainer;
+
+export default  CommunityUsersContainer = composeWithTracker(composer, Loading)(CommunityUsers);
