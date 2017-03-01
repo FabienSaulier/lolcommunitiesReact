@@ -11,9 +11,9 @@ export class CommunityUsers extends React.Component {
   render(){
     return(
       this.props.community.championFocus != null ?
-        <CommunityUsersChampionFocus summoners={this.props.summoners} />
+        <CommunityUsersChampionFocus community={this.props.community} summoners={this.props.summoners} />
       :
-        <CommunityUsersGeneral summoners={this.props.summoners} />
+        <CommunityUsersGeneral community={this.props.community} summoners={this.props.summoners} />
     )
   }
 }

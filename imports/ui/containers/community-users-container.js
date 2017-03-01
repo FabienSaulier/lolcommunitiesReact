@@ -92,7 +92,6 @@ const composer = (props, onData) => {
         delete summoner.leagues;
       }
     }
-    let toto = {"val": "racamba"};
     onData(null, { summoners, community });
   }
 
