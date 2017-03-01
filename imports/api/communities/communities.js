@@ -15,6 +15,15 @@ Communities.deny({
   remove: () => true,
 });
 
+ChampionFocusSchema = new SimpleSchema({
+    riotChampionId:{
+      type:Number
+    },
+    championName:{
+      type:String
+    }
+});
+
 Communities.schema = new SimpleSchema({
   _id:{
     type:String
@@ -43,6 +52,9 @@ Communities.schema = new SimpleSchema({
   user_id: {
     type: [String],
     optional: false // need to be instanciante empty
+  },
+  championFocus:{
+    type: ChampionFocusSchema
   }
 });
 

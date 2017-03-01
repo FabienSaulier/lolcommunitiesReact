@@ -93,7 +93,7 @@ const composer = (props, onData) => {
       }
     }
     let toto = {"val": "racamba"};
-    onData(null, { summoners, toto });
+    onData(null, { summoners, community });
   }
 
   if (subscription.ready()  && subUersData.ready() && subLolProfil.ready() )
