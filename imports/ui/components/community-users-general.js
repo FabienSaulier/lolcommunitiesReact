@@ -3,6 +3,7 @@ import { ListGroup, Alert, Table, Media} from 'react-bootstrap';
 import {TierIconImage} from './tier-icon';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import { Table as TableSemantic, Icon } from 'semantic-ui-react'
+import { calculateElo } from '../../modules/calcul-elo'
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
 export default class CommunityUsersGeneral extends React.Component {
@@ -14,7 +15,6 @@ export default class CommunityUsersGeneral extends React.Component {
     this.sortByRank3v3 = this.sortByRank3v3.bind(this);
     this.sortByRank5v5 = this.sortByRank5v5.bind(this);
     this.sortByRankFlex5v5 = this.sortByRankFlex5v5.bind(this);
-    this.calculateElo = this.calculateElo.bind(this);
     this.communityNameFormatter = this.communityNameFormatter.bind(this);
     this.refreshInfo = this.refreshInfo.bind(this);
     this.calculatePositionAB = this.calculatePositionAB.bind(this);
@@ -67,8 +67,8 @@ export default class CommunityUsersGeneral extends React.Component {
   }
 
   calculatePositionAB(aLeague, bLeague, order){
-    let aPoints = this.calculateElo(aLeague);
-    let bPoints = this.calculateElo(bLeague);
+    let aPoints = calculateElo(aLeague);
+    let bPoints = calculateElo(bLeague);
     if(order === 'desc'){
       if(aPoints > bPoints){
         return 1;
@@ -86,62 +86,6 @@ export default class CommunityUsersGeneral extends React.Component {
       else
         return 1;
     }
-  }
-
-  calculateElo(leagueInfo){
-    if(!leagueInfo)
-      return 0;
-
-    let points;
-    switch (leagueInfo.tier) {
-      case "UNRANKED":
-        points = 0;
-        break;
-      case "BRONZE":
-        points = 10000;
-        break;
-      case "SILVER":
-        points = 20000;
-        break;
-      case "GOLD":
-        points = 30000;
-        break;
-      case "PLATINUM":
-        points = 40000;
-        break;
-      case "DIAMOND":
-        points = 50000;
-        break;
-      case "MASTER":
-        points = 60000;
-        break;
-      case "CHALLENGER":
-        points = 70000;
-        break;
-      default:
-        points = 0;
-    };
-    switch (leagueInfo.division) {
-      case "V":
-        points += 0;
-        break;
-      case "IV":
-        points += 1000;
-        break;
-      case "III":
-        points += 2000;
-        break;
-      case "II":
-        points += 3000;
-        break;
-      case "I":
-        points += 4000;
-        break;
-      default:
-    };
-    if(leagueInfo.leaguePoints)
-      points += leagueInfo.leaguePoints;
-    return points;
   }
 
   tierDataFormatter(league, row){
