@@ -7,19 +7,19 @@ import moment from 'moment-timezone';
 const riotApiKey = Meteor.settings.riotApiKey;
 
 
-export const createSummonerProfile = (user, userCommunityName) => {
+export const createSummonerProfile = (user) => {
   let summonerProfileData = getSummonerProfileData(user.profile.summonerId, user.profile.server);
   summonerProfileData.summonerName = user.profile.summonerName; // ensure the summonerName cause we can't retrieve it from riot if user has no ranked stats.
   LolProfile.insert(summonerProfileData);
 }
 
-export const updateSummonerProfile = (summonerId, summonerServer) =>{
+export const updateSummonerProfile = (user) =>{
   // get new data from Riot
-  const summonerProfileData = getSummonerProfileData(summonerId, summonerServer);
+  const summonerProfileData = getSummonerProfileData(user.profile.summonerId, user.profile.server);
   // merge: report histo in the new data.
   const sumProfilDataMerged = mergeHisto(summonerProfileData)
   // update
-  LolProfile.update({summonerId: summonerId}, {$set: sumProfilDataMerged}, {validate: false});
+  LolProfile.update({summonerId: user.profile.summonerId}, {$set: sumProfilDataMerged}, {validate: false});
 }
 
 // Put the new data in the league historic.
@@ -54,13 +54,14 @@ const mergeHisto = (newProfileData) => {
   return newProfileData;
 }
 
-
 export const refreshSummonerProfile = new ValidatedMethod({
   name: 'summonerProfile.refresh',
   validate:null,
   run({summonerId, summonerServer }) {
-    console.log("refreshSummonerProfile");
-    updateSummonerProfile(summonerId, summonerServer);
+    const user = {};
+    user.profile.summonerId = summonerId;
+    user.profile.summonerServer = summonerServer;
+    updateSummonerProfile(user);
   },
 });
 

@@ -8,12 +8,8 @@ import { Row, Col, ListGroupItem, Modal, FormControl, FormGroup, ControlLabel} f
 import { Login } from '../pages/login';
 import {Link } from 'react-router';
 import { Header, Image, Button, Label} from 'semantic-ui-react'
-
 import {Users} from '../../api/user/userHelpers';
-
 import { LinkContainer } from 'react-router-bootstrap';
-
-
 
 class CommunityHeaderContainer extends React.Component {
 
@@ -26,7 +22,6 @@ class CommunityHeaderContainer extends React.Component {
     this.userCommunityNameHandleChange = this.userCommunityNameHandleChange.bind(this);
     this.handleInputNameEnter = this.handleInputNameEnter.bind(this);
     this.state = {showModal: false, userCommunityNameValue: ''};
-
   }
 
   leaveCommunity (){

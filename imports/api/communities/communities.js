@@ -54,7 +54,8 @@ Communities.schema = new SimpleSchema({
     optional: false // need to be instanciante empty
   },
   championFocus:{
-    type: ChampionFocusSchema
+    type: ChampionFocusSchema,
+    optional: true
   }
 });
 
