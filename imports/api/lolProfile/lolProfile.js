@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import {ChampionMasterySchema} from './championMastery';
+import {ChampionStatsSchema} from './championStats';
 
 export const LolProfile = new Mongo.Collection('LolProfile');
 
@@ -87,8 +87,8 @@ LolProfile.schema = new SimpleSchema({
   leagues: {
     type: [LeagueSchema]
   },
-  championsMasteries: {
-    type: [ChampionMasterySchema]
+  championsStats: {
+    type: [ChampionStatsSchema]
   }
 });
 
