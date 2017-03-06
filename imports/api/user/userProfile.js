@@ -23,7 +23,6 @@ Schema.UserProfile = new SimpleSchema({
         type:[Object],
         optional: false // need to be instanciante empty
     },
-
     "community.$._id":{
         type: String
     },

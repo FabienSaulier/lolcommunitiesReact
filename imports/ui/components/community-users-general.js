@@ -32,15 +32,13 @@ export default class CommunityUsersGeneral extends React.Component {
 
   }
 
-  communityNameFormatter(comName, row){
-    return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(row.summonerId, row.server)}} />  {comName}</div>);
+  communityNameFormatter(comName, user){ // user is the table row
+    return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(user)}} />  {comName}</div>);
   }
 
-  refreshInfo(summonerId, summonerServer){
+  refreshInfo(lolProfile){
     Meteor.call('summonerProfile.refresh', {
-      summonerId: summonerId,
-      summonerServer: summonerServer,
-      community: this.props.community
+      lolProfile: lolProfile
     }, (error) => {
       if (error) {
         Bert.alert(error.reason, 'danger');

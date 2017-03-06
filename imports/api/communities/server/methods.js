@@ -34,7 +34,7 @@ export const joinCommunity = new ValidatedMethod({
       if(community.championFocus){
          console.log("do it");
       }
-
+// it changed!! it is lol profile now
       updateSummonerProfile(user);
 
     } else{

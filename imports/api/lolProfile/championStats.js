@@ -6,18 +6,27 @@ ChampionStatsSchema = new SimpleSchema({
     type:Number,
     label:"championId"
   },
-  championMasteryPoints:{
-    type:Number,
-    label:"championMasteryPoints"
+  histo:{
+    type: [ChampionStatsHistoSchema],
+    label: "historicChampionValue",
+        defaultValue: [],
   },
-  championMasteryLevel:{
+
+  /** Champion Mastery  **/
+  championPoints:{
     type:Number,
-    label:"championMasteryLevel"
+    label:"championPoints"
+  },
+  championLevel:{
+    type:Number,
+    label:"championLevel"
   },
   tokensEarned:{
     type:Number,
     label:"tokensEarned"
   },
+
+  /** ChampionStats  **/
   totalSessionsPlayed:{
     type:Number,
     label:"totalSessionsPlayed"
@@ -61,9 +70,5 @@ ChampionStatsSchema = new SimpleSchema({
   totalFirstBlood:{
     type:Number,
     label:"totalFirstBlood"
-  },
-  histo:{
-    type: [ChampionStatsHistoSchema],
-    label: "historicChampionValue"
   }
 });
