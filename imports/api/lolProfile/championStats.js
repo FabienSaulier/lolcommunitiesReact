@@ -1,20 +1,19 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import {ChampionStatsHistoSchema} from './championStatsHisto';
 
-ChampionStatsSchema = new SimpleSchema({
+export const ChampionStatsSchema = new SimpleSchema({
   championId: {
     type:Number,
     label:"championId"
   },
   histo:{
     type: [ChampionStatsHistoSchema],
-    label: "historicChampionValue",
-        defaultValue: [],
+    label: "historicChampionValue"
   },
 
   /** Champion Mastery  **/
   championPoints:{
-    type:Number,
+    type:String,
     label:"championPoints"
   },
   championLevel:{
@@ -67,8 +66,8 @@ ChampionStatsSchema = new SimpleSchema({
     type:Number,
     label:"totalQuadraKills"
   },
-  totalFirstBlood:{
+  totalPentaKills:{
     type:Number,
-    label:"totalFirstBlood"
+    label:"totalPentaKills"
   }
 });

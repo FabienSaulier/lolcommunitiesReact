@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-ChampionStatsHistoSchema = new SimpleSchema({
+export const ChampionStatsHistoSchema = new SimpleSchema({
   lastUpdate:{ // only used for Histo.
     type: String, // easier use to compare on day date: store YYYY-MM-DD
     label: 'lastUpdate'
@@ -61,12 +61,8 @@ ChampionStatsHistoSchema = new SimpleSchema({
     type:Number,
     label:"totalQuadraKills"
   },
-  totalFirstBlood:{
+  totalPentaKills:{
     type:Number,
-    label:"totalFirstBlood"
-  },
-  lastUpdate:{ // only used for Histo.
-    type: String, // easier use to compare on day date: store YYYY-MM-DD
-    label: 'lastUpdate'
+    label:"totalPentaKills"
   }
 });

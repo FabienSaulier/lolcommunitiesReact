@@ -12,20 +12,15 @@ export const createOrUpdateSummonerProfile = (user) => {
   summonerProfileData.summonerName = user.profile.summonerName; // ensure the summonerName cause we can't retrieve it from riot if user has no ranked stats.
   let sumProfileDataMerged = mergeHisto(summonerProfileData);
 
-console.log(sumProfileDataMerged.leagues);
-console.log(user.profile.summonerId);
-
-
   const ret = LolProfile.update({summonerId: user.profile.summonerId},
                             {$set: {
                               summonerName : sumProfileDataMerged.summonerName,
+                              summonerId: user.profile.summonerId,
+                              server: user.profile.server,
                               leagues: sumProfileDataMerged.leagues,
-                              championStats: sumProfileDataMerged.championStats
+                              championsStats: sumProfileDataMerged.championStats
                             }}, { upsert:true, validate: false});
-
-  console.log(ret);
 }
-
 
 export const createOrUpdateSummonerProfileWithChampion = (user, championId) => {
   let summonerProfileData = getSummonerProfileData(user);
@@ -35,54 +30,21 @@ export const createOrUpdateSummonerProfileWithChampion = (user, championId) => {
   let championMasteryData = getSummonerChampionMasteryData(user, championId);
 
   Object.assign(championStatsData, championMasteryData);
+console.log(championStatsData);
 
   let sumProfileDataMerged = mergeHisto(summonerProfileData);
 
-  LolProfile.update({summonerId: user.profile.summonerId},
+console.log(sumProfileDataMerged.leagues);
+console.log(championStatsData);
+
+  const ret = LolProfile.update({summonerId: user.profile.summonerId},
                             {$set: {
                               summonerName : sumProfileDataMerged.summonerName,
                               leagues: sumProfileDataMerged.leagues,
-                              championStats: [championStatsData]
+                              championsStats: [championStatsData]
                             }}, { upsert:true, validate: false});
+                            console.log(ret);
 }
-
-
-/*
-export const updateSummonerProfile = (lolProfile) =>{
-  // get new data from Riot
-  console.log("entree updateSummonerProfile ");
-  console.log(lolProfile);
-  const summonerProfileData = getSummonerProfileData(lolProfile);
-
-console.log(lolProfile);
-  let championStatsData = {};
-  if(lolProfile.championsStats.length > 0){
-    console.log("todo: get champion data");
-
-    for(championStats of lolProfile.championsStats){
-
-//      const championMasteryData = getSummonerChampionMasteryData(lolProfile, championStats.riotChampionId);
-      championStatsData = getSummonerChampionStatsData(lolProfile, championStats.riotChampionId);
-
-    }
-
-  }
-
-
-  // merge: report histo in the new data.
-  let sumProfilDataMerged = mergeHisto(summonerProfileData);
-  sumProfilDataMerged.championsStats.push(championStatsData);
-  console.log(championStatsData);
-
-  console.log(sumProfilDataMerged);
-
-  // update
-  LolProfile.update({summonerId: lolProfile.summonerId}, {$set: sumProfilDataMerged}, {validate: false});
-}
-
-*/
-
-
 
 // Put the new data in the league historic.
 const mergeHisto = (newProfileData) => {
@@ -267,39 +229,6 @@ const getSummonerChampionStatsData = (user, championId) => {
         return champion.stats;
       }
     }
-    // at least 1 queue otherwise it's in 404
-
-
-/*
-    summonerProfileData = {
-      'server': server,
-      'summonerId': summonerQueues[0].entries[0].playerOrTeamId,
-      'summonerName': summonerQueues[0].entries[0].playerOrTeamName,
-      'leagues':[]
-    }
-    for(i in summonerQueues){
-      let league = summonerQueues[i];
-      let stats = league.entries[0]; // it's always 1 player, not a team.
-      summonerProfileData.leagues.push({
-        'queue': league.queue,
-        'tier': league.tier,
-        'leagueName': league.name,
-        'division': stats.division,
-        'leaguePoints': stats.leaguePoints,
-        'wins': stats.wins,
-        'losses': stats.losses,
-        'histo':[{
-          'date': moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
-          'tier': league.tier,
-          'division': stats.division,
-          'leaguePoints': stats.leaguePoints
-        }]
-      })
-    }
-    return summonerProfileData;
-
-
-*/
   } catch (e) {
 
     if(e.response.statusCode == '429'){
@@ -308,17 +237,9 @@ const getSummonerChampionStatsData = (user, championId) => {
     }
     else if(e.response.statusCode == 404){
       // user has no ranked stats
-      // note: on an update he has already his summonerName. on create, we ensure to pass the summoner name in appropriate function.
-console.log(e);
-      /*
-      summonerProfileData = {
-        'server': server.toUpperCase(),
-        'summonerId': summonerId,
-        'leagues': []
-      }
-      return summonerProfileData;
-*/
-
+      // note: on an update he has already his summonerName. on create, we ensure to pass the summoner name in appropriate function..
+      console.log('at '+riotApiChampionStatsUrl);
+      console.log('id champion undetermined? ':championId);
     } else{
       // Got a network error, time-out or HTTP error in the 400 or 500 range.
       console.log('at: '+riotApiChampionStatsUrl);

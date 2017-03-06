@@ -2,7 +2,7 @@ import { Communities } from '../communities';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { Meteor } from 'meteor/meteor';
-import {createSummonerProfile, updateSummonerProfile, createOrUpdateSummonerProfile} from '../../lolProfile/server/methods';
+import {createOrUpdateSummonerProfileWithChampion, createOrUpdateSummonerProfile} from '../../lolProfile/server/methods';
 
 const riotApiKey = Meteor.settings.riotApiKey;
 

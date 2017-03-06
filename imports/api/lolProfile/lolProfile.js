@@ -68,6 +68,7 @@ LeagueSchema = new SimpleSchema({
   }
 });
 
+
 LolProfile.schema = new SimpleSchema({
   server: {
     type:String,
