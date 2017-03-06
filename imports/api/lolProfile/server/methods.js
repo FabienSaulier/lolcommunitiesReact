@@ -7,14 +7,36 @@ import moment from 'moment-timezone';
 const riotApiKey = Meteor.settings.riotApiKey;
 
 
-export const createSummonerProfile = (user) => {
-  let summonerProfileData = getSummonerProfileData(user.profile);
+export const createOrUpdateSummonerProfile = (user) => {
+  let summonerProfileData = getSummonerProfileData(user);
   summonerProfileData.summonerName = user.profile.summonerName; // ensure the summonerName cause we can't retrieve it from riot if user has no ranked stats.
+
+
+  let sumProfileDataMerged = mergeHisto(summonerProfileData);
+
+
+  console.log(sumProfileDataMerged);
+
+let retur =   LolProfile.update({summonerId: user.summonerId},
+                            {$set: {
+                              summonerName : sumProfileDataMerged.summonerName,
+                              leagues: sumProfileDataMerged.leagues,
+                              championStats: sumProfileDataMerged.championStats
+                            }}, { upsert:true, validate: false});
+console.log(retur);
+
+}
+
+export const createSummonerProfile = (mainProfile) => {
+  let summonerProfileData = getSummonerProfileData(mainProfile);
+  summonerProfileData.summonerName = mainProfile.summonerName; // ensure the summonerName cause we can't retrieve it from riot if user has no ranked stats.
   LolProfile.insert(summonerProfileData);
 }
 
 export const updateSummonerProfile = (lolProfile) =>{
   // get new data from Riot
+  console.log("entree updateSummonerProfile ");
+  console.log(lolProfile);
   const summonerProfileData = getSummonerProfileData(lolProfile);
 
 console.log(lolProfile);
@@ -43,10 +65,17 @@ console.log(lolProfile);
   LolProfile.update({summonerId: lolProfile.summonerId}, {$set: sumProfilDataMerged}, {validate: false});
 }
 
+
+
+
+
 // Put the new data in the league historic.
 const mergeHisto = (newProfileData) => {
 
   lolProfile = LolProfile.findOne({summonerId: newProfileData.summonerId});
+
+  if(lolProfile == null) // this is a lolProfile creation
+    return newProfileData;
 
   for(newDataleague of newProfileData.leagues){
     for(league of lolProfile.leagues){
@@ -79,13 +108,18 @@ export const refreshSummonerProfile = new ValidatedMethod({
   name: 'summonerProfile.refresh',
   validate:null,
   run({lolProfile}) {
-    updateSummonerProfile(lolProfile);
+    const user = { profile: {
+                      summonerId:lolProfile.summonerId,
+                      summonerName: lolProfile.summonerName,
+                      server: lolProfile.server
+                    }};
+    createOrUpdateSummonerProfile(user);
   },
 });
 
-const getSummonerProfileData = (lolProfile) => {
-  const server = lolProfile.server;
-  const summonerId = lolProfile.summonerId;
+const getSummonerProfileData = (user) => {
+  const server = user.profile.server;
+  const summonerId = user.profile.summonerId;
   const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
   try {
     var result = HTTP.call("GET", riotApiUrl);
@@ -123,11 +157,11 @@ const getSummonerProfileData = (lolProfile) => {
     return summonerProfileData;
 
   } catch (e) {
-    if(e.response.statusCode == '429'){
+    if(e.response && e.response.statusCode == '429'){
       console.log('Riot Api is overloaded, wait one minute to refresh');
       throw new Meteor.Error('riot.api ', 'Riot Api is overloaded, wait one minute to refresh');
     }
-    else if(e.response.statusCode == 404){
+    else if(e.response && e.response.statusCode == 404){
       // user has no ranked stats
       // note: on an update he has already his summonerName. on create, we ensure to pass the summoner name in appropriate function.
       summonerProfileData = {
@@ -145,9 +179,9 @@ const getSummonerProfileData = (lolProfile) => {
   }
 }
 
-const getSummonerChampionMasteryData = (lolProfile, championId) => {
-  const server = lolProfile.server;
-  const summonerId = lolProfile.summonerId;
+const getSummonerChampionMasteryData = (user, championId) => {
+  const server = user.profile.server;
+  const summonerId = user.profile.summonerId;
   /** https://developer.riotgames.com/docs/regional-endpoints **/
   let platformId;
   if(server.toLowerCase == 'kr' || server.toLowerCase == 'ru')
@@ -193,9 +227,9 @@ const getSummonerChampionMasteryData = (lolProfile, championId) => {
 }
 
 
-const getSummonerChampionStatsData = (lolProfile, championId) => {
-  const server = lolProfile.server;
-  const summonerId = lolProfile.summonerId;
+const getSummonerChampionStatsData = (user, championId) => {
+  const server = user.profile.server;
+  const summonerId = user.profile.summonerId;
   const riotApiChampionStatsUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v1.3/stats/by-summoner/"+summonerId+"/ranked?season=SEASON2017&api_key="+riotApiKey;
 console.log(riotApiChampionStatsUrl);
   try {

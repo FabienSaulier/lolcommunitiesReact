@@ -10,9 +10,6 @@ export default class CommunityUsersChampionFocus extends React.Component {
 
   constructor(props){
     super(props);
-    console.log(props);
-    console.log(this.props);
-
     this.summonerNameFormatter = this.summonerNameFormatter.bind(this);
     this.tierDataFormatter = this.tierDataFormatter.bind(this);
     this.sortByRank3v3 = this.sortByRank3v3.bind(this);
@@ -36,8 +33,8 @@ export default class CommunityUsersChampionFocus extends React.Component {
 
   }
 
-  communityNameFormatter(comName, user){ // user is the table row
-    return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(user)}} />  {comName}</div>);
+  communityNameFormatter(comName, lolProfile){ // user is the table row
+    return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(lolProfile)}} />  {comName}</div>);
   }
 
   refreshInfo(lolProfile){

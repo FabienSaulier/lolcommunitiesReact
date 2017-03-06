@@ -29,11 +29,10 @@ export default class CommunityUsersGeneral extends React.Component {
            return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
        }
    });
-
   }
 
-  communityNameFormatter(comName, user){ // user is the table row
-    return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(user)}} />  {comName}</div>);
+  communityNameFormatter(comName, lolProfile){ // user is the table row
+    return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(lolProfile)}} />  {comName}</div>);
   }
 
   refreshInfo(lolProfile){

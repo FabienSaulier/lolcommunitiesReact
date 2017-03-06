@@ -2,7 +2,7 @@ import { Communities } from '../communities';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { Meteor } from 'meteor/meteor';
-import {createSummonerProfile, updateSummonerProfile} from '../../lolProfile/server/methods';
+import {createSummonerProfile, updateSummonerProfile, createOrUpdateSummonerProfile} from '../../lolProfile/server/methods';
 
 const riotApiKey = Meteor.settings.riotApiKey;
 
@@ -23,23 +23,10 @@ export const joinCommunity = new ValidatedMethod({
     let userCommunity = {'_id': community._id, 'userName': userCommunityName}
     Meteor.users.update(user._id, {$push: {'profile.communities': userCommunity} });
 
-    // TODO should only update and Create when use signup.
 
-    // + if com is champion focus: update with champion data
+    createOrUpdateSummonerProfile(user);
 
-    const hasProfile = Meteor.call('LolProfile.hasUserLolProfile', {user : user });
-    if(hasProfile){
 
-      if(community.championFocus){
-         console.log("do up with champion focus");
-      }
-// it changed!! it is lol profile now
-      updateSummonerProfile(user);
-
-    } else{
-      console.log(user);
-      createSummonerProfile(user);
-    }
   },
 });
 

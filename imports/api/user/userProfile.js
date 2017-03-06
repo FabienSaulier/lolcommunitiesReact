@@ -3,6 +3,10 @@ import { Meteor } from 'meteor/meteor';
 
 // User est un cas particulier de collection.
 
+Meteor.users.deny({
+  update() { return true; }
+});
+
 Schema = {};
 
 Schema.UserProfile = new SimpleSchema({
@@ -32,6 +36,7 @@ Schema.UserProfile = new SimpleSchema({
         min: 3,
         max: 30
     }
+
 });
 
 Schema.User = new SimpleSchema({
