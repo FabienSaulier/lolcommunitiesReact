@@ -59,11 +59,17 @@ export const refreshSummonerProfile = new ValidatedMethod({
   validate:null,
   run({summonerId, summonerServer, community }) {
     const user = {};
+    user.profile = {};
     user.profile.summonerId = summonerId;
     user.profile.summonerServer = summonerServer;
 
-    if(community.championFocus)
+    if(community.championFocus){
       console.log("todo: get champion data");
+
+      getSummonerChampionMasteryData(summonerId, summonerServer, community.championFocus.riotChampionId);
+      getSummonerChampionStatsData(summonerId, summonerServer, community.championFocus.riotChampionId);
+
+    }
     updateSummonerProfile(user);
   },
 });
@@ -129,9 +135,19 @@ const getSummonerProfileData = (summonerId, server) => {
 }
 
 const getSummonerChampionMasteryData = (summonerId, server, championId) => {
-  const riotApiChampionMasteryUrl =  "https://"+server+".api.pvp.net/championmastery/location/"+server+"/player/"+summonerId+"/champion/"+championId+"/entry?api_key="+riotApiKey;
+  /** https://developer.riotgames.com/docs/regional-endpoints **/
+  let platformId;
+  if(server.toLowerCase == 'kr' || server.toLowerCase == 'ru')
+    platformId = server;
+  else if(server.toLowerCase == 'las')
+    platformId = server+"2";
+  else
+    platformId = server+"1";
 
-// EUW ????? EUW1, EUW2 sur la doc...
+  const riotApiChampionMasteryUrl =  "https://"+server+".api.pvp.net/championmastery/location/"+platformId+"/player/"+summonerId+"/champion/"+championId+"?api_key="+riotApiKey;
+
+
+
   try {
     var result = HTTP.call("GET", riotApiChampionMasteryUrl);
 
@@ -179,15 +195,19 @@ const getSummonerChampionMasteryData = (summonerId, server, championId) => {
     else if(e.response.statusCode == 404){
       // user has no ranked stats
       // note: on an update he has already his summonerName. on create, we ensure to pass the summoner name in appropriate function.
+
+console.log(e);
+      /*
       summonerProfileData = {
         'server': server.toUpperCase(),
         'summonerId': summonerId,
         'leagues': []
       }
       return summonerProfileData;
+      */
     } else{
       // Got a network error, time-out or HTTP error in the 400 or 500 range.
-      console.log('at: '+riotApiUrl);
+      console.log('at: '+riotApiChampionMasteryUrl);
       console.log(e);
       throw new Meteor.Error('riot.api ', 'Unknown error from Riot api.');
     }
@@ -196,14 +216,16 @@ const getSummonerChampionMasteryData = (summonerId, server, championId) => {
 
 
 const getSummonerChampionStatsData = (summonerId, server, championId) => {
-  const riotApiChampionStatsUrl = ;// TODO "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
+  const riotApiChampionStatsUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v1.3/stats/by-summoner/"+summonerId+"/summary?season=SEASON2017&api_key="+riotApiKey;
   try {
-    var result = HTTP.call("GET", riotApiChampionMasteryUrl);
+    var result = HTTP.call("GET", riotApiChampionStatsUrl);
 
-    let summonerProfileData = {};
-    let summonerQueues = result.data[summonerId];
+    let championsStats = result.champions;
+    console.log(championsStats);
     // at least 1 queue otherwise it's in 404
 
+
+/*
     summonerProfileData = {
       'server': server,
       'summonerId': summonerQueues[0].entries[0].playerOrTeamId,
@@ -231,6 +253,8 @@ const getSummonerChampionStatsData = (summonerId, server, championId) => {
     }
     return summonerProfileData;
 
+
+*/
   } catch (e) {
 
     if(e.response.statusCode == '429'){
@@ -240,15 +264,19 @@ const getSummonerChampionStatsData = (summonerId, server, championId) => {
     else if(e.response.statusCode == 404){
       // user has no ranked stats
       // note: on an update he has already his summonerName. on create, we ensure to pass the summoner name in appropriate function.
+console.log(e);
+      /*
       summonerProfileData = {
         'server': server.toUpperCase(),
         'summonerId': summonerId,
         'leagues': []
       }
       return summonerProfileData;
+*/
+
     } else{
       // Got a network error, time-out or HTTP error in the 400 or 500 range.
-      console.log('at: '+riotApiUrl);
+      console.log('at: '+riotApiChampionStatsUrl);
       console.log(e);
       throw new Meteor.Error('riot.api ', 'Unknown error from Riot api.');
     }

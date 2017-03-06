@@ -10,6 +10,9 @@ export default class CommunityUsersChampionFocus extends React.Component {
 
   constructor(props){
     super(props);
+    console.log(props);
+    console.log(this.props);
+
     this.summonerNameFormatter = this.summonerNameFormatter.bind(this);
     this.tierDataFormatter = this.tierDataFormatter.bind(this);
     this.sortByRank3v3 = this.sortByRank3v3.bind(this);
@@ -37,8 +40,7 @@ export default class CommunityUsersChampionFocus extends React.Component {
     return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(row.summonerId, row.server)}} />  {comName}</div>);
   }
 
-//TODO change for add champion
-  refreshInfo(summonerId, summonerServer){
+  refreshInfo(summonerId, summonerServer, props){
     Meteor.call('summonerProfile.refresh', {
       summonerId: summonerId,
       summonerServer: summonerServer,
