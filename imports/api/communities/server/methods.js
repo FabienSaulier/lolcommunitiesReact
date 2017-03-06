@@ -30,14 +30,14 @@ export const joinCommunity = new ValidatedMethod({
     const hasProfile = Meteor.call('LolProfile.hasUserLolProfile', {user : user });
     if(hasProfile){
 
-      console.log(community.championFocus);
       if(community.championFocus){
-         console.log("do it");
+         console.log("do up with champion focus");
       }
 // it changed!! it is lol profile now
       updateSummonerProfile(user);
 
     } else{
+      console.log(user);
       createSummonerProfile(user);
     }
   },

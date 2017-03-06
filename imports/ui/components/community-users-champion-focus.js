@@ -41,7 +41,6 @@ export default class CommunityUsersChampionFocus extends React.Component {
   }
 
   refreshInfo(lolProfile){
-    console.log(lolProfile);
     Meteor.call('summonerProfile.refresh', {
       lolProfile: lolProfile
     }, (error) => {

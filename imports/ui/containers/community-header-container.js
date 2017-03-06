@@ -22,6 +22,7 @@ class CommunityHeaderContainer extends React.Component {
     this.userCommunityNameHandleChange = this.userCommunityNameHandleChange.bind(this);
     this.handleInputNameEnter = this.handleInputNameEnter.bind(this);
     this.state = {showModal: false, userCommunityNameValue: ''};
+    this.allowToLeaveCommunity = false;
   }
 
   leaveCommunity (){
@@ -112,8 +113,8 @@ class CommunityHeaderContainer extends React.Component {
     let actionBtn = this.determineActionBtn();
     if( actionBtn === "join")
       return <JoinCommunityBtn  openModal={this.openModal} name={community.name} />
-    else if(actionBtn === "youarein")
-      return null;//<YouAreInBtn leaveCommunity={this.leaveCommunity} name={community.name}  />
+//    else if(actionBtn === "youarein")
+//      return <YouAreInBtn leaveCommunity={this.leaveCommunity} name={community.name}  />
     else
       return <LoginBtn  name={community.name} />
   }
@@ -160,12 +161,8 @@ const YouAreInBtn = (props) => (
     <Label bsStyle="info">
       You are part of this community
     </Label>
-    {
-      /*
     <Button onClick={props.leaveCommunity} className="ui primary button">
       leave {props.name}
     </Button>
-    */
-    }
   </span>
 );

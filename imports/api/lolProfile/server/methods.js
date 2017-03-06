@@ -17,7 +17,7 @@ export const updateSummonerProfile = (lolProfile) =>{
   // get new data from Riot
   const summonerProfileData = getSummonerProfileData(lolProfile);
 
-
+console.log(lolProfile);
   let championStatsData = {};
   if(lolProfile.championsStats.length > 0){
     console.log("todo: get champion data");
