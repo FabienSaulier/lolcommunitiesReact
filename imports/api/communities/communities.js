@@ -16,7 +16,7 @@ Communities.deny({
 });
 
 ChampionFocusSchema = new SimpleSchema({
-    riotChampionId:{
+    championId:{
       type:Number
     },
     championName:{

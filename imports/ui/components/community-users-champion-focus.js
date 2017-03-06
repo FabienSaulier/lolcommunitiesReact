@@ -24,22 +24,21 @@ export default class CommunityUsersChampionFocus extends React.Component {
       sortIndicator: false
    };
 
-
    Object.assign(String.prototype, {
        capitalizeFirstLetter() {
            return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
        }
    });
-
   }
 
   communityNameFormatter(comName, lolProfile){ // user is the table row
     return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(lolProfile)}} />  {comName}</div>);
   }
 
-  refreshInfo(lolProfile){
-    Meteor.call('summonerProfile.refresh', {
-      lolProfile: lolProfile
+  refreshInfo(lolProfile, props){
+    Meteor.call('summonerProfile.refreshChampionStats', {
+      lolProfile: lolProfile,
+      championId: this.props.community.championFocus.championId
     }, (error) => {
       if (error) {
         Bert.alert(error.reason, 'danger');

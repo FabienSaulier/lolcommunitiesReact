@@ -26,6 +26,8 @@ export const joinCommunity = new ValidatedMethod({
 
     createOrUpdateSummonerProfile(user);
 
+    if(community.championFocus)
+      createOrUpdateSummonerProfileWithChampion(user, community.championFocus.championId);
 
   },
 });
