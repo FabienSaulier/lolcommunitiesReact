@@ -41,7 +41,8 @@ export default class CommunityUsersChampionFocus extends React.Component {
   refreshInfo(summonerId, summonerServer){
     Meteor.call('summonerProfile.refresh', {
       summonerId: summonerId,
-      summonerServer: summonerServer
+      summonerServer: summonerServer,
+      community: this.props.community
     }, (error) => {
       if (error) {
         Bert.alert(error.reason, 'danger');

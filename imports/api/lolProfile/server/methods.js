@@ -57,10 +57,13 @@ const mergeHisto = (newProfileData) => {
 export const refreshSummonerProfile = new ValidatedMethod({
   name: 'summonerProfile.refresh',
   validate:null,
-  run({summonerId, summonerServer }) {
+  run({summonerId, summonerServer, community }) {
     const user = {};
     user.profile.summonerId = summonerId;
     user.profile.summonerServer = summonerServer;
+
+    if(community.championFocus)
+      console.log("todo: get champion data");
     updateSummonerProfile(user);
   },
 });
@@ -69,6 +72,133 @@ const getSummonerProfileData = (summonerId, server) => {
   const riotApiUrl = "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
   try {
     var result = HTTP.call("GET", riotApiUrl);
+
+    let summonerProfileData = {};
+    let summonerQueues = result.data[summonerId];
+    // at least 1 queue otherwise it's in 404
+
+    summonerProfileData = {
+      'server': server,
+      'summonerId': summonerQueues[0].entries[0].playerOrTeamId,
+      'summonerName': summonerQueues[0].entries[0].playerOrTeamName,
+      'leagues':[]
+    }
+    for(i in summonerQueues){
+      let league = summonerQueues[i];
+      let stats = league.entries[0]; // it's always 1 player, not a team.
+      summonerProfileData.leagues.push({
+        'queue': league.queue,
+        'tier': league.tier,
+        'leagueName': league.name,
+        'division': stats.division,
+        'leaguePoints': stats.leaguePoints,
+        'wins': stats.wins,
+        'losses': stats.losses,
+        'histo':[{
+          'date': moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
+          'tier': league.tier,
+          'division': stats.division,
+          'leaguePoints': stats.leaguePoints
+        }]
+      })
+    }
+    return summonerProfileData;
+
+  } catch (e) {
+
+    if(e.response.statusCode == '429'){
+      console.log('Riot Api is overloaded, wait one minute to refresh');
+      throw new Meteor.Error('riot.api ', 'Riot Api is overloaded, wait one minute to refresh');
+    }
+    else if(e.response.statusCode == 404){
+      // user has no ranked stats
+      // note: on an update he has already his summonerName. on create, we ensure to pass the summoner name in appropriate function.
+      summonerProfileData = {
+        'server': server.toUpperCase(),
+        'summonerId': summonerId,
+        'leagues': []
+      }
+      return summonerProfileData;
+    } else{
+      // Got a network error, time-out or HTTP error in the 400 or 500 range.
+      console.log('at: '+riotApiUrl);
+      console.log(e);
+      throw new Meteor.Error('riot.api ', 'Unknown error from Riot api.');
+    }
+  }
+}
+
+const getSummonerChampionMasteryData = (summonerId, server, championId) => {
+  const riotApiChampionMasteryUrl =  "https://"+server+".api.pvp.net/championmastery/location/"+server+"/player/"+summonerId+"/champion/"+championId+"/entry?api_key="+riotApiKey;
+
+// EUW ????? EUW1, EUW2 sur la doc...
+  try {
+    var result = HTTP.call("GET", riotApiChampionMasteryUrl);
+
+//    let championsStatsDto = result.data[summonerId];
+    // at least 1 queue otherwise it's in 404
+
+/*
+    let championStat = {
+      'server': server,
+      'summonerId': summonerQueues[0].entries[0].playerOrTeamId,
+      'summonerName': summonerQueues[0].entries[0].playerOrTeamName,
+      'leagues':[]
+    }
+    */
+    console.log(result);
+    /*
+    for(i in summonerQueues){
+      let league = summonerQueues[i];
+      let stats = league.entries[0]; // it's always 1 player, not a team.
+      summonerProfileData.leagues.push({
+        'queue': league.queue,
+        'tier': league.tier,
+        'leagueName': league.name,
+        'division': stats.division,
+        'leaguePoints': stats.leaguePoints,
+        'wins': stats.wins,
+        'losses': stats.losses,
+        'histo':[{
+          'date': moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
+          'tier': league.tier,
+          'division': stats.division,
+          'leaguePoints': stats.leaguePoints
+        }]
+      })
+    }
+    return summonerProfileData;
+    */
+
+  } catch (e) {
+
+    if(e.response.statusCode == '429'){
+      console.log('Riot Api is overloaded, wait one minute to refresh');
+      throw new Meteor.Error('riot.api ', 'Riot Api is overloaded, wait one minute to refresh');
+    }
+    else if(e.response.statusCode == 404){
+      // user has no ranked stats
+      // note: on an update he has already his summonerName. on create, we ensure to pass the summoner name in appropriate function.
+      summonerProfileData = {
+        'server': server.toUpperCase(),
+        'summonerId': summonerId,
+        'leagues': []
+      }
+      return summonerProfileData;
+    } else{
+      // Got a network error, time-out or HTTP error in the 400 or 500 range.
+      console.log('at: '+riotApiUrl);
+      console.log(e);
+      throw new Meteor.Error('riot.api ', 'Unknown error from Riot api.');
+    }
+  }
+}
+
+
+const getSummonerChampionStatsData = (summonerId, server, championId) => {
+  const riotApiChampionStatsUrl = ;// TODO "https://"+server+".api.pvp.net/api/lol/"+server+"/v2.5/league/by-summoner/"+summonerId+"/entry?api_key="+riotApiKey;
+  try {
+    var result = HTTP.call("GET", riotApiChampionMasteryUrl);
 
     let summonerProfileData = {};
     let summonerQueues = result.data[summonerId];
