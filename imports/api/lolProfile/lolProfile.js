@@ -25,13 +25,11 @@ HistoValueSchema = new SimpleSchema({
   },
   wins: {
     type: Number,
-    label: "wins",
-    optional: true
+    label: "wins"
   },
   losses: {
     type: Number,
-    label: "losses",
-    optional: true
+    label: "losses"
   }
 });
 

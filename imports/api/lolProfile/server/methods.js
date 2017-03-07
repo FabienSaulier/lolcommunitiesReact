@@ -37,7 +37,6 @@ export const createOrUpdateSummonerProfileWithChampion = (user, championId) => {
   let sumProfileDataMerged = mergeHisto(summonerProfileData,currentLolProfil);
 
   let championStatsDataMerged = mergeChampionDataHisto(championStatsData, currentLolProfil.championsStats);
-console.log(championStatsDataMerged);
 
   const ret = LolProfile.update({summonerId: user.profile.summonerId},
                             {$set: {
@@ -67,7 +66,9 @@ const mergeHisto = (newProfileData, currentLolProfil) => {
           'date': currentDay,
           'tier': newDataleague.tier,
           'division': newDataleague.division,
-          'leaguePoints': newDataleague.leaguePoints
+          'leaguePoints': newDataleague.leaguePoints,
+          'wins': newDataleague.wins,
+          'losses': newDataleague.losses
         };
 
         if(!lastHistoEntry)
