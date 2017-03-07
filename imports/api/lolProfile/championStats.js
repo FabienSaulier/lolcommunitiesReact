@@ -10,7 +10,10 @@ export const ChampionStatsSchema = new SimpleSchema({
     type: [ChampionStatsHistoValueSchema],
     label: "historicChampionValue"
   },
-
+  date:{
+      type:String,
+      label: "last update"
+  },
   /** Champion Mastery  **/
   championPoints:{
     type:String,

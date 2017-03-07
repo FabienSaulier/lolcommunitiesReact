@@ -22,6 +22,16 @@ HistoValueSchema = new SimpleSchema({
   leaguePoints: {
     type: Number,
     label: "leaguePoints"
+  },
+  wins: {
+    type: Number,
+    label: "wins",
+    optional: true
+  },
+  losses: {
+    type: Number,
+    label: "losses",
+    optional: true
   }
 });
 
@@ -62,6 +72,10 @@ LeagueSchema = new SimpleSchema({
     type: Number,
     label: "losses",
     optional: true
+  },
+  date:{
+      type:String,
+      label: "last update"
   },
   histo:{
     type: [HistoValueSchema]

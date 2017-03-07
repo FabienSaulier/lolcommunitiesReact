@@ -175,17 +175,24 @@ const getSummonerProfileData = (user) => {
         'leaguePoints': stats.leaguePoints,
         'wins': stats.wins,
         'losses': stats.losses,
+        'date': moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
         'histo':[{
           'date': moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
           'tier': league.tier,
           'division': stats.division,
-          'leaguePoints': stats.leaguePoints
+          'leaguePoints': stats.leaguePoints,
+          'wins': stats.wins,
+          'losses': stats.losses
         }]
       })
     }
     return summonerProfileData;
 
   } catch (e) {
+    if(!e.response){
+      console.log('at: '+riotApiChampionStatsUrl);
+      console.log(e);
+    }
     if(e.response && e.response.statusCode == '429'){
       console.log('Riot Api is overloaded, wait one minute to refresh');
       throw new Meteor.Error('riot.api ', 'Riot Api is overloaded, wait one minute to refresh');
@@ -233,7 +240,10 @@ const getSummonerChampionMasteryData = (user, championId) => {
     return championData;
 
   } catch (e) {
-
+    if(!e.response){
+      console.log('at: '+riotApiChampionStatsUrl);
+      console.log(e);
+    }
     if(e.response.statusCode == '429'){
       console.log('Riot Api is overloaded, wait one minute to refresh');
       throw new Meteor.Error('riot.api ', 'Riot Api is overloaded, wait one minute to refresh');
@@ -264,12 +274,17 @@ const getSummonerChampionStatsData = (user, championId) => {
     var result = HTTP.call("GET", riotApiChampionStatsUrl);
 
     for(champion of result.data.champions){
+      console.log(champion);
       if(champion.id == championId){
+        champion.stats.date = moment().tz("Europe/London").format("YYYY-MM-DD");
         return champion.stats;
       }
     }
   } catch (e) {
-
+    if(!e.response){
+      console.log('at: '+riotApiChampionStatsUrl);
+      console.log(e);
+    }
     if(e.response.statusCode == '429'){
       console.log('Riot Api is overloaded, wait one minute to refresh');
       throw new Meteor.Error('riot.api ', 'Riot Api is overloaded, wait one minute to refresh');
