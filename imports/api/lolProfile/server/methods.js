@@ -53,7 +53,7 @@ console.log(championStatsDataMerged);
 
 }
 
-// Put the new data in the league historic.
+// Put the new data in the league historic (all leagues are concerned)
 const mergeHisto = (newProfileData, currentLolProfil) => {
   if(currentLolProfil == null) // this is a lolProfile creation
     return newProfileData;
@@ -89,29 +89,48 @@ const mergeHisto = (newProfileData, currentLolProfil) => {
 // New data concerning only one champion
 const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData) => {
   console.log(currentChampionsStatsData.length == 0);
-  if(currentChampionsStatsData.length == 0) // this is a lolProfile creation
+  if(currentChampionsStatsData.length == 0){ // this is a lolProfile creation
+    // initiate histo
+    let copyChampionStats = Object.assign({}, newChampionStatsData);
+    copyChampionStats.date = moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
+    newChampionStatsData.histo = [];
+    newChampionStatsData.histo.push(copyChampionStats);
     return [newChampionStatsData];
-
-
+  }
 
   // for each champions
   for( cStats of currentChampionsStatsData) {
     // we find the champ concerning by the update
     if(cStats.championId == newChampionStatsData.championId){
+
+      console.log("new data");
+      console.log(newChampionStatsData);
+
+
+      // save histo
+      const tmpHisto = cStats.histo.slice(); // copy array
+
       const lastHistoEntry = cStats.histo[cStats.histo.length-1];
       const currentDay = moment().tz("Europe/London").format("YYYY-MM-DD"); // GMT
       let todayHisto = newChampionStatsData;
       todayHisto.date = currentDay;
 
+      // set the old stats with the new values and add the saved histo
+      cStats = newChampionStatsData;
+      cStats.histo = tmpHisto;
+
+      // add today histo
       if(!lastHistoEntry)
           cStats.histo.push(todayHisto);
       else if(lastHistoEntry.date != currentDay)
         cStats.histo.push(todayHisto);
       else if (lastHistoEntry.date == currentDay)
         cStats.histo[cStats.histo.length-1] = todayHisto;
+      
+        console.log(cStats);
     }
   }
-
+console.log(cStats);
   return currentChampionsStatsData;
 }
 
@@ -260,7 +279,6 @@ const getSummonerChampionStatsData = (user, championId) => {
 
     for(champion of result.data.champions){
       if(champion.id == championId){
-        champion.stats.histo = [];
         return champion.stats;
       }
     }
