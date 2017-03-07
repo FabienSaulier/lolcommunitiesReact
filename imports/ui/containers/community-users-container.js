@@ -16,30 +16,6 @@ const composer = (props, onData) => {
   load = () =>{
     community = Communities.findOne({name:props.communityName});
 
-
-
-
-
-
-
-
-//TODO if community has depend_champ : get the champion info.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /** Get the users of the community.**/
     let users = [];
     //TODO optimiser la requete, pas besoins de tout le user.
@@ -92,6 +68,19 @@ const composer = (props, onData) => {
         delete summoner.leagues;
       }
     }
+
+    // extract the proper champion stats for this community.
+    if(community.championFocus){
+      for(summoner of summoners){
+        for(cStats of summoner.championsStats){
+          if (cStats.championId == community.championFocus.championId){
+            summoner.championStats = cStats;
+          }
+          delete summoner.championsStats;
+        }
+      }
+    }
+
     onData(null, { summoners, community });
   }
 
