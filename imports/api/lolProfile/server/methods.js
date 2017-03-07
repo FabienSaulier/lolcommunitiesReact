@@ -36,9 +36,6 @@ export const createOrUpdateSummonerProfileWithChampion = (user, championId) => {
   let currentLolProfil = LolProfile.findOne({summonerId: user.profile.summonerId});
   let sumProfileDataMerged = mergeHisto(summonerProfileData,currentLolProfil);
 
-console.log(championStatsData);
-console.log(currentLolProfil.championsStats);
-
   let championStatsDataMerged = mergeChampionDataHisto(championStatsData, currentLolProfil.championsStats);
 console.log(championStatsDataMerged);
 
@@ -85,11 +82,10 @@ const mergeHisto = (newProfileData, currentLolProfil) => {
   return newProfileData;
 }
 
-
 // New data concerning only one champion
 const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData) => {
-  console.log(currentChampionsStatsData.length == 0);
-  if(currentChampionsStatsData.length == 0){ // this is a lolProfile creation
+  // this is a lolProfile creation
+  if(currentChampionsStatsData.length == 0){
     // initiate histo
     let copyChampionStats = Object.assign({}, newChampionStatsData);
     copyChampionStats.date = moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
@@ -98,21 +94,15 @@ const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData)
     return [newChampionStatsData];
   }
 
-  // for each champions
-  for( cStats of currentChampionsStatsData) {
-    // we find the champ concerning by the update
+  // update a champion stats
+  currentChampionsStatsData = currentChampionsStatsData.map(function(cStats) {
     if(cStats.championId == newChampionStatsData.championId){
-
-      console.log("new data");
-      console.log(newChampionStatsData);
-
-
-      // save histo
-      const tmpHisto = cStats.histo.slice(); // copy array
+      // save histo, copy array
+      const tmpHisto = cStats.histo.slice();
 
       const lastHistoEntry = cStats.histo[cStats.histo.length-1];
       const currentDay = moment().tz("Europe/London").format("YYYY-MM-DD"); // GMT
-      let todayHisto = newChampionStatsData;
+      let todayHisto = Object.assign({},newChampionStatsData);
       todayHisto.date = currentDay;
 
       // set the old stats with the new values and add the saved histo
@@ -120,17 +110,13 @@ const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData)
       cStats.histo = tmpHisto;
 
       // add today histo
-      if(!lastHistoEntry)
-          cStats.histo.push(todayHisto);
-      else if(lastHistoEntry.date != currentDay)
+      if(!lastHistoEntry || lastHistoEntry.date != currentDay)
         cStats.histo.push(todayHisto);
       else if (lastHistoEntry.date == currentDay)
         cStats.histo[cStats.histo.length-1] = todayHisto;
-      
-        console.log(cStats);
     }
-  }
-console.log(cStats);
+    return cStats;
+  });
   return currentChampionsStatsData;
 }
 
