@@ -1,5 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import {ChampionStatsHistoSchema} from './championStatsHisto';
+import {ChampionStatsHistoValueSchema} from './championStatsHisto';
 
 export const ChampionStatsSchema = new SimpleSchema({
   championId: {
@@ -7,7 +7,7 @@ export const ChampionStatsSchema = new SimpleSchema({
     label:"championId"
   },
   histo:{
-    type: [ChampionStatsHistoSchema],
+    type: [ChampionStatsHistoValueSchema],
     label: "historicChampionValue"
   },
 

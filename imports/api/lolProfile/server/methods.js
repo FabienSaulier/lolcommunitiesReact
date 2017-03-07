@@ -10,7 +10,10 @@ const riotApiKey = Meteor.settings.riotApiKey;
 export const createOrUpdateSummonerProfile = (user) => {
   let summonerProfileData = getSummonerProfileData(user);
   summonerProfileData.summonerName = user.profile.summonerName; // ensure the summonerName cause we can't retrieve it from riot if user has no ranked stats.
-  let sumProfileDataMerged = mergeHisto(summonerProfileData);
+
+  let currentLolProfil = LolProfile.findOne({summonerId: newProfileData.summonerId});
+
+  let sumProfileDataMerged = mergeHisto(summonerProfileData, currentLolProfil);
 
   const ret = LolProfile.update({summonerId: user.profile.summonerId},
                             {$set: {
@@ -28,34 +31,35 @@ export const createOrUpdateSummonerProfileWithChampion = (user, championId) => {
 
   let championStatsData = getSummonerChampionStatsData(user, championId);
   let championMasteryData = getSummonerChampionMasteryData(user, championId);
-
   Object.assign(championStatsData, championMasteryData);
-console.log(championStatsData);
 
-  let sumProfileDataMerged = mergeHisto(summonerProfileData);
+  let currentLolProfil = LolProfile.findOne({summonerId: user.profile.summonerId});
+  let sumProfileDataMerged = mergeHisto(summonerProfileData,currentLolProfil);
 
-console.log(sumProfileDataMerged.leagues);
 console.log(championStatsData);
+console.log(currentLolProfil.championsStats);
+
+  let championStatsDataMerged = mergeChampionDataHisto(championStatsData, currentLolProfil.championsStats);
+console.log(championStatsDataMerged);
 
   const ret = LolProfile.update({summonerId: user.profile.summonerId},
                             {$set: {
                               summonerName : sumProfileDataMerged.summonerName,
+                              summonerId: user.profile.summonerId,
+                              server: user.profile.server,
                               leagues: sumProfileDataMerged.leagues,
-                              championsStats: [championStatsData]
+                              championsStats: championStatsDataMerged
                             }}, { upsert:true, validate: false});
-                            console.log(ret);
+
 }
 
 // Put the new data in the league historic.
-const mergeHisto = (newProfileData) => {
-
-  lolProfile = LolProfile.findOne({summonerId: newProfileData.summonerId});
-
-  if(lolProfile == null) // this is a lolProfile creation
+const mergeHisto = (newProfileData, currentLolProfil) => {
+  if(currentLolProfil == null) // this is a lolProfile creation
     return newProfileData;
 
   for(newDataleague of newProfileData.leagues){
-    for(league of lolProfile.leagues){
+    for(league of currentLolProfil.leagues){
       if(newDataleague.queue == league.queue){
         // put the histo into the empty new data from riot.
         newDataleague.histo = league.histo;
@@ -79,6 +83,36 @@ const mergeHisto = (newProfileData) => {
     }
   }
   return newProfileData;
+}
+
+
+// New data concerning only one champion
+const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData) => {
+  console.log(currentChampionsStatsData.length == 0);
+  if(currentChampionsStatsData.length == 0) // this is a lolProfile creation
+    return [newChampionStatsData];
+
+
+
+  // for each champions
+  for( cStats of currentChampionsStatsData) {
+    // we find the champ concerning by the update
+    if(cStats.championId == newChampionStatsData.championId){
+      const lastHistoEntry = cStats.histo[cStats.histo.length-1];
+      const currentDay = moment().tz("Europe/London").format("YYYY-MM-DD"); // GMT
+      let todayHisto = newChampionStatsData;
+      todayHisto.date = currentDay;
+
+      if(!lastHistoEntry)
+          cStats.histo.push(todayHisto);
+      else if(lastHistoEntry.date != currentDay)
+        cStats.histo.push(todayHisto);
+      else if (lastHistoEntry.date == currentDay)
+        cStats.histo[cStats.histo.length-1] = todayHisto;
+    }
+  }
+
+  return currentChampionsStatsData;
 }
 
 export const refreshSummonerProfile = new ValidatedMethod({
@@ -226,6 +260,7 @@ const getSummonerChampionStatsData = (user, championId) => {
 
     for(champion of result.data.champions){
       if(champion.id == championId){
+        champion.stats.histo = [];
         return champion.stats;
       }
     }

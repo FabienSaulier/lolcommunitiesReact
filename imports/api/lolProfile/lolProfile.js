@@ -7,7 +7,7 @@ export const LolProfile = new Mongo.Collection('LolProfile');
 HistoValueSchema = new SimpleSchema({
   date:{
     type: String, // easier use to compare on day date: store YYYY-MM-DD
-    label: 'date'
+    label: 'date of this histo'
   },
   tier: {
     type: String,

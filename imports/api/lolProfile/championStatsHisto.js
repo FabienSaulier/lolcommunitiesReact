@@ -1,21 +1,21 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-export const ChampionStatsHistoSchema = new SimpleSchema({
-  lastUpdate:{ // only used for Histo.
+export const ChampionStatsHistoValueSchema = new SimpleSchema({
+  date:{ // only used for Histo.
     type: String, // easier use to compare on day date: store YYYY-MM-DD
-    label: 'lastUpdate'
+    label: 'date of this histo'
   },
   championId: {
     type:Number,
     label:"championId"
   },
-  championMasteryPoints:{
+  championPoints:{
     type:Number,
-    label:"championMasteryPoints"
+    label:"championPoints"
   },
-  championMasteryLevel:{
+  championLevel:{
     type:Number,
-    label:"championMasteryLevel"
+    label:"championLevel"
   },
   tokensEarned:{
     type:Number,
