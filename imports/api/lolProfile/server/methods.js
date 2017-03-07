@@ -11,7 +11,7 @@ export const createOrUpdateSummonerProfile = (user) => {
   let summonerProfileData = getSummonerProfileData(user);
   summonerProfileData.summonerName = user.profile.summonerName; // ensure the summonerName cause we can't retrieve it from riot if user has no ranked stats.
 
-  let currentLolProfil = LolProfile.findOne({summonerId: newProfileData.summonerId});
+  let currentLolProfil = LolProfile.findOne({summonerId: user.profile.summonerId});
 
   let sumProfileDataMerged = mergeHisto(summonerProfileData, currentLolProfil);
 
