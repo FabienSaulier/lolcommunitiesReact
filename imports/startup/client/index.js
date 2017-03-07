@@ -3,6 +3,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './routes.js';
 
 
+Object.assign(String.prototype, {
+    capitalizeFirstLetter() {
+        return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+    }
+});
+
 
 Bert.defaults = {
 
