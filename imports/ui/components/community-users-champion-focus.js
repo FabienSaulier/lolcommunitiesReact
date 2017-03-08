@@ -17,6 +17,8 @@ export default class CommunityUsersChampionFocus extends React.Component {
     this.refreshInfo = this.refreshInfo.bind(this);
     this.masteryDataFormatter=this.masteryDataFormatter.bind(this);
     this.championStatsDataFormatter = this.championStatsDataFormatter.bind(this);
+    this.getKdaColor = this.getKdaColor.bind(this);
+    this.getWinrateColor = this.getWinrateColor.bind(this);
     this.tableOptions = {
       defaultSortName: 'championStats',
       defaultSortOrder: 'asc',
@@ -68,6 +70,30 @@ export default class CommunityUsersChampionFocus extends React.Component {
     );
   }
 
+  getKdaColor(K,D,A){
+    if(D == 0) return 'black';
+    const kda=(K+A)/D
+    if(kda < 3)
+      return 'black';
+    else if(kda < 3.5)
+      return "#f9a825"; // yellow darken-3
+    else if(kda < 4)
+      return '#ef6c00';// orange darken-3
+    else
+      return '#d84315';// deep-orange darken-3
+  }
+
+  getWinrateColor(winrate){
+    if(winrate < 55)
+      return 'black';
+    else if(winrate < 60)
+      return "#f9a825"; // yellow darken-3
+    else if(winrate < 65)
+      return '#ef6c00';// orange darken-3
+    else
+      return '#d84315';// deep-orange darken-3
+  }
+
   championStatsDataFormatter(summoner, row){
     const championStats = row.championStats;
     if(!championStats || !championStats.totalSessionsPlayed)
@@ -78,11 +104,11 @@ export default class CommunityUsersChampionFocus extends React.Component {
     const KDA = K+" / "+D+" / "+A;
     const winrate = Math.round((championStats.totalSessionsWon/championStats.totalSessionsPlayed)*100);
     return(
-      (championStats && championStats.totalSessionsPlayed)?
+      (championStats && championStats.totalSessionsPlayed)? //'fontWeight':'bold',
         <div >
           <List style={{ 'display': 'table', 'margin': '0 auto'}}>
-            <List.Item  style={{ 'marginLeft': '10px'}} style={{'color':'#ffb300'}}>{KDA}</List.Item>
-            <List.Item><span style={{'color':'#ffb300'}}>{winrate}%</span> &nbsp;&nbsp; <small>{championStats.totalSessionsPlayed} games</small></List.Item>
+            <List.Item  style={{ 'marginLeft': '10px', 'color': this.getKdaColor(K,D,A)}} >{KDA}</List.Item>
+            <List.Item><span style={{ 'color':this.getWinrateColor(winrate)}}>{winrate}%</span> &nbsp;&nbsp; <small>{championStats.totalSessionsPlayed} games</small></List.Item>
           </List>
         </div>
       :
