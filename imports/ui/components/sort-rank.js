@@ -16,6 +16,38 @@ export const sortByMastery = (summonerA, summonerB, order) => {
   return calculatePositionByMasteryAB(summonerA, summonerB, order);
 }
 
+export const sortByKda = (summonerA, summonerB, order) => {
+  return calculatePositionByKdaAB(summonerA, summonerB, order);
+}
+
+const calculatePositionByKdaAB = (summonerA, summonerB, order)=> {
+  const aKda = calculateKda(summonerA.championStats);
+  const bKda = calculateKda(summonerB.championStats);
+  if(order === 'desc'){
+    if(aKda > bKda){
+      return 1;
+    }
+    else if (aKda === bKda)
+      return 0;
+    else
+      return -1;
+  } else{
+    if(aKda > bKda){
+      return -1;
+    }
+    else if (aKda === bKda)
+      return 0;
+    else
+      return 1;
+  }
+}
+
+const calculateKda = (championStats) => {
+  if(!championStats.totalSessionsPlayed || championStats.totalSessionsPlayed == 0 || championStats.totalDeathsPerSession == 0)
+    return 0;
+  return (championStats.totalChampionKills+championStats.totalAssists)/(championStats.totalDeathsPerSession);
+}
+
 const calculatePositionAB = (aLeague, bLeague, order)=> {
   let aPoints = calculateElo(aLeague);
   let bPoints = calculateElo(bLeague);
@@ -90,10 +122,6 @@ calculateMasteryScore = (championStats) =>{
     default:
       points = 0;
   };
-  console.log(points);
   points += championStats.championPoints;
-  console.log(championStats);
-  console.log(points);
-
   return points;
 };
