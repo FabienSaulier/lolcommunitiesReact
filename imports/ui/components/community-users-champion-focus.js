@@ -24,8 +24,14 @@ export default class CommunityUsersChampionFocus extends React.Component {
    };
   }
 
-  communityNameFormatter(comName, lolProfile){ // user is the table row
-    return(<div><Icon name='refresh' link onClick={() => {this.refreshInfo(lolProfile)}} />  {comName}</div>);
+  communityNameFormatter(comName, lolProfile, props){ // user is the table row
+    const urlPrefix = this.props.community.urlUserLinkPrefix;
+    const urlPrefixDisplay = this.props.community.urlUserLinkPrefixDisplay;
+    return(
+      <div>
+        <Icon name='refresh' link onClick={() => {this.refreshInfo(lolProfile)}} />
+        <a href={urlPrefix+comName} target='_blank'>{urlPrefixDisplay+comName}</a>
+      </div>);
   }
 
   refreshInfo(lolProfile, props){
@@ -54,7 +60,7 @@ export default class CommunityUsersChampionFocus extends React.Component {
             <MasteryIconImage mastery={championStats.championLevel} />
           </Media.Left>
           <Media.Right  align="middle" style={{'paddingLeft':'5px'}}>
-            {championStats.championPoints} points
+            {championStats.championPoints} pts
           </Media.Right>
         </Media>
       :
@@ -75,8 +81,8 @@ export default class CommunityUsersChampionFocus extends React.Component {
       (championStats && championStats.totalSessionsPlayed)?
         <div >
           <List style={{ 'display': 'table', 'margin': '0 auto'}}>
-            <List.Item style={{ 'marginLeft': '10px'}}>{KDA}</List.Item>
-            <List.Item>{winrate}% &nbsp;&nbsp; {championStats.totalSessionsPlayed} games </List.Item>
+            <List.Item  style={{ 'marginLeft': '10px'}} style={{'color':'#ffb300'}}>{KDA}</List.Item>
+            <List.Item><span style={{'color':'#ffb300'}}>{winrate}%</span> &nbsp;&nbsp; <small>{championStats.totalSessionsPlayed} games</small></List.Item>
           </List>
         </div>
       :

@@ -44,6 +44,16 @@ Communities.schema = new SimpleSchema({
     max: 100,
     optional:true
   },
+  urlUserLinkPrefix:{
+    type:String,
+    label: 'prefix for link to the user profil of the community',
+    optional: true
+  },
+  urlUserLinkPrefixDisplay:{
+    type:String,
+    label: 'prefix to display to ihm to indicate a link to the user profil of the community',
+    optional: true
+  },
   picture: {
     type: String,
     label: "picture",
