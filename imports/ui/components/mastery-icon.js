@@ -13,7 +13,7 @@ export class MasteryIconImage extends React.Component {
   render(){
     return(
       this.props.mastery ?
-        <img src={this.getMasteryIconSrc()}   height="32" width="32" />
+        <img src={this.getMasteryIconSrc()} alt={"Mastery "+this.props.mastery}  title={"Mastery "+this.props.mastery}  height="32" width="32" />
       :
         <span></span>
     )

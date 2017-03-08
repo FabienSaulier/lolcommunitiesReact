@@ -65,7 +65,7 @@ calculateMasteryScore = (championStats) =>{
     return 0;
 
   let points;
-  switch (championStats.championLeveL) {
+  switch (championStats.championLevel) {
     case 1:
       points = 0;
       break;
@@ -90,6 +90,10 @@ calculateMasteryScore = (championStats) =>{
     default:
       points = 0;
   };
+  console.log(points);
   points += championStats.championPoints;
+  console.log(championStats);
+  console.log(points);
+
   return points;
 };
