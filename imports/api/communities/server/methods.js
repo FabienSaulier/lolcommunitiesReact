@@ -23,15 +23,12 @@ export const joinCommunity = new ValidatedMethod({
     let userCommunity = {'_id': community._id, 'userName': userCommunityName}
     Meteor.users.update(user._id, {$push: {'profile.communities': userCommunity} });
 
-
-    createOrUpdateSummonerProfile(user);
-
     if(community.championFocus)
       createOrUpdateSummonerProfileWithChampion(user, community.championFocus.championId);
-
-  },
+    else
+      createOrUpdateSummonerProfile(user);
+  }
 });
-
 
 // check if summoner exist and return riot Id.
 export const checkSummonerExist = new ValidatedMethod({

@@ -31,12 +31,15 @@ export const createOrUpdateSummonerProfileWithChampion = (user, championId) => {
 
   let championStatsData = getSummonerChampionStatsData(user, championId);
   let championMasteryData = getSummonerChampionMasteryData(user, championId);
+
   Object.assign(championStatsData, championMasteryData);
 
   let currentLolProfil = LolProfile.findOne({summonerId: user.profile.summonerId});
   let sumProfileDataMerged = mergeHisto(summonerProfileData,currentLolProfil);
+console.log(championStatsData);
 
   let championStatsDataMerged = mergeChampionDataHisto(championStatsData, currentLolProfil.championsStats);
+  console.log(championStatsDataMerged)
 
   const ret = LolProfile.update({summonerId: user.profile.summonerId},
                             {$set: {
@@ -86,7 +89,7 @@ const mergeHisto = (newProfileData, currentLolProfil) => {
 // New data concerning only one champion
 const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData) => {
   // this is a lolProfile creation
-  if(currentChampionsStatsData.length == 0){
+  if(currentChampionsStatsData == null || currentChampionsStatsData.length == 0){
     // initiate histo
     let copyChampionStats = Object.assign({}, newChampionStatsData);
     copyChampionStats.date = moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
@@ -191,7 +194,7 @@ const getSummonerProfileData = (user) => {
 
   } catch (e) {
     if(!e.response){
-      console.log('at: '+riotApiChampionStatsUrl);
+      console.log('at: '+riotApiUrl);
       console.log(e);
     }
     if(e.response && e.response.statusCode == '429'){
@@ -231,18 +234,23 @@ const getSummonerChampionMasteryData = (user, championId) => {
   const riotApiChampionMasteryUrl =  "https://"+server+".api.pvp.net/championmastery/location/"+platformId+"/player/"+summonerId+"/champion/"+championId+"?api_key="+riotApiKey;
   try {
     var result = HTTP.call("GET", riotApiChampionMasteryUrl);
-
-    let championData = {
-      'championId': result.data.championId,
-      'championLevel': result.data.championLevel,
-      'championPoints': result.data.championPoints,
-      'tokensEarned': result.data.tokensEarned
+    if(!result.data){
+      return {
+        'championId': championId,
+        'championLevel': 0
+      }
+    } else {
+      return {
+       'championId': championId,
+       'championLevel': result.data.championLevel,
+       'championPoints': result.data.championPoints,
+       'tokensEarned': result.data.tokensEarned
+     }
     }
-    return championData;
 
   } catch (e) {
     if(!e.response){
-      console.log('at: '+riotApiChampionStatsUrl);
+      console.log('at: '+riotApiChampionMasteryUrl);
       console.log(e);
     }
     if(e.response.statusCode == '429'){
@@ -275,12 +283,15 @@ const getSummonerChampionStatsData = (user, championId) => {
     var result = HTTP.call("GET", riotApiChampionStatsUrl);
 
     for(champion of result.data.champions){
-      console.log(champion);
       if(champion.id == championId){
         champion.stats.date = moment().tz("Europe/London").format("YYYY-MM-DD");
         return champion.stats;
       }
     }
+    return { //default case when user has not stats on this champion.
+        championId: championId,
+        date : moment().tz("Europe/London").format("YYYY-MM-DD")
+    };
   } catch (e) {
     if(!e.response){
       console.log('at: '+riotApiChampionStatsUrl);
