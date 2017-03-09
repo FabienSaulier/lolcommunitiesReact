@@ -5,22 +5,20 @@ import { Table as TableSemantic, Icon , List} from 'semantic-ui-react'
 export const championStatsDataFormatter = (summoner, row) => {
   const championStats = row.championStats;
   if(!championStats || !championStats.totalSessionsPlayed)
-    return(<span></span>);
+    return(<span style={{ 'display': 'table', 'margin': '0 auto'}}>N/A</span>);
+    
   const K = Math.round(championStats.totalChampionKills*10/championStats.totalSessionsPlayed) / 10;
   const D = Math.round(championStats.totalDeathsPerSession*10/championStats.totalSessionsPlayed) / 10;
   const A = Math.round(championStats.totalAssists*10/championStats.totalSessionsPlayed) / 10;
   const KDA = K+" / "+D+" / "+A;
   const winrate = Math.round((championStats.totalSessionsWon/championStats.totalSessionsPlayed)*100);
   return(
-    (championStats && championStats.totalSessionsPlayed)? //'fontWeight':'bold',
       <div >
         <List style={{ 'display': 'table', 'margin': '0 auto'}}>
           <List.Item  style={{ 'marginLeft': '10px', 'color': this.getKdaColor(K,D,A)}} >{KDA}</List.Item>
           <List.Item><span style={{ 'color':this.getWinrateColor(winrate), 'fontWeight':getWinrateBoldness(winrate) }}>{winrate}%</span> &nbsp;&nbsp; <small>{championStats.totalSessionsPlayed} games</small></List.Item>
         </List>
       </div>
-    :
-      <span></span>
   );
 }
 

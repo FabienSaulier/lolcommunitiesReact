@@ -57,7 +57,7 @@ export default class CommunityUsersChampionFocus extends React.Component {
         <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} dataAlign='center' isKey>{this.props.community.displayName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} dataAlign='center' >Summoner</TableHeaderColumn>
         <TableHeaderColumn dataField='championStats' dataSort sortFunc={sortByMastery} dataFormat={masteryDataFormatter} headerAlign='center'>Mastery</TableHeaderColumn>
-        <TableHeaderColumn dataField='summoner' dataSort sortFunc={sortByKda} dataFormat={championStatsDataFormatter} headerAlign='center'>KDA</TableHeaderColumn>
+        <TableHeaderColumn dataField='summoner' dataSort sortFunc={sortByKda} dataFormat={championStatsDataFormatter} headerAlign='center'>KDA / Win ratio</TableHeaderColumn>
         <TableHeaderColumn dataField='server' dataAlign='center' headerAlign='center'>Server</TableHeaderColumn>
         <TableHeaderColumn dataField='league5v5' dataSort sortFunc={sortByRank5v5} dataFormat={rankedTierDataFormatter} headerAlign='center'>S7 solo 5v5</TableHeaderColumn>
       </BootstrapTable>
