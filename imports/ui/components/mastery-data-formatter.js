@@ -1,7 +1,7 @@
 import { ListGroup, Alert, Table, Media} from 'react-bootstrap';
 import {MasteryIconImage} from './mastery-icon';
 
-masteryDataFormatter(championStats, row, props){
+export const masteryDataFormatter = (championStats, row ) => {
   return(
     championStats ?
       <Media style={{'marginLeft': 'auto', 'marginRight': 'auto', 'width': '150px'}}>
