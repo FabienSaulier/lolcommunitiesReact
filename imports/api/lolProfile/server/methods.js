@@ -38,7 +38,7 @@ export const createOrUpdateSummonerProfileWithChampion = (user, championId) => {
   let sumProfileDataMerged = mergeHisto(summonerProfileData,currentLolProfil);
 console.log(championStatsData);
 
-  let championStatsDataMerged = mergeChampionDataHisto(championStatsData, currentLolProfil.championsStats);
+  let championStatsDataMerged = mergeChampionDataHisto(championStatsData, currentLolProfil);
   console.log(championStatsDataMerged)
 
   const ret = LolProfile.update({summonerId: user.profile.summonerId},
@@ -87,9 +87,9 @@ const mergeHisto = (newProfileData, currentLolProfil) => {
 }
 
 // New data concerning only one champion
-const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData) => {
+const mergeChampionDataHisto = (newChampionStatsData, currentLolProfil) => {
   // this is a lolProfile creation
-  if(currentChampionsStatsData == null || currentChampionsStatsData.length == 0){
+  if(currentLolProfil == null || currentLolProfil.championsStats.length == 0){
     // initiate histo
     let copyChampionStats = Object.assign({}, newChampionStatsData);
     copyChampionStats.date = moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
@@ -101,7 +101,7 @@ const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData)
   let newChampionStatsDataWereInserted = false;
 
   // for each existing champion stats
-  currentChampionsStatsData = currentChampionsStatsData.map(function(cStats) {
+  currentLolProfil.championsStats = currentLolProfil.championsStats.map(function(cStats) {
     // update and Histo an existing champion stats.
     if(cStats.championId == newChampionStatsData.championId){
       const tmpHisto = cStats.histo.slice();
@@ -132,10 +132,10 @@ const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData)
     copyChampionStats.date = moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
     newChampionStatsData.histo = [];
     newChampionStatsData.histo.push(copyChampionStats);
-    currentChampionsStatsData.push(newChampionStatsData);
+    currentLolProfil.championsStats.push(newChampionStatsData);
   }
 
-  return currentChampionsStatsData;
+  return currentLolProfil.championsStats;
 }
 
 export const refreshSummonerProfile = new ValidatedMethod({

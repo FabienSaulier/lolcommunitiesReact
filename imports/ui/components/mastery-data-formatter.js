@@ -2,8 +2,8 @@ import { ListGroup, Alert, Table, Media} from 'react-bootstrap';
 import {MasteryIconImage} from './mastery-icon';
 
 export const masteryDataFormatter = (championStats, row ) => {
-  return( //style={{'marginLeft': 'auto', 'marginRight': 'auto', 'width': '150px'}}
-    championStats ?
+  return( 
+    championStats && championStats.championPoints ?
       <Media style={{ 'display': 'table', 'margin': '0 auto'}}>
         <Media.Left align="middle" style={{'paddingRight':0}}>
           <MasteryIconImage mastery={championStats.championLevel} />
