@@ -98,12 +98,13 @@ const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData)
     return [newChampionStatsData];
   }
 
-  // update a champion stats
-  currentChampionsStatsData = currentChampionsStatsData.map(function(cStats) {
-    if(cStats.championId == newChampionStatsData.championId){
-      // save histo, copy array
-      const tmpHisto = cStats.histo.slice();
+  let newChampionStatsDataWereInserted = false;
 
+  // for each existing champion stats
+  currentChampionsStatsData = currentChampionsStatsData.map(function(cStats) {
+    // update and Histo an existing champion stats.
+    if(cStats.championId == newChampionStatsData.championId){
+      const tmpHisto = cStats.histo.slice();
       const lastHistoEntry = cStats.histo[cStats.histo.length-1];
       const currentDay = moment().tz("Europe/London").format("YYYY-MM-DD"); // GMT
       let todayHisto = Object.assign({},newChampionStatsData);
@@ -118,9 +119,22 @@ const mergeChampionDataHisto = (newChampionStatsData, currentChampionsStatsData)
         cStats.histo.push(todayHisto);
       else if (lastHistoEntry.date == currentDay)
         cStats.histo[cStats.histo.length-1] = todayHisto;
+
+      newChampionStatsDataWereInserted = true;
     }
     return cStats;
   });
+
+  // it's a new champion stat.
+  if(!newChampionStatsDataWereInserted){
+    // initiate histo
+    let copyChampionStats = Object.assign({}, newChampionStatsData);
+    copyChampionStats.date = moment().tz("Europe/London").format("YYYY-MM-DD"), // GMT
+    newChampionStatsData.histo = [];
+    newChampionStatsData.histo.push(copyChampionStats);
+    currentChampionsStatsData.push(newChampionStatsData);
+  }
+
   return currentChampionsStatsData;
 }
 
