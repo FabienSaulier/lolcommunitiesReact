@@ -11,7 +11,7 @@ const composer = (params, onData) => {
 
   load = () =>{
     const data = {};
-    communities = Communities.find().fetch();
+    communities = Communities.find({}, {sort:{'displayName':1}}).fetch();
     data.communities = communities;
     onData(null, { data });
   }
