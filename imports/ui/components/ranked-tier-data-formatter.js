@@ -7,7 +7,7 @@ export const rankedTierDataFormatter = (league, row) => {
     league = {'tier': 'unranked'};
   const winrate = Math.round((league.wins/(league.wins+league.losses))*100);
   return(
-      <Media style={{'marginLeft': 'auto', 'marginRight': 'auto', 'width': '150px'}}>
+      <Media style={{'marginLeft': 'auto', 'marginRight': 'auto', 'width': '160px'}}>
         <Media.Left align="middle" style={{'paddingRight':0}}>
           <TierIconImage tier={league.tier} />
         </Media.Left>

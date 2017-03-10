@@ -9,10 +9,12 @@ export const Layout = React.createClass({
   },
   render() {
     return <div>
+      <div style={{minHeight:'85vh'}}>
       <AppNavigationContainer />
       <Grid >
         { this.props.children }
       </Grid>
+      </div>
       <AppFooter />
     </div>;
   },

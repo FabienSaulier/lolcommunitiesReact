@@ -12,7 +12,7 @@ export class TierIconImage extends React.Component {
 
   render(){
     return(
-      <img src={this.getTierIconSrc()}   height="32" width="32" />
+      <img src={this.getTierIconSrc()}   height="50" width="50" />
     )
   }
 }

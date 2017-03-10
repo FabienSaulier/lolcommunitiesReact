@@ -7,7 +7,7 @@ const footerStyle = {border:'none'};
 export default  class AppNavigation extends React.Component {
   render() {
     return(
-      <Navbar  fixedBottom style={footerStyle}>
+      <Navbar   style={footerStyle}>
         <hr />
         <div>
           <small>Site in beta. Any suggestions, or bugs are welcome - contact: fsaulier@hotmail.com </small><br />

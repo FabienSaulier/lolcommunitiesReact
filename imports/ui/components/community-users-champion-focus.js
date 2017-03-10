@@ -26,10 +26,11 @@ export default class CommunityUsersChampionFocus extends React.Component {
     const urlPrefix = this.props.community.urlUserLinkPrefix;
     const urlPrefixDisplay = this.props.community.urlUserLinkPrefixDisplay;
     return(
-      <div>
-        <Icon name='refresh' link onClick={() => {this.refreshInfo(lolProfile)}} />
-        <a href={urlPrefix+comName} target='_blank'>{urlPrefixDisplay+comName}</a>
-      </div>);
+        <div>
+          <Icon name='refresh' link onClick={() => {this.refreshInfo(lolProfile)}} />
+          <a href={urlPrefix+comName} target='_blank'>{urlPrefixDisplay+comName}</a>
+        </div>
+);
   }
 
   refreshInfo(lolProfile, props){
@@ -53,13 +54,13 @@ export default class CommunityUsersChampionFocus extends React.Component {
   render(){
     return(
       this.props.summoners.length > 0 ?
-      <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '80%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
-        <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} dataAlign='center' isKey>{this.props.community.displayName}</TableHeaderColumn>
-        <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} dataAlign='center' >Summoner</TableHeaderColumn>
-        <TableHeaderColumn dataField='championStats' dataSort sortFunc={sortByMastery} dataFormat={masteryDataFormatter} headerAlign='center'>Mastery</TableHeaderColumn>
-        <TableHeaderColumn dataField='summoner' dataSort sortFunc={sortByKda} dataFormat={championStatsDataFormatter} headerAlign='center'>KDA / Win ratio</TableHeaderColumn>
-        <TableHeaderColumn dataField='server' dataAlign='center' headerAlign='center'>Server</TableHeaderColumn>
-        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={sortByRank5v5} dataFormat={rankedTierDataFormatter} headerAlign='center'>S7 solo 5v5</TableHeaderColumn>
+      <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '85%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
+        <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} tdStyle={{ verticalAlign: 'middle' }} dataAlign='center' isKey>{this.props.community.displayName}</TableHeaderColumn>
+        <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} tdStyle={{ 'verticalAlign': 'middle' }} dataAlign='center' >Summoner</TableHeaderColumn>
+        <TableHeaderColumn dataField='championStats' dataSort sortFunc={sortByMastery} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={masteryDataFormatter} headerAlign='center'>Mastery</TableHeaderColumn>
+        <TableHeaderColumn dataField='summoner' dataSort sortFunc={sortByKda} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={championStatsDataFormatter} headerAlign='center'>KDA / Win ratio</TableHeaderColumn>
+        <TableHeaderColumn dataField='server' dataAlign='center'  tdStyle={{ 'verticalAlign': 'middle' }}   headerAlign='center'>Server</TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={sortByRank5v5} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={rankedTierDataFormatter} headerAlign='center'>S7 solo 5v5</TableHeaderColumn>
       </BootstrapTable>
       :
       <Alert bsStyle="warning">No summoners yet.</Alert>
