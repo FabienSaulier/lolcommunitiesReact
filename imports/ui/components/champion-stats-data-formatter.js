@@ -2,11 +2,12 @@
 import { ListGroup, Alert, Table, Media} from 'react-bootstrap';
 import { Table as TableSemantic, Icon , List} from 'semantic-ui-react'
 
-export const championStatsDataFormatter = (summoner, row) => {
+export const ChampionStatsDataFormatter = (summoner, row) => {
+  console.log(row);
   const championStats = row.championStats;
   if(!championStats || !championStats.totalSessionsPlayed)
     return(<span style={{ 'display': 'table', 'margin': '0 auto'}}>N/A</span>);
-    
+
   const K = Math.round(championStats.totalChampionKills*10/championStats.totalSessionsPlayed) / 10;
   const D = Math.round(championStats.totalDeathsPerSession*10/championStats.totalSessionsPlayed) / 10;
   const A = Math.round(championStats.totalAssists*10/championStats.totalSessionsPlayed) / 10;

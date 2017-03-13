@@ -2,7 +2,7 @@
 import { ListGroup, Alert, Table, Media} from 'react-bootstrap';
 import {TierIconImage} from './tier-icon';
 
-export const rankedTierDataFormatter = (league, row) => {
+export const RankedTierDataFormatter = (league, row) => {
   if(!league)
     league = {'tier': 'unranked'};
   const winrate = Math.round((league.wins/(league.wins+league.losses))*100);

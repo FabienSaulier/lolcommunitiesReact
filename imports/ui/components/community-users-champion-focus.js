@@ -3,9 +3,9 @@ import { ListGroup, Alert, Table, Media} from 'react-bootstrap';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import { Table as TableSemantic, Icon , List} from 'semantic-ui-react'
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
-import {rankedTierDataFormatter} from './ranked-tier-data-formatter';
-import {championStatsDataFormatter} from './champion-stats-data-formatter';
-import {masteryDataFormatter} from './mastery-data-formatter';
+import {RankedTierDataFormatter} from './ranked-tier-data-formatter';
+import {ChampionStatsDataFormatter} from './champion-stats-data-formatter';
+import {MasteryDataFormatter} from './mastery-data-formatter';
 import { sortByRank5v5, sortByMastery, sortByKda} from './sort-rank';
 import MediaQuery from 'react-responsive';
 
@@ -16,6 +16,8 @@ export default class CommunityUsersChampionFocus extends React.Component {
     this.summonerNameFormatter = this.summonerNameFormatter.bind(this);
     this.communityNameFormatter = this.communityNameFormatter.bind(this);
     this.refreshInfo = this.refreshInfo.bind(this);
+    this.expandComponent = this.expandComponent.bind(this);
+    this.isExpandableRow = this.isExpandableRow.bind(this);
     this.tableOptions = {
       defaultSortName: 'championStats',
       defaultSortOrder: 'asc',
@@ -52,12 +54,38 @@ export default class CommunityUsersChampionFocus extends React.Component {
     return "<a href="+url+" target='_blank' > "+sumName+"</a>";
   }
 
+
+  expandComponent(row){
+    console.log(row);
+    return(
+      <BootstrapTable data={row}   bordered={ false }
+          containerStyle={{ width: '100%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
+        <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} tdStyle={{ verticalAlign: 'middle' }} dataAlign='center' isKey>{this.props.community.displayName}</TableHeaderColumn>
+        <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} tdStyle={{ 'verticalAlign': 'middle' }} dataAlign='center' >Summoner</TableHeaderColumn>
+        <TableHeaderColumn dataField='championStats'  tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={MasteryDataFormatter} headerAlign='center'>Mastery</TableHeaderColumn>
+        <TableHeaderColumn dataField='summoner'  tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={ChampionStatsDataFormatter} headerAlign='center'>KDA / Win ratio</TableHeaderColumn>
+        <TableHeaderColumn dataField='server' dataAlign='center'  tdStyle={{ 'verticalAlign': 'middle' }} width='60px'  headerAlign='center'>Server</TableHeaderColumn>
+      </BootstrapTable>
+    );
+  }
+  isExpandableRow(row){
+    return true;
+  }
+
   render(){
     return(
       this.props.summoners.length > 0 ?
       <div>
       <MediaQuery maxWidth={680}>
-        trop petit haha
+        <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }
+          expandableRow={this.isExpandableRow}   expandComponent={ this.expandComponent }
+            containerStyle={{ width: '100%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
+          <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} tdStyle={{ verticalAlign: 'middle' }} dataAlign='center' isKey>{this.props.community.displayName}</TableHeaderColumn>
+          <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} tdStyle={{ 'verticalAlign': 'middle' }} dataAlign='center' >Summoner</TableHeaderColumn>
+          <TableHeaderColumn dataField='championStats' dataSort sortFunc={sortByMastery} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={MasteryDataFormatter} headerAlign='center'>Mastery</TableHeaderColumn>
+          <TableHeaderColumn dataField='summoner' dataSort sortFunc={sortByKda} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={ChampionStatsDataFormatter} headerAlign='center'>KDA / Win ratio</TableHeaderColumn>
+          <TableHeaderColumn dataField='server' dataAlign='center'  tdStyle={{ 'verticalAlign': 'middle' }} width='60px'  headerAlign='center'>Server</TableHeaderColumn>
+        </BootstrapTable>
       </MediaQuery>
       <MediaQuery minWidth={681}>
 
@@ -65,10 +93,10 @@ export default class CommunityUsersChampionFocus extends React.Component {
       <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '100%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
         <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} tdStyle={{ verticalAlign: 'middle' }} dataAlign='center' isKey>{this.props.community.displayName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} tdStyle={{ 'verticalAlign': 'middle' }} dataAlign='center' >Summoner</TableHeaderColumn>
-        <TableHeaderColumn dataField='championStats' dataSort sortFunc={sortByMastery} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={masteryDataFormatter} headerAlign='center'>Mastery</TableHeaderColumn>
-        <TableHeaderColumn dataField='summoner' dataSort sortFunc={sortByKda} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={championStatsDataFormatter} headerAlign='center'>KDA / Win ratio</TableHeaderColumn>
+        <TableHeaderColumn dataField='championStats' dataSort sortFunc={sortByMastery} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={MasteryDataFormatter} headerAlign='center'>Mastery</TableHeaderColumn>
+        <TableHeaderColumn dataField='summoner' dataSort sortFunc={sortByKda} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={ChampionStatsDataFormatter} headerAlign='center'>KDA / Win ratio</TableHeaderColumn>
         <TableHeaderColumn dataField='server' dataAlign='center'  tdStyle={{ 'verticalAlign': 'middle' }} width='60px'  headerAlign='center'>Server</TableHeaderColumn>
-        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={sortByRank5v5} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={rankedTierDataFormatter} headerAlign='center'>S7 solo 5v5</TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={sortByRank5v5} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={RankedTierDataFormatter} headerAlign='center'>S7 solo 5v5</TableHeaderColumn>
       </BootstrapTable>
     </MediaQuery>
     </div>

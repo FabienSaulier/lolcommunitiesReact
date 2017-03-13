@@ -4,7 +4,7 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import { Table as TableSemantic, Icon } from 'semantic-ui-react'
 import { calculateElo } from '../../modules/calcul-elo'
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
-import {rankedTierDataFormatter} from './ranked-tier-data-formatter';
+import {RankedTierDataFormatter} from './ranked-tier-data-formatter';
 import {sortByRank3v3,  sortByRank5v5, sortByRankFlex5v5} from './sort-rank';
 
 export default class CommunityUsersGeneral extends React.Component {
@@ -48,8 +48,8 @@ export default class CommunityUsersGeneral extends React.Component {
       <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '100%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
         <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} tdStyle={{ 'verticalAlign': 'middle' }}  dataAlign='center' isKey>{this.props.community.displayName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} tdStyle={{ 'verticalAlign': 'middle' }}  dataAlign='center' >Summoner</TableHeaderColumn>
-        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={sortByRank5v5} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={rankedTierDataFormatter} headerAlign='center'>S7 solo 5v5</TableHeaderColumn>
-        <TableHeaderColumn dataField='league5v5flex' dataSort sortFunc={sortByRankFlex5v5} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={rankedTierDataFormatter}  headerAlign='center' >S7 flex 5v5</TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5' dataSort sortFunc={sortByRank5v5} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={RankedTierDataFormatter} headerAlign='center'>S7 solo 5v5</TableHeaderColumn>
+        <TableHeaderColumn dataField='league5v5flex' dataSort sortFunc={sortByRankFlex5v5} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={RankedTierDataFormatter}  headerAlign='center' >S7 flex 5v5</TableHeaderColumn>
 {/*
         <TableHeaderColumn dataField='league3v3' dataSort sortFunc={sortByRank3v3} dataFormat={rankedTierDataFormatter} dataAlign='center'  >S7 3v3</TableHeaderColumn>
 */}
