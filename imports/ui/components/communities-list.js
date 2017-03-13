@@ -1,6 +1,7 @@
 import React from 'react';
-import { ListGroup, Alert } from 'react-bootstrap';
+import { List} from 'semantic-ui-react'
 import { CommunitySticker } from './community-sticker.js';
+import MediaQuery from 'react-responsive';
 
 export class CommunitiesList extends React.Component {
 
@@ -8,12 +9,21 @@ export class CommunitiesList extends React.Component {
     let communities = this.props.data.communities;
 
     return(
-      communities.length > 0 ? <ListGroup className="communities-list">
+
+        <div>
+  <MediaQuery minDeviceWidth={480}>
+
+      <List >
         {communities.map((com) => (
-          <CommunitySticker key={ com._id } community={ com } />
+          <List.Item key={ com._id }><CommunitySticker  community={ com } /></List.Item>
+
         ))}
-      </ListGroup> :
-      <Alert bsStyle="warning">No communities yet.</Alert>
+      </List>
+
+  </MediaQuery>
+
+</div>
+
     );
   }
 

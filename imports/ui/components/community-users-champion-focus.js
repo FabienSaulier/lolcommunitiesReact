@@ -54,7 +54,7 @@ export default class CommunityUsersChampionFocus extends React.Component {
   render(){
     return(
       this.props.summoners.length > 0 ?
-      <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '85%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
+      <BootstrapTable data={ this.props.summoners }  options={this.tableOptions} bordered={ false }  containerStyle={{ width: '100%' }}  tableStyle={ { margin: '0 0 0 0' } } condensed >
         <TableHeaderColumn dataField='userCommunityName' dataFormat={this.communityNameFormatter} tdStyle={{ verticalAlign: 'middle' }} dataAlign='center' isKey>{this.props.community.displayName}</TableHeaderColumn>
         <TableHeaderColumn dataField='summonerName' dataFormat={this.summonerNameFormatter} tdStyle={{ 'verticalAlign': 'middle' }} dataAlign='center' >Summoner</TableHeaderColumn>
         <TableHeaderColumn dataField='championStats' dataSort sortFunc={sortByMastery} tdStyle={{ 'verticalAlign': 'middle' }}  dataFormat={masteryDataFormatter} headerAlign='center'>Mastery</TableHeaderColumn>
