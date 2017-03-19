@@ -2,9 +2,14 @@
 import { ListGroup, Alert, Table, Media} from 'react-bootstrap';
 import { Table as TableSemantic, Icon , List} from 'semantic-ui-react'
 
-export const ChampionStatsDataFormatter = (summoner, row) => {
-  console.log(row);
-  const championStats = row.championStats;
+export const ChampionStatsDataFormatter = (data,row) => {
+  let championStats;
+  if(!data) // need this case for react bootstrap table who build this component... strangely.......
+    championStats = row.championStats;
+  else{
+    championStats = data.row.championStats;
+  }
+
   if(!championStats || !championStats.totalSessionsPlayed)
     return(<span style={{ 'display': 'table', 'margin': '0 auto'}}>N/A</span>);
 
